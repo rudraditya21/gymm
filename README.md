@@ -1,4 +1,4 @@
-# pos
+# Personal Operating System
 
 A new Flutter project.
 
