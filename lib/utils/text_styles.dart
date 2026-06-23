@@ -1,134 +1,121 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../constants/colors.dart';
 
-// Display font: Space Grotesk (fallback for CohereText)
-// Body/UI font: Inter (fallback for Unica77)
-// Mono font:    system monospace (fallback for CohereMono)
-const String _display = 'SpaceGrotesk';
-const String _body = 'Inter';
-const String _mono = 'monospace';
+// Display: Instrument Serif  (serif, dramatic, large scale only)
+// Body/UI: Poppins            (geometric sans, all sizes)
+// Mono:    system monospace   (technical labels)
 
 abstract final class AppTextStyles {
   // ── Display ────────────────────────────────────────────────────────────────
 
   /// 96px · hero page declaration scale
-  static const TextStyle heroDisplay = TextStyle(
-    fontFamily: _display,
-    fontSize: 96,
-    fontWeight: FontWeight.w400,
-    letterSpacing: -1.92,
-    height: 1.0,
-    color: AppColors.ink,
-  );
+  static TextStyle get heroDisplay => GoogleFonts.instrumentSerif(
+        fontSize: 96,
+        fontWeight: FontWeight.w400,
+        letterSpacing: -1.92,
+        height: 1.0,
+        color: AppLightColors.foreground,
+      );
 
   /// 72px · product and research hero headlines
-  static const TextStyle productDisplay = TextStyle(
-    fontFamily: _display,
-    fontSize: 72,
-    fontWeight: FontWeight.w400,
-    letterSpacing: -1.44,
-    height: 1.0,
-    color: AppColors.ink,
-  );
+  static TextStyle get productDisplay => GoogleFonts.instrumentSerif(
+        fontSize: 72,
+        fontWeight: FontWeight.w400,
+        letterSpacing: -1.44,
+        height: 1.0,
+        color: AppLightColors.foreground,
+      );
 
   /// 60px · large product-page headings
-  static const TextStyle sectionDisplay = TextStyle(
-    fontFamily: _body,
-    fontSize: 60,
-    fontWeight: FontWeight.w400,
-    letterSpacing: -1.2,
-    height: 1.0,
-    color: AppColors.ink,
-  );
+  static TextStyle get sectionDisplay => GoogleFonts.poppins(
+        fontSize: 60,
+        fontWeight: FontWeight.w400,
+        letterSpacing: -1.2,
+        height: 1.0,
+        color: AppLightColors.foreground,
+      );
 
   // ── Headings ───────────────────────────────────────────────────────────────
 
   /// 48px · split hero and CTA headings
-  static const TextStyle sectionHeading = TextStyle(
-    fontFamily: _body,
-    fontSize: 48,
-    fontWeight: FontWeight.w400,
-    letterSpacing: -0.48,
-    height: 1.2,
-    color: AppColors.ink,
-  );
+  static TextStyle get sectionHeading => GoogleFonts.poppins(
+        fontSize: 48,
+        fontWeight: FontWeight.w400,
+        letterSpacing: -0.48,
+        height: 1.2,
+        color: AppLightColors.foreground,
+      );
 
   /// 32px · feature card and list section titles
-  static const TextStyle cardHeading = TextStyle(
-    fontFamily: _body,
-    fontSize: 32,
-    fontWeight: FontWeight.w400,
-    letterSpacing: -0.32,
-    height: 1.2,
-    color: AppColors.ink,
-  );
+  static TextStyle get cardHeading => GoogleFonts.poppins(
+        fontSize: 32,
+        fontWeight: FontWeight.w400,
+        letterSpacing: -0.32,
+        height: 1.2,
+        color: AppLightColors.foreground,
+      );
 
   /// 24px · cards, filters, article titles
-  static const TextStyle featureHeading = TextStyle(
-    fontFamily: _body,
-    fontSize: 24,
-    fontWeight: FontWeight.w400,
-    height: 1.3,
-    color: AppColors.ink,
-  );
+  static TextStyle get featureHeading => GoogleFonts.poppins(
+        fontSize: 24,
+        fontWeight: FontWeight.w400,
+        height: 1.3,
+        color: AppLightColors.foreground,
+      );
 
   // ── Body ───────────────────────────────────────────────────────────────────
 
   /// 18px · lead text and larger paragraphs
-  static const TextStyle bodyLarge = TextStyle(
-    fontFamily: _body,
-    fontSize: 18,
-    fontWeight: FontWeight.w400,
-    height: 1.4,
-    color: AppColors.ink,
-  );
+  static TextStyle get bodyLarge => GoogleFonts.poppins(
+        fontSize: 18,
+        fontWeight: FontWeight.w400,
+        height: 1.4,
+        color: AppLightColors.foreground,
+      );
 
   /// 16px · default copy and link text
-  static const TextStyle body = TextStyle(
-    fontFamily: _body,
-    fontSize: 16,
-    fontWeight: FontWeight.w400,
-    height: 1.5,
-    color: AppColors.ink,
-  );
+  static TextStyle get body => GoogleFonts.poppins(
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        height: 1.5,
+        color: AppLightColors.foreground,
+      );
 
   // ── Labels & Utility ──────────────────────────────────────────────────────
 
   /// 14px · compact CTA labels
-  static const TextStyle button = TextStyle(
-    fontFamily: _body,
-    fontSize: 14,
-    fontWeight: FontWeight.w500,
-    height: 1.71,
-    color: AppColors.ink,
-  );
+  static TextStyle get button => GoogleFonts.poppins(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        height: 1.71,
+        color: AppLightColors.foreground,
+      );
 
   /// 14px · metadata and small explanatory text
-  static const TextStyle caption = TextStyle(
-    fontFamily: _body,
-    fontSize: 14,
-    fontWeight: FontWeight.w400,
-    height: 1.4,
-    color: AppColors.mutedSlate,
-  );
+  static TextStyle get caption => GoogleFonts.poppins(
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        height: 1.4,
+        color: AppLightColors.mutedForeground,
+      );
 
   /// 14px · uppercase technical / system markers (mono)
   static const TextStyle monoLabel = TextStyle(
-    fontFamily: _mono,
+    fontFamily: 'monospace',
     fontSize: 14,
     fontWeight: FontWeight.w400,
     letterSpacing: 0.28,
     height: 1.4,
-    color: AppColors.mutedSlate,
+    color: AppLightColors.mutedForeground,
   );
 
   /// 12px · footer, nav microcopy, small links
-  static const TextStyle micro = TextStyle(
-    fontFamily: _body,
-    fontSize: 12,
-    fontWeight: FontWeight.w400,
-    height: 1.4,
-    color: AppColors.mutedSlate,
-  );
+  static TextStyle get micro => GoogleFonts.poppins(
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        height: 1.4,
+        color: AppLightColors.mutedForeground,
+      );
 }
