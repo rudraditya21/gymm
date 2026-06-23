@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'constants/colors.dart';
 
 void main() {
-  runApp(const POSApp());
+  runApp(const GymmApp());
 }
 
-class POSApp extends StatelessWidget {
-  const POSApp({super.key});
+class GymmApp extends StatelessWidget {
+  const GymmApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Personal Operating System',
+      title: 'Gymm',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
