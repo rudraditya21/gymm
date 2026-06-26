@@ -10,6 +10,7 @@ import '../../providers/settings_provider.dart';
 import '../../screens/workout/active_workout_screen.dart';
 import '../../screens/workout/routine_editor_screen.dart';
 import '../../utils/format.dart';
+import '../../utils/streak.dart';
 import '../../widgets/workout_calendar.dart';
 import '../../widgets/workout_card.dart';
 
@@ -32,6 +33,7 @@ class HomeScreen extends ConsumerWidget {
     final weekCount = thisWeek.length;
     final weekVolume =
         thisWeek.fold<double>(0, (s, w) => s + w.totalVolume);
+    final streak = computeStreak(history);
 
     return Scaffold(
       backgroundColor: cs.surface,
@@ -68,6 +70,14 @@ class HomeScreen extends ConsumerWidget {
                     _WeekStat(
                       label: 'Volume',
                       value: formatVolume(weekVolume, useKg: useKg),
+                      cs: cs,
+                    ),
+                  ],
+                  if (streak > 0) ...[
+                    const SizedBox(width: 24),
+                    _WeekStat(
+                      label: 'Streak',
+                      value: '$streak 🔥',
                       cs: cs,
                     ),
                   ],
