@@ -10,6 +10,7 @@ import '../../providers/settings_provider.dart';
 import '../../screens/workout/active_workout_screen.dart';
 import '../../screens/workout/routine_editor_screen.dart';
 import '../../utils/format.dart';
+import '../../widgets/workout_calendar.dart';
 import '../../widgets/workout_card.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -72,6 +73,13 @@ class HomeScreen extends ConsumerWidget {
                   ],
                 ],
               ),
+            ),
+            const SizedBox(height: 28),
+
+            // Calendar heatmap
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: WorkoutCalendar(workouts: history),
             ),
             const SizedBox(height: 28),
 
