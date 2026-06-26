@@ -4,11 +4,13 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../models/active_workout.dart';
 
-typedef OnSetComplete = void Function(double? weight, int? reps);
+typedef OnSetComplete = void Function(
+    double? weight, int? reps, int? durationSeconds, double? distanceMeters);
 
 class SetRow extends StatefulWidget {
   final ActiveSet set;
   final bool useKg;
+  final bool isCardio;
   final OnSetComplete onComplete;
   final VoidCallback onRemove;
   final VoidCallback onCycleType;
@@ -17,6 +19,7 @@ class SetRow extends StatefulWidget {
     super.key,
     required this.set,
     required this.useKg,
+    required this.isCardio,
     required this.onComplete,
     required this.onRemove,
     required this.onCycleType,
@@ -27,35 +30,46 @@ class SetRow extends StatefulWidget {
 }
 
 class _SetRowState extends State<SetRow> {
-  late TextEditingController _weightCtrl;
-  late TextEditingController _repsCtrl;
+  late TextEditingController _primaryCtrl;  // weight or duration-min
+  late TextEditingController _secondaryCtrl; // reps or distance-km
 
   @override
   void initState() {
     super.initState();
-    _weightCtrl = TextEditingController(
-      text: _weightText(widget.set.weight, widget.useKg),
-    );
-    _repsCtrl = TextEditingController(
-      text: widget.set.reps?.toString() ?? '',
-    );
+    _primaryCtrl = TextEditingController(text: _primaryText());
+    _secondaryCtrl = TextEditingController(text: _secondaryText());
   }
 
   @override
   void didUpdateWidget(SetRow old) {
     super.didUpdateWidget(old);
-    // Only sync if the value changed externally (e.g. set was re-added)
     if (old.set.index != widget.set.index) {
-      _weightCtrl.text = _weightText(widget.set.weight, widget.useKg);
-      _repsCtrl.text = widget.set.reps?.toString() ?? '';
+      _primaryCtrl.text = _primaryText();
+      _secondaryCtrl.text = _secondaryText();
     }
   }
 
   @override
   void dispose() {
-    _weightCtrl.dispose();
-    _repsCtrl.dispose();
+    _primaryCtrl.dispose();
+    _secondaryCtrl.dispose();
     super.dispose();
+  }
+
+  String _primaryText() {
+    if (widget.isCardio) {
+      final secs = widget.set.durationSeconds;
+      return secs != null ? '${secs ~/ 60}' : '';
+    }
+    return _weightText(widget.set.weight, widget.useKg);
+  }
+
+  String _secondaryText() {
+    if (widget.isCardio) {
+      final m = widget.set.distanceMeters;
+      return m != null ? (m / 1000).toStringAsFixed(2) : '';
+    }
+    return widget.set.reps?.toString() ?? '';
   }
 
   String _weightText(double? w, bool useKg) {
@@ -69,6 +83,19 @@ class _SetRowState extends State<SetRow> {
     final v = double.tryParse(text);
     if (v == null) return null;
     return widget.useKg ? v : v / 2.20462;
+  }
+
+  void _onCheck() {
+    if (widget.isCardio) {
+      final mins = int.tryParse(_primaryCtrl.text.trim());
+      final km = double.tryParse(_secondaryCtrl.text.trim());
+      widget.onComplete(null, null, mins != null ? mins * 60 : null,
+          km != null ? km * 1000 : null);
+    } else {
+      final weight = _parseWeight(_primaryCtrl.text.trim());
+      final reps = int.tryParse(_secondaryCtrl.text.trim());
+      widget.onComplete(weight, reps, null, null);
+    }
   }
 
   static String _typeLabel(ActiveSet set) {
@@ -97,26 +124,21 @@ class _SetRowState extends State<SetRow> {
     }
   }
 
-  void _onCheck() {
-    final weight = _parseWeight(_weightCtrl.text.trim());
-    final reps = int.tryParse(_repsCtrl.text.trim());
-    widget.onComplete(weight, reps);
-  }
-
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     final set = widget.set;
     final completed = set.isCompleted;
-    final unit = widget.useKg ? 'kg' : 'lb';
 
     final rowColor = completed
         ? cs.primary.withValues(alpha: 0.06)
         : Colors.transparent;
 
-    final prevText = (set.prevWeight != null && set.prevReps != null)
-        ? '${_weightText(set.prevWeight, widget.useKg)}×${set.prevReps}'
-        : '–';
+    final prevText = widget.isCardio
+        ? '–'
+        : (set.prevWeight != null && set.prevReps != null)
+            ? '${_weightText(set.prevWeight, widget.useKg)}×${set.prevReps}'
+            : '–';
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 150),
@@ -153,25 +175,25 @@ class _SetRowState extends State<SetRow> {
               ),
             ),
           ),
-          // Weight field
+          // Primary field (weight or minutes)
           Expanded(
             flex: 3,
             child: _NumberField(
-              controller: _weightCtrl,
-              hint: unit,
-              decimal: true,
+              controller: _primaryCtrl,
+              hint: widget.isCardio ? 'min' : (widget.useKg ? 'kg' : 'lb'),
+              decimal: !widget.isCardio,
               completed: completed,
               cs: cs,
             ),
           ),
           const SizedBox(width: 8),
-          // Reps field
+          // Secondary field (reps or km)
           Expanded(
             flex: 2,
             child: _NumberField(
-              controller: _repsCtrl,
-              hint: 'reps',
-              decimal: false,
+              controller: _secondaryCtrl,
+              hint: widget.isCardio ? 'km' : 'reps',
+              decimal: widget.isCardio,
               completed: completed,
               cs: cs,
             ),
@@ -189,7 +211,7 @@ class _SetRowState extends State<SetRow> {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
-                completed ? Icons.check_rounded : Icons.check_rounded,
+                Icons.check_rounded,
                 size: 18,
                 color: completed
                     ? cs.onPrimary

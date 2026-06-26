@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../constants/categories.dart';
 import '../data/hive_service.dart';
 import '../models/active_workout.dart';
 import '../models/workout.dart';
@@ -14,11 +15,18 @@ import 'set_row.dart';
 class ExerciseBlock extends ConsumerWidget {
   final int exerciseIndex;
   final ActiveExercise exercise;
+  // Superset props
+  final String? supersetLabel;
+  final bool isLastInSuperset;
+  final bool isLastExercise;
 
   const ExerciseBlock({
     super.key,
     required this.exerciseIndex,
     required this.exercise,
+    this.supersetLabel,
+    this.isLastInSuperset = true,
+    this.isLastExercise = true,
   });
 
   @override
@@ -27,14 +35,24 @@ class ExerciseBlock extends ConsumerWidget {
     final notifier = ref.read(activeWorkoutProvider.notifier);
     final useKg = ref.watch(settingsProvider).useKg;
     final restSeconds = ref.watch(settingsProvider).restSeconds;
-    final suggestion = _overloadSuggestion(exercise.exerciseId, useKg);
+
+    // Detect cardio via Hive exercise record
+    final ex = HiveService.exercises.get(exercise.exerciseId);
+    final isCardio = ex?.primaryMuscle == MuscleGroup.cardio;
+
+    final suggestion =
+        isCardio ? null : _overloadSuggestion(exercise.exerciseId, useKg);
+
+    // Superset accent color
+    final inSuperset = supersetLabel != null;
+    final accentColor = inSuperset ? cs.primary : cs.outline;
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         color: cs.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: cs.outline),
+        border: Border.all(color: inSuperset ? accentColor : cs.outline),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,6 +62,27 @@ class ExerciseBlock extends ConsumerWidget {
             padding: const EdgeInsets.fromLTRB(16, 14, 8, 0),
             child: Row(
               children: [
+                // Superset label chip
+                if (inSuperset) ...[
+                  Container(
+                    width: 22,
+                    height: 22,
+                    margin: const EdgeInsets.only(right: 8),
+                    decoration: BoxDecoration(
+                      color: cs.primary,
+                      shape: BoxShape.circle,
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      supersetLabel!,
+                      style: GoogleFonts.poppins(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        color: cs.onPrimary,
+                      ),
+                    ),
+                  ),
+                ],
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,6 +103,14 @@ class ExerciseBlock extends ConsumerWidget {
                             color: cs.onSurface.withValues(alpha: 0.45),
                           ),
                         ),
+                      if (isCardio)
+                        Text(
+                          'Cardio — log time & distance',
+                          style: GoogleFonts.poppins(
+                            fontSize: 11,
+                            color: cs.onSurface.withValues(alpha: 0.4),
+                          ),
+                        ),
                     ],
                   ),
                 ),
@@ -71,13 +118,29 @@ class ExerciseBlock extends ConsumerWidget {
                   icon: Icon(Icons.more_horiz,
                       color: cs.onSurface.withValues(alpha: 0.45)),
                   onSelected: (val) {
-                    if (val == 'remove') notifier.removeExercise(exerciseIndex);
+                    if (val == 'remove') {
+                      notifier.removeExercise(exerciseIndex);
+                    } else if (val == 'link_superset') {
+                      notifier.createSuperset(exerciseIndex, exerciseIndex + 1);
+                    } else if (val == 'unlink_superset') {
+                      notifier.removeFromSuperset(exerciseIndex);
+                    }
                   },
                   itemBuilder: (_) => [
                     const PopupMenuItem(
                       value: 'remove',
                       child: Text('Remove exercise'),
                     ),
+                    if (!isLastExercise && !inSuperset)
+                      const PopupMenuItem(
+                        value: 'link_superset',
+                        child: Text('Superset with next'),
+                      ),
+                    if (inSuperset)
+                      const PopupMenuItem(
+                        value: 'unlink_superset',
+                        child: Text('Remove from superset'),
+                      ),
                   ],
                 ),
               ],
@@ -103,16 +166,20 @@ class ExerciseBlock extends ConsumerWidget {
                 ),
                 Expanded(
                   flex: 3,
-                  child: Text(useKg ? 'KG' : 'LB',
-                      textAlign: TextAlign.center,
-                      style: _headerStyle(cs)),
+                  child: Text(
+                    isCardio ? 'MIN' : (useKg ? 'KG' : 'LB'),
+                    textAlign: TextAlign.center,
+                    style: _headerStyle(cs),
+                  ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   flex: 2,
-                  child: Text('REPS',
-                      textAlign: TextAlign.center,
-                      style: _headerStyle(cs)),
+                  child: Text(
+                    isCardio ? 'KM' : 'REPS',
+                    textAlign: TextAlign.center,
+                    style: _headerStyle(cs),
+                  ),
                 ),
                 const SizedBox(width: 8),
                 const SizedBox(width: 36),
@@ -139,10 +206,11 @@ class ExerciseBlock extends ConsumerWidget {
                 key: ValueKey('${exercise.exerciseId}_row_$setIndex'),
                 set: set,
                 useKg: useKg,
-                onComplete: (weight, reps) {
+                isCardio: isCardio,
+                onComplete: (weight, reps, duration, distance) {
                   notifier.completeSet(
-                      exerciseIndex, setIndex, weight, reps);
-                  if (!set.isCompleted) {
+                      exerciseIndex, setIndex, weight, reps, duration, distance);
+                  if (!set.isCompleted && isLastInSuperset) {
                     ref
                         .read(restTimerProvider.notifier)
                         .start(restSeconds);

@@ -8,6 +8,8 @@ class WorkoutSet {
   final int? rpe;
   final bool isDropSet;
   final bool isAmrap;
+  final int? durationSeconds;
+  final double? distanceMeters;
 
   const WorkoutSet({
     this.weight,
@@ -17,6 +19,8 @@ class WorkoutSet {
     this.rpe,
     this.isDropSet = false,
     this.isAmrap = false,
+    this.durationSeconds,
+    this.distanceMeters,
   });
 }
 
@@ -86,13 +90,15 @@ class WorkoutSetAdapter extends TypeAdapter<WorkoutSet> {
       rpe: fields[4] as int?,
       isDropSet: fields[5] as bool? ?? false,
       isAmrap: fields[6] as bool? ?? false,
+      durationSeconds: fields[7] as int?,
+      distanceMeters: (fields[8] as num?)?.toDouble(),
     );
   }
 
   @override
   void write(BinaryWriter writer, WorkoutSet obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.weight)
       ..writeByte(1)
@@ -106,7 +112,11 @@ class WorkoutSetAdapter extends TypeAdapter<WorkoutSet> {
       ..writeByte(5)
       ..write(obj.isDropSet)
       ..writeByte(6)
-      ..write(obj.isAmrap);
+      ..write(obj.isAmrap)
+      ..writeByte(7)
+      ..write(obj.durationSeconds)
+      ..writeByte(8)
+      ..write(obj.distanceMeters);
   }
 }
 

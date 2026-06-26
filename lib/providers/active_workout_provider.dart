@@ -121,10 +121,14 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
               index: e.key,
               isWarmup: e.value.isWarmup,
               isCompleted: e.value.isCompleted,
+              isDropSet: e.value.isDropSet,
+              isAmrap: e.value.isAmrap,
               weight: e.value.weight,
               reps: e.value.reps,
               prevWeight: e.value.prevWeight,
               prevReps: e.value.prevReps,
+              durationSeconds: e.value.durationSeconds,
+              distanceMeters: e.value.distanceMeters,
             ))
         .toList();
     exercises[exerciseIndex] = ex.copyWith(sets: reindexed);
@@ -151,7 +155,8 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
     });
   }
 
-  void completeSet(int exerciseIndex, int setIndex, double? weight, int? reps) {
+  void completeSet(int exerciseIndex, int setIndex, double? weight, int? reps,
+      [int? durationSeconds, double? distanceMeters]) {
     _updateSet(
       exerciseIndex,
       setIndex,
@@ -159,10 +164,14 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
         index: s.index,
         isWarmup: s.isWarmup,
         isCompleted: !s.isCompleted,
+        isDropSet: s.isDropSet,
+        isAmrap: s.isAmrap,
         weight: weight ?? s.weight,
         reps: reps ?? s.reps,
         prevWeight: s.prevWeight,
         prevReps: s.prevReps,
+        durationSeconds: durationSeconds ?? s.durationSeconds,
+        distanceMeters: distanceMeters ?? s.distanceMeters,
       ),
     );
   }
@@ -202,6 +211,8 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
                           isWarmup: as_.isWarmup,
                           isDropSet: as_.isDropSet,
                           isAmrap: as_.isAmrap,
+                          durationSeconds: as_.durationSeconds,
+                          distanceMeters: as_.distanceMeters,
                         ))
                     .toList(),
               ))
@@ -217,6 +228,10 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
   List<PRResult> _computePRs(ActiveWorkoutState s) {
     final results = <PRResult>[];
     for (final ex in s.exercises) {
+      // Skip cardio exercises — no 1RM to compare
+      final isCardio = ex.sets.isNotEmpty &&
+          ex.sets.every((set) => set.weight == null && set.durationSeconds != null);
+      if (isCardio) continue;
       final historicalBest = _bestHistoricalE1RM(ex.exerciseId);
       double newBest = 0;
       double bestWeight = 0;

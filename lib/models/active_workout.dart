@@ -10,6 +10,9 @@ class ActiveSet {
   final int? reps;
   final double? prevWeight;
   final int? prevReps;
+  // Cardio fields
+  final int? durationSeconds;
+  final double? distanceMeters;
 
   const ActiveSet({
     required this.index,
@@ -21,6 +24,8 @@ class ActiveSet {
     this.reps,
     this.prevWeight,
     this.prevReps,
+    this.durationSeconds,
+    this.distanceMeters,
   });
 
   SetType get setType {
@@ -37,8 +42,12 @@ class ActiveSet {
     bool? isAmrap,
     double? weight,
     int? reps,
+    int? durationSeconds,
+    double? distanceMeters,
     bool clearWeight = false,
     bool clearReps = false,
+    bool clearDuration = false,
+    bool clearDistance = false,
   }) {
     return ActiveSet(
       index: index,
@@ -50,6 +59,8 @@ class ActiveSet {
       reps: clearReps ? null : (reps ?? this.reps),
       prevWeight: prevWeight,
       prevReps: prevReps,
+      durationSeconds: clearDuration ? null : (durationSeconds ?? this.durationSeconds),
+      distanceMeters: clearDistance ? null : (distanceMeters ?? this.distanceMeters),
     );
   }
 }
