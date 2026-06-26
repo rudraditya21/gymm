@@ -6,6 +6,7 @@ import '../../app_theme.dart';
 import '../../providers/history_provider.dart';
 import '../../providers/settings_provider.dart';
 import '../../utils/format.dart';
+import '../tools/plate_calculator_screen.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -157,6 +158,46 @@ class ProfileScreen extends ConsumerWidget {
                     cs: cs,
                   ),
                 ],
+              ),
+            ),
+            const SizedBox(height: 28),
+
+            // Tools
+            _SectionLabel('TOOLS'),
+            const SizedBox(height: 10),
+            Container(
+              decoration: BoxDecoration(
+                color: cs.surface,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: cs.outline),
+              ),
+              child: ListTile(
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const PlateCalculatorScreen(),
+                  ),
+                ),
+                leading: Icon(Icons.fitness_center, color: cs.primary, size: 20),
+                title: Text(
+                  'Plate Calculator',
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: cs.onSurface,
+                  ),
+                ),
+                subtitle: Text(
+                  'How many plates per side',
+                  style: GoogleFonts.poppins(
+                    fontSize: 12,
+                    color: cs.onSurface.withValues(alpha: 0.5),
+                  ),
+                ),
+                trailing: Icon(Icons.chevron_right,
+                    color: cs.onSurface.withValues(alpha: 0.3)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
             ),
           ],
