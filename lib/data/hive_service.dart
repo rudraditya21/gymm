@@ -2,6 +2,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import '../models/body_weight_entry.dart';
 import '../models/exercise.dart';
+import '../models/measurement_entry.dart';
 import '../models/scheduled_entry.dart';
 import '../models/workout.dart';
 import '../models/routine.dart';
@@ -14,6 +15,7 @@ abstract final class HiveService {
   static const _settings = 'settings';
   static const _bodyWeight = 'body_weight';
   static const _schedule = 'schedule';
+  static const _measurements = 'measurements';
   static const _seeded = 'seeded';
 
   static Box<Exercise> get exercises => Hive.box<Exercise>(_exercises);
@@ -24,6 +26,8 @@ abstract final class HiveService {
       Hive.box<BodyWeightEntry>(_bodyWeight);
   static Box<ScheduledEntry> get schedule =>
       Hive.box<ScheduledEntry>(_schedule);
+  static Box<MeasurementEntry> get measurements =>
+      Hive.box<MeasurementEntry>(_measurements);
 
   static Future<void> init() async {
     await Hive.initFlutter();
@@ -37,7 +41,8 @@ abstract final class HiveService {
       ..registerAdapter(RoutineExerciseAdapter())
       ..registerAdapter(RoutineSetAdapter())
       ..registerAdapter(BodyWeightEntryAdapter())
-      ..registerAdapter(ScheduledEntryAdapter());
+      ..registerAdapter(ScheduledEntryAdapter())
+      ..registerAdapter(MeasurementEntryAdapter());
 
     await Future.wait([
       Hive.openBox<Exercise>(_exercises),
@@ -46,6 +51,7 @@ abstract final class HiveService {
       Hive.openBox<dynamic>(_settings),
       Hive.openBox<BodyWeightEntry>(_bodyWeight),
       Hive.openBox<ScheduledEntry>(_schedule),
+      Hive.openBox<MeasurementEntry>(_measurements),
     ]);
 
     await _seedIfNeeded();

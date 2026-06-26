@@ -10,6 +10,7 @@ import '../../utils/csv_export.dart';
 import '../../utils/format.dart';
 import '../stats/muscle_heatmap_screen.dart';
 import '../tools/body_weight_screen.dart';
+import '../tools/measurements_screen.dart';
 import '../tools/plate_calculator_screen.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -264,6 +265,33 @@ class ProfileScreen extends ConsumerWidget {
                     ),
                     subtitle: Text(
                       'Track weight over time',
+                      style: GoogleFonts.poppins(
+                        fontSize: 12,
+                        color: cs.onSurface.withValues(alpha: 0.5),
+                      ),
+                    ),
+                    trailing: Icon(Icons.chevron_right,
+                        color: cs.onSurface.withValues(alpha: 0.3)),
+                  ),
+                  Divider(height: 1, color: cs.outline),
+                  ListTile(
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const MeasurementsScreen(),
+                      ),
+                    ),
+                    leading: Icon(Icons.straighten_outlined,
+                        color: cs.primary, size: 20),
+                    title: Text(
+                      'Body Measurements',
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: cs.onSurface,
+                      ),
+                    ),
+                    subtitle: Text(
+                      'Waist, chest, biceps and more',
                       style: GoogleFonts.poppins(
                         fontSize: 12,
                         color: cs.onSurface.withValues(alpha: 0.5),
