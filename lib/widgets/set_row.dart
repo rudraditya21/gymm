@@ -11,6 +11,7 @@ class SetRow extends StatefulWidget {
   final ActiveSet set;
   final bool useKg;
   final bool isCardio;
+  final bool isBodyweight;
   final OnSetComplete onComplete;
   final VoidCallback onRemove;
   final VoidCallback onCycleType;
@@ -20,6 +21,7 @@ class SetRow extends StatefulWidget {
     required this.set,
     required this.useKg,
     required this.isCardio,
+    this.isBodyweight = false,
     required this.onComplete,
     required this.onRemove,
     required this.onCycleType,
@@ -134,11 +136,17 @@ class _SetRowState extends State<SetRow> {
         ? cs.primary.withValues(alpha: 0.06)
         : Colors.transparent;
 
-    final prevText = widget.isCardio
-        ? '–'
-        : (set.prevWeight != null && set.prevReps != null)
-            ? '${_weightText(set.prevWeight, widget.useKg)}×${set.prevReps}'
-            : '–';
+    String prevText;
+    if (widget.isCardio) {
+      prevText = '–';
+    } else if (set.prevReps != null) {
+      final w = set.prevWeight != null
+          ? _weightText(set.prevWeight, widget.useKg)
+          : (widget.isBodyweight ? 'BW' : '–');
+      prevText = '$w×${set.prevReps}';
+    } else {
+      prevText = '–';
+    }
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 150),
@@ -180,7 +188,11 @@ class _SetRowState extends State<SetRow> {
             flex: 3,
             child: _NumberField(
               controller: _primaryCtrl,
-              hint: widget.isCardio ? 'min' : (widget.useKg ? 'kg' : 'lb'),
+              hint: widget.isCardio
+                  ? 'min'
+                  : widget.isBodyweight
+                      ? (widget.useKg ? '+kg' : '+lb')
+                      : (widget.useKg ? 'kg' : 'lb'),
               decimal: !widget.isCardio,
               completed: completed,
               cs: cs,

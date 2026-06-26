@@ -36,9 +36,10 @@ class ExerciseBlock extends ConsumerWidget {
     final useKg = ref.watch(settingsProvider).useKg;
     final restSeconds = ref.watch(settingsProvider).restSeconds;
 
-    // Detect cardio via Hive exercise record
+    // Detect exercise type via Hive exercise record
     final ex = HiveService.exercises.get(exercise.exerciseId);
     final isCardio = ex?.primaryMuscle == MuscleGroup.cardio;
+    final isBodyweight = !isCardio && ex?.equipment == Equipment.bodyweight;
 
     final suggestion =
         isCardio ? null : _overloadSuggestion(exercise.exerciseId, useKg);
@@ -111,6 +112,14 @@ class ExerciseBlock extends ConsumerWidget {
                             color: cs.onSurface.withValues(alpha: 0.4),
                           ),
                         ),
+                      if (isBodyweight)
+                        Text(
+                          'Bodyweight — weight is optional',
+                          style: GoogleFonts.poppins(
+                            fontSize: 11,
+                            color: cs.onSurface.withValues(alpha: 0.4),
+                          ),
+                        ),
                     ],
                   ),
                 ),
@@ -167,7 +176,11 @@ class ExerciseBlock extends ConsumerWidget {
                 Expanded(
                   flex: 3,
                   child: Text(
-                    isCardio ? 'MIN' : (useKg ? 'KG' : 'LB'),
+                    isCardio
+                        ? 'MIN'
+                        : isBodyweight
+                            ? (useKg ? '+KG' : '+LB')
+                            : (useKg ? 'KG' : 'LB'),
                     textAlign: TextAlign.center,
                     style: _headerStyle(cs),
                   ),
@@ -207,6 +220,7 @@ class ExerciseBlock extends ConsumerWidget {
                 set: set,
                 useKg: useKg,
                 isCardio: isCardio,
+                isBodyweight: isBodyweight,
                 onComplete: (weight, reps, duration, distance) {
                   notifier.completeSet(
                       exerciseIndex, setIndex, weight, reps, duration, distance);
