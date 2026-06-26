@@ -89,7 +89,7 @@ class HomeScreen extends ConsumerWidget {
             // Calendar heatmap
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: WorkoutCalendar(workouts: history),
+              child: const WorkoutCalendar(),
             ),
             const SizedBox(height: 28),
 
