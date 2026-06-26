@@ -187,6 +187,15 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
     return workout;
   }
 
+  void reorderExercises(int oldIndex, int newIndex) {
+    if (state == null) return;
+    final exercises = [...state!.exercises];
+    if (newIndex > oldIndex) newIndex--;
+    final item = exercises.removeAt(oldIndex);
+    exercises.insert(newIndex, item);
+    state = state!.copyWith(exercises: exercises);
+  }
+
   void cancel() => state = null;
 
   // ── Helpers ────────────────────────────────────────────────────────────────

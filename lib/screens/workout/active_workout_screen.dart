@@ -39,22 +39,28 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
           icon: const Icon(Icons.close),
           onPressed: () => _confirmDiscard(context, notifier),
         ),
+        // Workout name + elapsed timer stacked vertically
         title: GestureDetector(
           onTap: () => _renameDialog(context, workout.name, notifier),
-          child: Text(
-            workout.name,
-            style: GoogleFonts.poppins(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: cs.onSurface,
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                workout.name,
+                style: GoogleFonts.poppins(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: cs.onSurface,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              _ElapsedTimer(startedAt: workout.startedAt, cs: cs),
+            ],
           ),
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 4),
-            child: _ElapsedTimer(startedAt: workout.startedAt),
-          ),
           Padding(
             padding: const EdgeInsets.only(right: 8),
             child: TextButton(
@@ -77,42 +83,53 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
       ),
       body: Column(
         children: [
+          // Exercises list
           Expanded(
             child: workout.exercises.isEmpty
                 ? _EmptyState(cs: cs)
-                : ListView(
-                    padding: const EdgeInsets.only(bottom: 24),
-                    children: [
-                      ...workout.exercises.asMap().entries.map((e) =>
-                          ExerciseBlock(
-                            key: ValueKey(e.value.exerciseId + e.key.toString()),
-                            exerciseIndex: e.key,
-                            exercise: e.value,
-                          )),
-                    ],
+                : ReorderableListView(
+                    padding: const EdgeInsets.only(top: 8, bottom: 16),
+                    onReorder: notifier.reorderExercises,
+                    children: workout.exercises.asMap().entries.map((e) {
+                      return ExerciseBlock(
+                        key: ValueKey(
+                            '${e.value.exerciseId}_${e.key}'),
+                        exerciseIndex: e.key,
+                        exercise: e.value,
+                      );
+                    }).toList(),
                   ),
           ),
-          const RestTimerBar(),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => ExercisePickerScreen(
-              onSelect: (ex) => notifier.addExercise(ex),
+          // Add exercise — fixed above rest timer, never overlaps
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+            decoration: BoxDecoration(
+              color: cs.surface,
+              border: Border(top: BorderSide(color: cs.outline)),
+            ),
+            child: TextButton.icon(
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => ExercisePickerScreen(
+                    onSelect: (ex) => notifier.addExercise(ex),
+                  ),
+                ),
+              ),
+              icon: Icon(Icons.add, size: 18, color: cs.primary),
+              label: Text(
+                'Add Exercise',
+                style: GoogleFonts.poppins(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: cs.primary,
+                ),
+              ),
             ),
           ),
-        ),
-        backgroundColor: cs.primary,
-        foregroundColor: cs.onPrimary,
-        icon: const Icon(Icons.add),
-        label: Text(
-          'Add Exercise',
-          style: GoogleFonts.poppins(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+          // Rest timer — appears below the button, above safe area
+          const RestTimerBar(),
+        ],
       ),
     );
   }
@@ -122,11 +139,24 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
     final nav = Navigator.of(context);
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (ctx) => _FinishDialog(),
+      builder: (ctx) => AlertDialog(
+        title: const Text('Finish Workout?'),
+        content: const Text('Save this workout to your history?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text('Finish'),
+          ),
+        ],
+      ),
     );
     if (confirmed != true) return;
-    final workout = await notifier.finish();
-    nav.pop(workout);
+    await notifier.finish();
+    nav.pop();
   }
 
   Future<void> _confirmDiscard(
@@ -156,8 +186,8 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
     }
   }
 
-  Future<void> _renameDialog(
-      BuildContext context, String current, ActiveWorkoutNotifier notifier) async {
+  Future<void> _renameDialog(BuildContext context, String current,
+      ActiveWorkoutNotifier notifier) async {
     final ctrl = TextEditingController(text: current);
     final result = await showDialog<String>(
       context: context,
@@ -185,9 +215,12 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
   }
 }
 
+// ── Elapsed Timer ─────────────────────────────────────────────────────────────
+
 class _ElapsedTimer extends StatefulWidget {
   final DateTime startedAt;
-  const _ElapsedTimer({required this.startedAt});
+  final ColorScheme cs;
+  const _ElapsedTimer({required this.startedAt, required this.cs});
 
   @override
   State<_ElapsedTimer> createState() => _ElapsedTimerState();
@@ -199,7 +232,8 @@ class _ElapsedTimerState extends State<_ElapsedTimer> {
   @override
   void initState() {
     super.initState();
-    _timer = Timer.periodic(const Duration(seconds: 1), (_) => setState(() {}));
+    _timer = Timer.periodic(
+        const Duration(seconds: 1), (_) => setState(() {}));
   }
 
   @override
@@ -210,7 +244,6 @@ class _ElapsedTimerState extends State<_ElapsedTimer> {
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
     final elapsed = DateTime.now().difference(widget.startedAt);
     final h = elapsed.inHours;
     final m = elapsed.inMinutes.remainder(60).toString().padLeft(2, '0');
@@ -220,13 +253,15 @@ class _ElapsedTimerState extends State<_ElapsedTimer> {
     return Text(
       text,
       style: GoogleFonts.poppins(
-        fontSize: 14,
-        fontWeight: FontWeight.w500,
-        color: cs.onSurface.withValues(alpha: 0.6),
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        color: widget.cs.onSurface.withValues(alpha: 0.5),
       ),
     );
   }
 }
+
+// ── Empty State ───────────────────────────────────────────────────────────────
 
 class _EmptyState extends StatelessWidget {
   final ColorScheme cs;
@@ -250,7 +285,7 @@ class _EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            'Tap "Add Exercise" to get started',
+            'Tap "Add Exercise" below to get started',
             style: GoogleFonts.poppins(
               fontSize: 13,
               color: cs.onSurface.withValues(alpha: 0.3),
@@ -258,27 +293,6 @@ class _EmptyState extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _FinishDialog extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text('Finish Workout?'),
-      content:
-          const Text('Save this workout to your history?'),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(false),
-          child: const Text('Cancel'),
-        ),
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(true),
-          child: const Text('Finish'),
-        ),
-      ],
     );
   }
 }
