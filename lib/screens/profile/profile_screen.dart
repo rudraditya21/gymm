@@ -107,28 +107,57 @@ class ProfileScreen extends ConsumerWidget {
             _SectionLabel('UNITS'),
             const SizedBox(height: 10),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               decoration: BoxDecoration(
                 color: cs.surface,
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: cs.outline),
               ),
-              child: Row(
+              child: Column(
                 children: [
-                  Text(
-                    'Weight unit',
-                    style: GoogleFonts.poppins(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: cs.onSurface,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Weight unit',
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: cs.onSurface,
+                          ),
+                        ),
+                        const Spacer(),
+                        _UnitToggle(
+                          useKg: settings.useKg,
+                          onChanged: (v) =>
+                              ref.read(settingsProvider.notifier).setUseKg(v),
+                          cs: cs,
+                        ),
+                      ],
                     ),
                   ),
-                  const Spacer(),
-                  _UnitToggle(
-                    useKg: settings.useKg,
-                    onChanged: (v) =>
-                        ref.read(settingsProvider.notifier).setUseKg(v),
-                    cs: cs,
+                  Divider(height: 1, color: cs.outline),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Measurement unit',
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: cs.onSurface,
+                          ),
+                        ),
+                        const Spacer(),
+                        _MeasurementUnitToggle(
+                          useCm: settings.useCm,
+                          onChanged: (v) =>
+                              ref.read(settingsProvider.notifier).setUseCm(v),
+                          cs: cs,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -527,6 +556,36 @@ class _ThemeOption extends StatelessWidget {
             child: Text(label),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _MeasurementUnitToggle extends StatelessWidget {
+  final bool useCm;
+  final ValueChanged<bool> onChanged;
+  final ColorScheme cs;
+
+  const _MeasurementUnitToggle(
+      {required this.useCm, required this.onChanged, required this.cs});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 34,
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.all(2),
+      decoration: BoxDecoration(
+        color: cs.secondary,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: cs.outline),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _UnitOption(label: 'cm', selected: useCm, onTap: () => onChanged(true), cs: cs),
+          _UnitOption(label: 'in', selected: !useCm, onTap: () => onChanged(false), cs: cs),
+        ],
       ),
     );
   }

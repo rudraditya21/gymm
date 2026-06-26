@@ -9,6 +9,7 @@ class SettingsNotifier extends Notifier<AppSettings> {
     final box = HiveService.settings;
     return AppSettings(
       useKg: box.get('useKg', defaultValue: true) as bool,
+      useCm: box.get('useCm', defaultValue: true) as bool,
       restSeconds: box.get('restSeconds', defaultValue: 90) as int,
     );
   }
@@ -16,6 +17,11 @@ class SettingsNotifier extends Notifier<AppSettings> {
   void setUseKg(bool value) {
     HiveService.settings.put('useKg', value);
     state = state.copyWith(useKg: value);
+  }
+
+  void setUseCm(bool value) {
+    HiveService.settings.put('useCm', value);
+    state = state.copyWith(useCm: value);
   }
 
   void setRestSeconds(int value) {

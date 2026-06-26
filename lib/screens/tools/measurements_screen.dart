@@ -6,6 +6,18 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../models/measurement_entry.dart';
 import '../../providers/measurement_provider.dart';
+import '../../providers/settings_provider.dart';
+
+double _toDisplay(double cm, bool useCm) =>
+    useCm ? cm : cm * 0.393701;
+
+String _fmtVal(double cm, bool useCm) {
+  final v = _toDisplay(cm, useCm);
+  final unit = useCm ? 'cm' : 'in';
+  return v % 1 == 0
+      ? '${v.toInt()} $unit'
+      : '${v.toStringAsFixed(1)} $unit';
+}
 
 class MeasurementsScreen extends ConsumerWidget {
   const MeasurementsScreen({super.key});
@@ -14,6 +26,7 @@ class MeasurementsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final cs = Theme.of(context).colorScheme;
     final all = ref.watch(measurementProvider);
+    final useCm = ref.watch(settingsProvider).useCm;
 
     // Latest value per body part
     final latest = <String, MeasurementEntry>{};
@@ -25,8 +38,7 @@ class MeasurementsScreen extends ConsumerWidget {
     // Previous value per body part (second-latest)
     final prev = <String, MeasurementEntry>{};
     for (final part in kBodyParts) {
-      final entries =
-          all.where((e) => e.bodyPart == part).toList();
+      final entries = all.where((e) => e.bodyPart == part).toList();
       if (entries.length >= 2) prev[part] = entries[entries.length - 2];
     }
 
@@ -54,16 +66,21 @@ class MeasurementsScreen extends ConsumerWidget {
           final p = prev[part];
 
           double? delta;
-          if (l != null && p != null) delta = l.valueCm - p.valueCm;
+          if (l != null && p != null) {
+            delta = _toDisplay(l.valueCm, useCm) -
+                _toDisplay(p.valueCm, useCm);
+          }
 
           return _PartCard(
             part: part,
             latest: l,
             delta: delta,
+            useCm: useCm,
             cs: cs,
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (_) => _MeasurementDetailScreen(bodyPart: part),
+                builder: (_) =>
+                    _MeasurementDetailScreen(bodyPart: part),
               ),
             ),
           );
@@ -79,6 +96,7 @@ class _PartCard extends StatelessWidget {
   final String part;
   final MeasurementEntry? latest;
   final double? delta;
+  final bool useCm;
   final ColorScheme cs;
   final VoidCallback onTap;
 
@@ -86,12 +104,14 @@ class _PartCard extends StatelessWidget {
     required this.part,
     required this.latest,
     required this.delta,
+    required this.useCm,
     required this.cs,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
+    final unit = useCm ? 'cm' : 'in';
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -115,7 +135,7 @@ class _PartCard extends StatelessWidget {
             ),
             if (latest == null)
               Text(
-                '— cm',
+                '— $unit',
                 style: GoogleFonts.poppins(
                   fontSize: 14,
                   color: cs.onSurface.withValues(alpha: 0.3),
@@ -123,7 +143,7 @@ class _PartCard extends StatelessWidget {
               )
             else ...[
               Text(
-                '${latest!.valueCm % 1 == 0 ? latest!.valueCm.toInt() : latest!.valueCm.toStringAsFixed(1)} cm',
+                _fmtVal(latest!.valueCm, useCm),
                 style: GoogleFonts.poppins(
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
@@ -172,12 +192,13 @@ class _MeasurementDetailScreenState
     super.dispose();
   }
 
-  Future<void> _addEntry() async {
+  Future<void> _addEntry(bool useCm) async {
     _ctrl.clear();
+    final unit = useCm ? 'cm' : 'in';
     final result = await showDialog<double>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('Log ${widget.bodyPart} (cm)'),
+        title: Text('Log ${widget.bodyPart} ($unit)'),
         content: TextField(
           controller: _ctrl,
           autofocus: true,
@@ -186,9 +207,9 @@ class _MeasurementDetailScreenState
           inputFormatters: [
             FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
           ],
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             hintText: '0.0',
-            suffixText: 'cm',
+            suffixText: unit,
           ),
         ),
         actions: [
@@ -207,17 +228,20 @@ class _MeasurementDetailScreenState
       ),
     );
     if (result == null || result <= 0) return;
+    // Always store in cm
+    final cm = useCm ? result : result / 0.393701;
     final today = DateTime.now();
     await ref.read(measurementProvider.notifier).add(
           widget.bodyPart,
           DateTime(today.year, today.month, today.day),
-          result,
+          cm,
         );
   }
 
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+    final useCm = ref.watch(settingsProvider).useCm;
     final entries = ref
         .watch(measurementProvider.notifier)
         .forPart(widget.bodyPart);
@@ -238,18 +262,18 @@ class _MeasurementDetailScreenState
         actions: [
           IconButton(
             icon: Icon(Icons.add, color: cs.primary),
-            onPressed: _addEntry,
+            onPressed: () => _addEntry(useCm),
           ),
         ],
       ),
       body: entries.isEmpty
-          ? _Empty(cs: cs, onAdd: _addEntry)
+          ? _Empty(cs: cs, onAdd: () => _addEntry(useCm))
           : ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                _StatsRow(entries: entries, cs: cs),
+                _StatsRow(entries: entries, useCm: useCm, cs: cs),
                 const SizedBox(height: 20),
-                _Chart(entries: entries, cs: cs),
+                _Chart(entries: entries, useCm: useCm, cs: cs),
                 const SizedBox(height: 24),
                 Text(
                   'HISTORY',
@@ -264,6 +288,7 @@ class _MeasurementDetailScreenState
                 const SizedBox(height: 8),
                 ...entries.reversed.map((e) => _EntryRow(
                       entry: e,
+                      useCm: useCm,
                       cs: cs,
                       onDelete: () => ref
                           .read(measurementProvider.notifier)
@@ -279,11 +304,9 @@ class _MeasurementDetailScreenState
 
 class _StatsRow extends StatelessWidget {
   final List<MeasurementEntry> entries;
+  final bool useCm;
   final ColorScheme cs;
-  const _StatsRow({required this.entries, required this.cs});
-
-  String _fmt(double v) =>
-      v % 1 == 0 ? '${v.toInt()} cm' : '${v.toStringAsFixed(1)} cm';
+  const _StatsRow({required this.entries, required this.useCm, required this.cs});
 
   @override
   Widget build(BuildContext context) {
@@ -301,10 +324,10 @@ class _StatsRow extends StatelessWidget {
       ),
       child: Row(
         children: [
-          _Cell(label: 'Current', value: _fmt(entries.last.valueCm),
+          _Cell(label: 'Current', value: _fmtVal(entries.last.valueCm, useCm),
               highlight: true, cs: cs),
-          _Cell(label: 'Min', value: _fmt(minV), cs: cs),
-          _Cell(label: 'Max', value: _fmt(maxV), cs: cs),
+          _Cell(label: 'Min', value: _fmtVal(minV, useCm), cs: cs),
+          _Cell(label: 'Max', value: _fmtVal(maxV, useCm), cs: cs),
         ],
       ),
     );
@@ -353,13 +376,14 @@ class _Cell extends StatelessWidget {
 
 class _Chart extends StatelessWidget {
   final List<MeasurementEntry> entries;
+  final bool useCm;
   final ColorScheme cs;
-  const _Chart({required this.entries, required this.cs});
+  const _Chart({required this.entries, required this.useCm, required this.cs});
 
   @override
   Widget build(BuildContext context) {
     final spots = entries.asMap().entries
-        .map((e) => FlSpot(e.key.toDouble(), e.value.valueCm))
+        .map((e) => FlSpot(e.key.toDouble(), _toDisplay(e.value.valueCm, useCm)))
         .toList();
 
     final ys = spots.map((s) => s.y).toList();
@@ -455,19 +479,18 @@ class _Chart extends StatelessWidget {
 
 class _EntryRow extends StatelessWidget {
   final MeasurementEntry entry;
+  final bool useCm;
   final ColorScheme cs;
   final VoidCallback onDelete;
 
   const _EntryRow(
-      {required this.entry, required this.cs, required this.onDelete});
+      {required this.entry, required this.useCm, required this.cs, required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
     final d = entry.date;
     final dateStr = '${_month(d.month)} ${d.day}, ${d.year}';
-    final v = entry.valueCm % 1 == 0
-        ? '${entry.valueCm.toInt()} cm'
-        : '${entry.valueCm.toStringAsFixed(1)} cm';
+    final v = _fmtVal(entry.valueCm, useCm);
 
     return Dismissible(
       key: ValueKey('${entry.bodyPart}_${entry.date.millisecondsSinceEpoch}'),
