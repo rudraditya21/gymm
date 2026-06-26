@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -9,6 +10,16 @@ class RestTimerBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen<RestTimerState>(restTimerProvider, (prev, next) {
+      if (prev != null &&
+          prev.isRunning &&
+          !next.isRunning &&
+          next.remaining == 0) {
+        HapticFeedback.heavyImpact();
+        Future.delayed(const Duration(milliseconds: 150),
+            () => HapticFeedback.heavyImpact());
+      }
+    });
     final timer = ref.watch(restTimerProvider);
     if (!timer.isRunning && timer.remaining == 0) return const SizedBox.shrink();
 
