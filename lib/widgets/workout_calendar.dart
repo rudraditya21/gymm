@@ -270,7 +270,7 @@ class _WorkoutCalendarState extends ConsumerState<WorkoutCalendar> {
             _LegendDot(
                 color: cs.error.withValues(alpha: 0.10),
                 border: cs.error.withValues(alpha: 0.35),
-                label: 'Rest',
+                label: 'zzz',
                 cs: cs),
           ],
         ),
