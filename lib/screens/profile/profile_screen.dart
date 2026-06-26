@@ -9,6 +9,7 @@ import '../../utils/backup_restore.dart';
 import '../../utils/csv_export.dart';
 import '../../utils/format.dart';
 import '../../utils/streak.dart';
+import '../stats/muscle_heatmap_screen.dart';
 import '../tools/body_weight_screen.dart';
 import '../tools/plate_calculator_screen.dart';
 
@@ -231,6 +232,46 @@ class ProfileScreen extends ConsumerWidget {
                 ],
               );
             }),
+            const SizedBox(height: 28),
+
+            // Stats
+            _SectionLabel('STATS'),
+            const SizedBox(height: 10),
+            Container(
+              decoration: BoxDecoration(
+                color: cs.surface,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: cs.outline),
+              ),
+              child: ListTile(
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const MuscleHeatmapScreen(),
+                  ),
+                ),
+                leading: Icon(Icons.accessibility_new, color: cs.primary, size: 20),
+                title: Text(
+                  'Muscle Activity',
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: cs.onSurface,
+                  ),
+                ),
+                subtitle: Text(
+                  'Front/back heatmap of recent sessions',
+                  style: GoogleFonts.poppins(
+                    fontSize: 12,
+                    color: cs.onSurface.withValues(alpha: 0.5),
+                  ),
+                ),
+                trailing: Icon(Icons.chevron_right,
+                    color: cs.onSurface.withValues(alpha: 0.3)),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+              ),
+            ),
             const SizedBox(height: 28),
 
             // Tools
