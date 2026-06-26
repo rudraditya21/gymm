@@ -102,21 +102,38 @@ class ExerciseBlock extends ConsumerWidget {
               ],
             ),
           ),
-          // Sets
+          // Sets — swipe left to delete
           ...exercise.sets.asMap().entries.map((entry) {
             final setIndex = entry.key;
             final set = entry.value;
-            return SetRow(
-              key: ValueKey('${exercise.exerciseId}_$setIndex'),
-              set: set,
-              useKg: useKg,
-              onComplete: (weight, reps) {
-                notifier.completeSet(exerciseIndex, setIndex, weight, reps);
-                if (!set.isCompleted) {
-                  ref.read(restTimerProvider.notifier).start(restSeconds);
-                }
-              },
-              onRemove: () => notifier.removeSet(exerciseIndex, setIndex),
+            return Dismissible(
+              key: ValueKey('${exercise.exerciseId}_set_$setIndex'),
+              direction: DismissDirection.endToStart,
+              onDismissed: (_) =>
+                  notifier.removeSet(exerciseIndex, setIndex),
+              background: Container(
+                alignment: Alignment.centerRight,
+                padding: const EdgeInsets.only(right: 20),
+                color: cs.error.withValues(alpha: 0.12),
+                child: Icon(Icons.delete_outline,
+                    color: cs.error, size: 20),
+              ),
+              child: SetRow(
+                key: ValueKey('${exercise.exerciseId}_row_$setIndex'),
+                set: set,
+                useKg: useKg,
+                onComplete: (weight, reps) {
+                  notifier.completeSet(
+                      exerciseIndex, setIndex, weight, reps);
+                  if (!set.isCompleted) {
+                    ref
+                        .read(restTimerProvider.notifier)
+                        .start(restSeconds);
+                  }
+                },
+                onRemove: () =>
+                    notifier.removeSet(exerciseIndex, setIndex),
+              ),
             );
           }),
           // Add set
