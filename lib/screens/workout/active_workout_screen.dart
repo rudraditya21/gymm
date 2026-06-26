@@ -8,6 +8,7 @@ import '../../providers/active_workout_provider.dart';
 import '../../widgets/exercise_block.dart';
 import '../../widgets/rest_timer_bar.dart';
 import 'exercise_picker_screen.dart';
+import 'workout_summary_screen.dart';
 
 class ActiveWorkoutScreen extends ConsumerStatefulWidget {
   const ActiveWorkoutScreen({super.key});
@@ -155,8 +156,10 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
       ),
     );
     if (confirmed != true) return;
-    await notifier.finish();
-    nav.pop();
+    final (workout, prs) = await notifier.finish();
+    nav.pushReplacement(MaterialPageRoute(
+      builder: (_) => WorkoutSummaryScreen(workout: workout, prs: prs),
+    ));
   }
 
   Future<void> _confirmDiscard(

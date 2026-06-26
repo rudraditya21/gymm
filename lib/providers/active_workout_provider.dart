@@ -4,6 +4,7 @@ import 'package:uuid/uuid.dart';
 import '../data/hive_service.dart';
 import '../models/active_workout.dart';
 import '../models/exercise.dart';
+import '../models/pr_result.dart';
 import '../models/routine.dart';
 import '../models/workout.dart';
 import '../utils/format.dart';
@@ -156,9 +157,12 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
         (s) => s.copyWith(reps: reps, clearReps: reps == null));
   }
 
-  Future<Workout> finish() async {
+  Future<(Workout, List<PRResult>)> finish() async {
     final s = state!;
     final now = DateTime.now();
+
+    // Compute PRs before saving so we compare against previous workouts only
+    final prs = _computePRs(s);
 
     final workout = Workout(
       id: s.id,
@@ -184,7 +188,50 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
     await HiveService.workouts.put(workout.id, workout);
     ref.read(historyProvider.notifier).refresh();
     state = null;
-    return workout;
+    return (workout, prs);
+  }
+
+  List<PRResult> _computePRs(ActiveWorkoutState s) {
+    final results = <PRResult>[];
+    for (final ex in s.exercises) {
+      final historicalBest = _bestHistoricalE1RM(ex.exerciseId);
+      double newBest = 0;
+      double bestWeight = 0;
+      int bestReps = 0;
+      for (final set in ex.sets) {
+        if (!set.isCompleted || set.weight == null || set.reps == null) continue;
+        final e = estimate1RM(set.weight!, set.reps!);
+        if (e > newBest) {
+          newBest = e;
+          bestWeight = set.weight!;
+          bestReps = set.reps!;
+        }
+      }
+      if (newBest > historicalBest) {
+        results.add(PRResult(
+          exerciseName: ex.exerciseName,
+          weight: bestWeight,
+          reps: bestReps,
+          estimated1RM: newBest,
+        ));
+      }
+    }
+    return results;
+  }
+
+  double _bestHistoricalE1RM(String exerciseId) {
+    double best = 0;
+    for (final workout in HiveService.workouts.values) {
+      for (final ex in workout.exercises) {
+        if (ex.exerciseId != exerciseId) continue;
+        for (final s in ex.sets) {
+          if (!s.isCompleted || s.weight == null || s.reps == null) continue;
+          final e = estimate1RM(s.weight!, s.reps!);
+          if (e > best) best = e;
+        }
+      }
+    }
+    return best;
   }
 
   void reorderExercises(int oldIndex, int newIndex) {
