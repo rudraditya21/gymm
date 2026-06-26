@@ -136,6 +136,21 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
         (s) => s.copyWith(isWarmup: !s.isWarmup));
   }
 
+  void cycleSetType(int exerciseIndex, int setIndex) {
+    _updateSet(exerciseIndex, setIndex, (s) {
+      switch (s.setType) {
+        case SetType.normal:
+          return s.copyWith(isWarmup: true, isDropSet: false, isAmrap: false);
+        case SetType.warmup:
+          return s.copyWith(isWarmup: false, isDropSet: true, isAmrap: false);
+        case SetType.dropSet:
+          return s.copyWith(isWarmup: false, isDropSet: false, isAmrap: true);
+        case SetType.amrap:
+          return s.copyWith(isWarmup: false, isDropSet: false, isAmrap: false);
+      }
+    });
+  }
+
   void completeSet(int exerciseIndex, int setIndex, double? weight, int? reps) {
     _updateSet(
       exerciseIndex,
@@ -185,6 +200,8 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
                           reps: as_.reps,
                           isCompleted: as_.isCompleted,
                           isWarmup: as_.isWarmup,
+                          isDropSet: as_.isDropSet,
+                          isAmrap: as_.isAmrap,
                         ))
                     .toList(),
               ))

@@ -11,6 +11,7 @@ class SetRow extends StatefulWidget {
   final bool useKg;
   final OnSetComplete onComplete;
   final VoidCallback onRemove;
+  final VoidCallback onCycleType;
 
   const SetRow({
     super.key,
@@ -18,6 +19,7 @@ class SetRow extends StatefulWidget {
     required this.useKg,
     required this.onComplete,
     required this.onRemove,
+    required this.onCycleType,
   });
 
   @override
@@ -69,6 +71,32 @@ class _SetRowState extends State<SetRow> {
     return widget.useKg ? v : v / 2.20462;
   }
 
+  static String _typeLabel(ActiveSet set) {
+    switch (set.setType) {
+      case SetType.warmup:
+        return 'W';
+      case SetType.dropSet:
+        return 'D';
+      case SetType.amrap:
+        return 'F';
+      case SetType.normal:
+        return '${set.index + 1}';
+    }
+  }
+
+  static Color _typeColor(ActiveSet set, ColorScheme cs) {
+    switch (set.setType) {
+      case SetType.warmup:
+        return cs.primary.withValues(alpha: 0.6);
+      case SetType.dropSet:
+        return Colors.orange.withValues(alpha: 0.8);
+      case SetType.amrap:
+        return Colors.red.withValues(alpha: 0.7);
+      case SetType.normal:
+        return cs.onSurface.withValues(alpha: 0.45);
+    }
+  }
+
   void _onCheck() {
     final weight = _parseWeight(_weightCtrl.text.trim());
     final reps = int.tryParse(_repsCtrl.text.trim());
@@ -96,20 +124,19 @@ class _SetRowState extends State<SetRow> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       child: Row(
         children: [
-          // Set number / warmup indicator
+          // Set type indicator — tap to cycle, long-press to remove
           GestureDetector(
+            onTap: widget.onCycleType,
             onLongPress: widget.onRemove,
             child: SizedBox(
               width: 28,
               child: Text(
-                set.isWarmup ? 'W' : '${set.index + 1}',
+                _typeLabel(set),
                 textAlign: TextAlign.center,
                 style: GoogleFonts.poppins(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color: set.isWarmup
-                      ? cs.primary.withValues(alpha: 0.6)
-                      : cs.onSurface.withValues(alpha: 0.45),
+                  color: _typeColor(set, cs),
                 ),
               ),
             ),

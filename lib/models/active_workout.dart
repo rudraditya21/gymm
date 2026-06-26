@@ -1,7 +1,11 @@
+enum SetType { normal, warmup, dropSet, amrap }
+
 class ActiveSet {
   final int index;
   final bool isWarmup;
   final bool isCompleted;
+  final bool isDropSet;
+  final bool isAmrap;
   final double? weight;
   final int? reps;
   final double? prevWeight;
@@ -11,15 +15,26 @@ class ActiveSet {
     required this.index,
     this.isWarmup = false,
     this.isCompleted = false,
+    this.isDropSet = false,
+    this.isAmrap = false,
     this.weight,
     this.reps,
     this.prevWeight,
     this.prevReps,
   });
 
+  SetType get setType {
+    if (isWarmup) return SetType.warmup;
+    if (isDropSet) return SetType.dropSet;
+    if (isAmrap) return SetType.amrap;
+    return SetType.normal;
+  }
+
   ActiveSet copyWith({
     bool? isWarmup,
     bool? isCompleted,
+    bool? isDropSet,
+    bool? isAmrap,
     double? weight,
     int? reps,
     bool clearWeight = false,
@@ -29,6 +44,8 @@ class ActiveSet {
       index: index,
       isWarmup: isWarmup ?? this.isWarmup,
       isCompleted: isCompleted ?? this.isCompleted,
+      isDropSet: isDropSet ?? this.isDropSet,
+      isAmrap: isAmrap ?? this.isAmrap,
       weight: clearWeight ? null : (weight ?? this.weight),
       reps: clearReps ? null : (reps ?? this.reps),
       prevWeight: prevWeight,

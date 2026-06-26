@@ -150,6 +150,8 @@ class ExerciseBlock extends ConsumerWidget {
                 },
                 onRemove: () =>
                     notifier.removeSet(exerciseIndex, setIndex),
+                onCycleType: () =>
+                    notifier.cycleSetType(exerciseIndex, setIndex),
               ),
             );
           }),
