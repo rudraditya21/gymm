@@ -89,8 +89,13 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
             child: workout.exercises.isEmpty
                 ? _EmptyState(cs: cs)
                 : ReorderableListView(
-                    padding: const EdgeInsets.only(top: 8, bottom: 16),
+                    padding: const EdgeInsets.only(top: 8, bottom: 4),
                     onReorder: notifier.reorderExercises,
+                    footer: _NotesField(
+                      initial: workout.notes,
+                      cs: cs,
+                      onChanged: notifier.setNotes,
+                    ),
                     children: workout.exercises.asMap().entries.map((e) {
                       return ExerciseBlock(
                         key: ValueKey(
@@ -215,6 +220,67 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
     );
     ctrl.dispose();
     if (result != null && result.isNotEmpty) notifier.rename(result);
+  }
+}
+
+// ── Notes Field ───────────────────────────────────────────────────────────────
+
+class _NotesField extends StatefulWidget {
+  final String initial;
+  final ColorScheme cs;
+  final ValueChanged<String> onChanged;
+
+  const _NotesField({
+    required this.initial,
+    required this.cs,
+    required this.onChanged,
+  });
+
+  @override
+  State<_NotesField> createState() => _NotesFieldState();
+}
+
+class _NotesFieldState extends State<_NotesField> {
+  late final TextEditingController _ctrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = TextEditingController(text: widget.initial);
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = widget.cs;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+      child: TextField(
+        controller: _ctrl,
+        onChanged: widget.onChanged,
+        maxLines: null,
+        style: GoogleFonts.poppins(fontSize: 14, color: cs.onSurface),
+        decoration: InputDecoration(
+          hintText: 'Workout notes…',
+          hintStyle: GoogleFonts.poppins(
+              fontSize: 14,
+              color: cs.onSurface.withValues(alpha: 0.3)),
+          filled: true,
+          fillColor: cs.secondary,
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide.none,
+          ),
+        ),
+      ),
+    );
   }
 }
 

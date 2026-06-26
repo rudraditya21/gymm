@@ -85,6 +85,17 @@ class WorkoutDetailScreen extends ConsumerWidget {
               ],
             ),
           ),
+          if (workout.notes != null && workout.notes!.isNotEmpty) ...[
+            const SizedBox(height: 16),
+            Text(
+              workout.notes!,
+              style: GoogleFonts.poppins(
+                fontSize: 14,
+                color: cs.onSurface.withValues(alpha: 0.7),
+                height: 1.5,
+              ),
+            ),
+          ],
           const SizedBox(height: 20),
           // Exercises
           ...workout.exercises.map((ex) {

@@ -61,6 +61,11 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
     state = state!.copyWith(name: name);
   }
 
+  void setNotes(String notes) {
+    if (state == null) return;
+    state = state!.copyWith(notes: notes);
+  }
+
   void addExercise(Exercise exercise) {
     if (state == null) return;
     final prev = _lastSets(exercise.id);
@@ -169,6 +174,7 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
       name: s.name,
       startedAt: s.startedAt,
       finishedAt: now,
+      notes: s.notes.isEmpty ? null : s.notes,
       exercises: s.exercises
           .map((ae) => WorkoutExercise(
                 exerciseId: ae.exerciseId,

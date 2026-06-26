@@ -60,23 +60,27 @@ class ActiveWorkoutState {
   final String name;
   final DateTime startedAt;
   final List<ActiveExercise> exercises;
+  final String notes;
 
   const ActiveWorkoutState({
     required this.id,
     required this.name,
     required this.startedAt,
     required this.exercises,
+    this.notes = '',
   });
 
   ActiveWorkoutState copyWith({
     String? name,
     List<ActiveExercise>? exercises,
+    String? notes,
   }) =>
       ActiveWorkoutState(
         id: id,
         name: name ?? this.name,
         startedAt: startedAt,
         exercises: exercises ?? this.exercises,
+        notes: notes ?? this.notes,
       );
 
   double get totalVolume => exercises.fold(
