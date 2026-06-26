@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../data/hive_service.dart';
 import '../models/routine.dart';
 import '../models/scheduled_entry.dart';
 import '../models/workout.dart';
@@ -29,8 +30,17 @@ class _WorkoutCalendarState extends ConsumerState<WorkoutCalendar> {
     _month = DateTime(n.year, n.month, 1);
   }
 
-  void _prev() => setState(
-      () => _month = DateTime(_month.year, _month.month - 1, 1));
+  bool get _canGoPrev {
+    final ob = HiveService.onboardingDate;
+    final prev = DateTime(_month.year, _month.month - 1, 1);
+    return !prev.isBefore(DateTime(ob.year, ob.month, 1));
+  }
+
+  void _prev() {
+    if (!_canGoPrev) return;
+    setState(() => _month = DateTime(_month.year, _month.month - 1, 1));
+  }
+
   void _next() => setState(
       () => _month = DateTime(_month.year, _month.month + 1, 1));
 
@@ -77,7 +87,7 @@ class _WorkoutCalendarState extends ConsumerState<WorkoutCalendar> {
         // Month navigation
         Row(
           children: [
-            _NavBtn(icon: Icons.chevron_left, onTap: _prev, cs: cs),
+            _NavBtn(icon: Icons.chevron_left, onTap: _canGoPrev ? _prev : null, cs: cs),
             Expanded(
               child: Center(
                 child: Text(
@@ -128,6 +138,8 @@ class _WorkoutCalendarState extends ConsumerState<WorkoutCalendar> {
             if (i < startOffset) return const SizedBox();
             final day = i - startOffset + 1;
             final date = DateTime(_month.year, _month.month, day);
+            final ob = HiveService.onboardingDate;
+            final isBlocked = date.isBefore(ob);
             final vol = volumeByDay[day];
             final sched = scheduleByDay[day];
             final isToday = day == now.day &&
@@ -139,6 +151,24 @@ class _WorkoutCalendarState extends ConsumerState<WorkoutCalendar> {
             final hasWorkout = vol != null;
             final isRest = sched?.isRestDay == true;
             final isScheduled = sched != null && !sched.isRestDay;
+
+            // Blocked cells (before onboarding date) — dim, no interaction.
+            if (isBlocked) {
+              return Container(
+                decoration: BoxDecoration(
+                  color: cs.onSurface.withValues(alpha: 0.03),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  '$day',
+                  style: GoogleFonts.poppins(
+                    fontSize: 10,
+                    color: cs.onSurface.withValues(alpha: 0.15),
+                  ),
+                ),
+              );
+            }
 
             Color bg;
             Border? border;
@@ -274,7 +304,7 @@ class _WorkoutCalendarState extends ConsumerState<WorkoutCalendar> {
 
 class _NavBtn extends StatelessWidget {
   final IconData icon;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final ColorScheme cs;
   const _NavBtn({required this.icon, required this.onTap, required this.cs});
 
@@ -285,7 +315,8 @@ class _NavBtn extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
         child: Icon(icon,
-            size: 20, color: cs.onSurface.withValues(alpha: 0.55)),
+            size: 20,
+            color: cs.onSurface.withValues(alpha: onTap != null ? 0.55 : 0.2)),
       ),
     );
   }

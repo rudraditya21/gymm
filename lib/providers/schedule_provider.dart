@@ -10,24 +10,22 @@ class ScheduleNotifier extends Notifier<List<ScheduledEntry>> {
 
   Future<void> scheduleRoutine(
       DateTime date, String routineId, String routineName) async {
-    final key = _key(date);
     final entry = ScheduledEntry(
       date: _normalize(date),
       isRestDay: false,
       routineId: routineId,
       routineName: routineName,
     );
-    await HiveService.schedule.put(key, entry);
+    await HiveService.schedule.put(_key(date), entry);
     state = HiveService.schedule.values.toList();
   }
 
   Future<void> markRestDay(DateTime date) async {
-    final key = _key(date);
     final entry = ScheduledEntry(
       date: _normalize(date),
       isRestDay: true,
     );
-    await HiveService.schedule.put(key, entry);
+    await HiveService.schedule.put(_key(date), entry);
     state = HiveService.schedule.values.toList();
   }
 
@@ -36,7 +34,12 @@ class ScheduleNotifier extends Notifier<List<ScheduledEntry>> {
     state = HiveService.schedule.values.toList();
   }
 
-  static int _key(DateTime d) => _normalize(d).millisecondsSinceEpoch;
+  // String key avoids Hive's int key limit (max 0xFFFFFFFF).
+  static String _key(DateTime d) {
+    final n = _normalize(d);
+    return '${n.year}-${n.month}-${n.day}';
+  }
+
   static DateTime _normalize(DateTime d) => DateTime(d.year, d.month, d.day);
 }
 

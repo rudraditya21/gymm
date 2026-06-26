@@ -51,8 +51,23 @@ abstract final class HiveService {
     await _seedIfNeeded();
   }
 
+  static DateTime get onboardingDate {
+    final ms = settings.get('onboardingDate') as int?;
+    if (ms == null) return DateTime.now();
+    final d = DateTime.fromMillisecondsSinceEpoch(ms);
+    return DateTime(d.year, d.month, d.day);
+  }
+
   static Future<void> _seedIfNeeded() async {
     final box = settings;
+
+    // Store onboarding date on very first launch.
+    if (box.get('onboardingDate') == null) {
+      final now = DateTime.now();
+      await box.put('onboardingDate',
+          DateTime(now.year, now.month, now.day).millisecondsSinceEpoch);
+    }
+
     if (box.get(_seeded, defaultValue: false) as bool) return;
 
     final exerciseBox = exercises;
