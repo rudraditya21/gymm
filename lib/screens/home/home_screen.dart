@@ -156,6 +156,14 @@ class HomeScreen extends ConsumerWidget {
                     routine: routines[i],
                     cs: cs,
                     onStart: () => _startFromRoutine(context, ref, routines[i]),
+                    onEdit: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            RoutineEditorScreen(existing: routines[i]),
+                      ),
+                    ),
+                    onDelete: () =>
+                        _confirmDeleteRoutine(context, ref, routines[i].id),
                   ),
                 ),
               ),
@@ -252,6 +260,31 @@ class HomeScreen extends ConsumerWidget {
       MaterialPageRoute(builder: (_) => const ActiveWorkoutScreen()),
     );
   }
+
+  Future<void> _confirmDeleteRoutine(
+      BuildContext context, WidgetRef ref, String id) async {
+    final cs = Theme.of(context).colorScheme;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Delete Routine?'),
+        content: const Text('This cannot be undone.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text('Delete', style: TextStyle(color: cs.error)),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true) {
+      ref.read(routinesProvider.notifier).delete(id);
+    }
+  }
 }
 
 class _WeekStat extends StatelessWidget {
@@ -291,14 +324,61 @@ class _RoutineCard extends StatelessWidget {
   final Routine routine;
   final ColorScheme cs;
   final VoidCallback onStart;
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
 
-  const _RoutineCard(
-      {required this.routine, required this.cs, required this.onStart});
+  const _RoutineCard({
+    required this.routine,
+    required this.cs,
+    required this.onStart,
+    required this.onEdit,
+    required this.onDelete,
+  });
+
+  void _showOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: cs.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 8),
+            ListTile(
+              leading: Icon(Icons.edit_outlined, color: cs.onSurface),
+              title: Text('Edit',
+                  style: GoogleFonts.poppins(
+                      fontSize: 15, color: cs.onSurface)),
+              onTap: () {
+                Navigator.of(context).pop();
+                onEdit();
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.delete_outline, color: cs.error),
+              title: Text('Delete',
+                  style: GoogleFonts.poppins(
+                      fontSize: 15, color: cs.error)),
+              onTap: () {
+                Navigator.of(context).pop();
+                onDelete();
+              },
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onStart,
+      onLongPress: () => _showOptions(context),
       child: Container(
         width: 160,
         padding: const EdgeInsets.all(14),
