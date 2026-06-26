@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app_theme.dart';
 import 'constants/colors.dart';
-import 'screens/home_screen.dart';
-import 'screens/settings_screen.dart';
+import 'data/hive_service.dart';
+import 'screens/exercises/exercises_screen.dart';
+import 'screens/history/history_screen.dart';
+import 'screens/home/home_screen.dart';
+import 'screens/profile/profile_screen.dart';
 
-void main() {
-  runApp(const GymmApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await HiveService.init();
+  runApp(const ProviderScope(child: GymmApp()));
 }
 
 class GymmApp extends StatelessWidget {
@@ -66,7 +72,9 @@ class _MainShellState extends State<MainShell> {
 
   static const _pages = <Widget>[
     HomeScreen(),
-    SettingsScreen(),
+    HistoryScreen(),
+    ExercisesScreen(),
+    ProfileScreen(),
   ];
 
   @override
@@ -96,10 +104,24 @@ class _MainShellState extends State<MainShell> {
               label: 'Home',
             ),
             NavigationDestination(
-              icon: Icon(Icons.settings_outlined,
+              icon: Icon(Icons.calendar_month_outlined,
                   color: cs.onSurface.withValues(alpha: 0.45)),
-              selectedIcon: Icon(Icons.settings_rounded, color: cs.primary),
-              label: 'Settings',
+              selectedIcon:
+                  Icon(Icons.calendar_month, color: cs.primary),
+              label: 'History',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.fitness_center_outlined,
+                  color: cs.onSurface.withValues(alpha: 0.45)),
+              selectedIcon:
+                  Icon(Icons.fitness_center, color: cs.primary),
+              label: 'Exercises',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.person_outline,
+                  color: cs.onSurface.withValues(alpha: 0.45)),
+              selectedIcon: Icon(Icons.person, color: cs.primary),
+              label: 'Profile',
             ),
           ],
         ),
