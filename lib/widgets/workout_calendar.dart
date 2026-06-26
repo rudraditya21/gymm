@@ -240,11 +240,12 @@ class _WorkoutCalendarState extends ConsumerState<WorkoutCalendar> {
                       ),
                     if (isRest)
                       Text(
-                        'Z',
+                        'zzz',
                         style: TextStyle(
-                          fontSize: 7,
+                          fontSize: 6,
                           fontWeight: FontWeight.w700,
                           color: cs.error.withValues(alpha: 0.5),
+                          letterSpacing: 0.5,
                         ),
                       ),
                   ],
