@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../models/active_workout.dart';
 import '../../providers/active_workout_provider.dart';
 import '../../widgets/exercise_block.dart';
 import '../../widgets/rest_timer_bar.dart';
@@ -96,14 +97,7 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
                       cs: cs,
                       onChanged: notifier.setNotes,
                     ),
-                    children: workout.exercises.asMap().entries.map((e) {
-                      return ExerciseBlock(
-                        key: ValueKey(
-                            '${e.value.exerciseId}_${e.key}'),
-                        exerciseIndex: e.key,
-                        exercise: e.value,
-                      );
-                    }).toList(),
+                    children: _buildExerciseBlocks(workout.exercises),
                   ),
           ),
           // Add exercise — fixed above rest timer, never overlaps
@@ -138,6 +132,42 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
         ],
       ),
     );
+  }
+
+  List<Widget> _buildExerciseBlocks(List<ActiveExercise> exercises) {
+    // Map groupId → ordered list of indices in that group
+    final groups = <String, List<int>>{};
+    for (int i = 0; i < exercises.length; i++) {
+      final gid = exercises[i].supersetGroupId;
+      if (gid != null) groups.putIfAbsent(gid, () => []).add(i);
+    }
+
+    return exercises.asMap().entries.map((e) {
+      final i = e.key;
+      final ex = e.value;
+      final gid = ex.supersetGroupId;
+
+      String? label;
+      bool isLast = true;
+
+      if (gid != null) {
+        final positions = groups[gid] ?? [];
+        final pos = positions.indexOf(i);
+        if (pos >= 0) {
+          label = String.fromCharCode('A'.codeUnitAt(0) + pos);
+          isLast = pos == positions.length - 1;
+        }
+      }
+
+      return ExerciseBlock(
+        key: ValueKey('${ex.exerciseId}_$i'),
+        exerciseIndex: i,
+        exercise: ex,
+        supersetLabel: label,
+        isLastInSuperset: isLast,
+        isLastExercise: i == exercises.length - 1,
+      );
+    }).toList();
   }
 
   Future<void> _finish(

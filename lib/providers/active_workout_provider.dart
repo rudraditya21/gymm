@@ -272,6 +272,23 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
     return best;
   }
 
+  void createSuperset(int index1, int index2) {
+    if (state == null) return;
+    final groupId = const Uuid().v4();
+    final exercises = [...state!.exercises];
+    exercises[index1] = exercises[index1].copyWith(supersetGroupId: groupId);
+    exercises[index2] = exercises[index2].copyWith(supersetGroupId: groupId);
+    state = state!.copyWith(exercises: exercises);
+  }
+
+  void removeFromSuperset(int exerciseIndex) {
+    if (state == null) return;
+    final exercises = [...state!.exercises];
+    exercises[exerciseIndex] =
+        exercises[exerciseIndex].copyWith(clearSuperset: true);
+    state = state!.copyWith(exercises: exercises);
+  }
+
   void reorderExercises(int oldIndex, int newIndex) {
     if (state == null) return;
     final exercises = [...state!.exercises];

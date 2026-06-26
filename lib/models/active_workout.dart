@@ -69,17 +69,26 @@ class ActiveExercise {
   final String exerciseId;
   final String exerciseName;
   final List<ActiveSet> sets;
+  final String? supersetGroupId;
 
   const ActiveExercise({
     required this.exerciseId,
     required this.exerciseName,
     required this.sets,
+    this.supersetGroupId,
   });
 
-  ActiveExercise copyWith({List<ActiveSet>? sets}) => ActiveExercise(
+  ActiveExercise copyWith({
+    List<ActiveSet>? sets,
+    String? supersetGroupId,
+    bool clearSuperset = false,
+  }) =>
+      ActiveExercise(
         exerciseId: exerciseId,
         exerciseName: exerciseName,
         sets: sets ?? this.sets,
+        supersetGroupId:
+            clearSuperset ? null : (supersetGroupId ?? this.supersetGroupId),
       );
 }
 
