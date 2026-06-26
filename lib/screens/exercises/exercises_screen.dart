@@ -145,10 +145,58 @@ class _ExercisesScreenState extends ConsumerState<ExercisesScreen> {
                               color: cs.onSurface.withValues(alpha: 0.5),
                             ),
                           ),
-                          trailing: Icon(
-                            Icons.chevron_right,
-                            color: cs.onSurface.withValues(alpha: 0.3),
-                          ),
+                          trailing: ex.isCustom
+                              ? PopupMenuButton<String>(
+                                  icon: Icon(Icons.more_vert,
+                                      color:
+                                          cs.onSurface.withValues(alpha: 0.4),
+                                      size: 20),
+                                  onSelected: (val) async {
+                                    if (val == 'delete') {
+                                      final confirmed =
+                                          await showDialog<bool>(
+                                        context: context,
+                                        builder: (ctx) => AlertDialog(
+                                          title:
+                                              const Text('Delete Exercise?'),
+                                          content: const Text(
+                                              'This cannot be undone.'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () =>
+                                                  Navigator.of(ctx)
+                                                      .pop(false),
+                                              child: const Text('Cancel'),
+                                            ),
+                                            TextButton(
+                                              onPressed: () =>
+                                                  Navigator.of(ctx).pop(true),
+                                              child: Text('Delete',
+                                                  style: TextStyle(
+                                                      color: cs.error)),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                      if (confirmed == true) {
+                                        ref
+                                            .read(exercisesProvider.notifier)
+                                            .delete(ex.id);
+                                      }
+                                    }
+                                  },
+                                  itemBuilder: (_) => [
+                                    PopupMenuItem(
+                                      value: 'delete',
+                                      child: Text('Delete',
+                                          style: TextStyle(color: cs.error)),
+                                    ),
+                                  ],
+                                )
+                              : Icon(
+                                  Icons.chevron_right,
+                                  color: cs.onSurface.withValues(alpha: 0.3),
+                                ),
                         );
                       },
                     ),
