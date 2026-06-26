@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../constants/categories.dart';
 import '../../providers/exercise_provider.dart';
+import 'create_exercise_screen.dart';
 import 'exercise_detail_screen.dart';
 
 class ExercisesScreen extends ConsumerStatefulWidget {
@@ -35,6 +36,14 @@ class _ExercisesScreenState extends ConsumerState<ExercisesScreen> {
 
     return Scaffold(
       backgroundColor: cs.surface,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const CreateExerciseScreen()),
+        ),
+        backgroundColor: cs.primary,
+        foregroundColor: cs.onPrimary,
+        child: const Icon(Icons.add),
+      ),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
