@@ -14,6 +14,11 @@ class HistoryNotifier extends Notifier<List<Workout>> {
   }
 
   void refresh() => state = _load();
+
+  Future<void> delete(String id) async {
+    await HiveService.workouts.delete(id);
+    state = _load();
+  }
 }
 
 final historyProvider = NotifierProvider<HistoryNotifier, List<Workout>>(

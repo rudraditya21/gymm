@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../constants/categories.dart';
+import '../../data/hive_service.dart';
 import '../../providers/history_provider.dart';
 import '../../providers/settings_provider.dart';
 import '../../utils/format.dart';
@@ -41,6 +43,13 @@ class WorkoutDetailScreen extends ConsumerWidget {
             color: cs.onSurface,
           ),
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.delete_outline,
+                color: cs.error.withValues(alpha: 0.7)),
+            onPressed: () => _confirmDelete(context, ref, workout.id, cs),
+          ),
+        ],
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
@@ -102,6 +111,10 @@ class WorkoutDetailScreen extends ConsumerWidget {
             final completedSets = ex.sets.where((s) => s.isCompleted).toList();
             if (completedSets.isEmpty) return const SizedBox.shrink();
 
+            final isCardio =
+                HiveService.exercises.get(ex.exerciseId)?.primaryMuscle ==
+                    MuscleGroup.cardio;
+
             return Padding(
               padding: const EdgeInsets.only(bottom: 16),
               child: Column(
@@ -119,10 +132,24 @@ class WorkoutDetailScreen extends ConsumerWidget {
                   ...completedSets.asMap().entries.map((entry) {
                     final i = entry.key;
                     final s = entry.value;
-                    final wText = s.weight != null
-                        ? formatWeightNum(s.weight, useKg: useKg)
-                        : '–';
-                    final unit = useKg ? 'kg' : 'lb';
+
+                    String setLabel;
+                    if (isCardio) {
+                      final dur = s.durationSeconds != null
+                          ? '${s.durationSeconds! ~/ 60}min'
+                          : '–';
+                      final dist = s.distanceMeters != null
+                          ? '${(s.distanceMeters! / 1000).toStringAsFixed(2)} km'
+                          : '–';
+                      setLabel = '$dur · $dist';
+                    } else {
+                      final wText = s.weight != null
+                          ? formatWeightNum(s.weight, useKg: useKg)
+                          : '–';
+                      final unit = useKg ? 'kg' : 'lb';
+                      setLabel = '$wText $unit × ${s.reps ?? '–'}';
+                    }
+
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 2),
                       child: Row(
@@ -138,7 +165,7 @@ class WorkoutDetailScreen extends ConsumerWidget {
                             ),
                           ),
                           Text(
-                            '$wText $unit × ${s.reps ?? '–'}',
+                            setLabel,
                             style: GoogleFonts.poppins(
                               fontSize: 14,
                               color: cs.onSurface,
@@ -151,6 +178,36 @@ class WorkoutDetailScreen extends ConsumerWidget {
                               style: GoogleFonts.poppins(
                                 fontSize: 11,
                                 color: cs.onSurface.withValues(alpha: 0.4),
+                              ),
+                            ),
+                          ],
+                          if (s.isDropSet) ...[
+                            const SizedBox(width: 8),
+                            Text(
+                              'D',
+                              style: GoogleFonts.poppins(
+                                fontSize: 11,
+                                color: Colors.orange.withValues(alpha: 0.8),
+                              ),
+                            ),
+                          ],
+                          if (s.isAmrap) ...[
+                            const SizedBox(width: 8),
+                            Text(
+                              'AMRAP',
+                              style: GoogleFonts.poppins(
+                                fontSize: 11,
+                                color: Colors.red.withValues(alpha: 0.7),
+                              ),
+                            ),
+                          ],
+                          if (s.rpe != null) ...[
+                            const SizedBox(width: 8),
+                            Text(
+                              'RPE ${s.rpe}',
+                              style: GoogleFonts.poppins(
+                                fontSize: 11,
+                                color: cs.primary.withValues(alpha: 0.7),
                               ),
                             ),
                           ],
@@ -167,20 +224,39 @@ class WorkoutDetailScreen extends ConsumerWidget {
     );
   }
 
+  Future<void> _confirmDelete(
+    BuildContext context,
+    WidgetRef ref,
+    String id,
+    ColorScheme cs,
+  ) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Delete Workout?'),
+        content: const Text('This cannot be undone.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text('Delete', style: TextStyle(color: cs.error)),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true && context.mounted) {
+      ref.read(historyProvider.notifier).delete(id);
+      Navigator.of(context).pop();
+    }
+  }
+
   static String _monthName(int m) => const [
         '',
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec'
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
       ][m];
 }
 
