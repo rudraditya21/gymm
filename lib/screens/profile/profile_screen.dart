@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../app_theme.dart';
 import '../../providers/history_provider.dart';
 import '../../providers/settings_provider.dart';
+import '../../utils/backup_restore.dart';
 import '../../utils/csv_export.dart';
 import '../../utils/format.dart';
 import '../../utils/streak.dart';
@@ -313,6 +314,67 @@ class ProfileScreen extends ConsumerWidget {
                     ),
                     subtitle: Text(
                       'Share all workout history',
+                      style: GoogleFonts.poppins(
+                        fontSize: 12,
+                        color: cs.onSurface.withValues(alpha: 0.5),
+                      ),
+                    ),
+                    trailing: Icon(Icons.chevron_right,
+                        color: cs.onSurface.withValues(alpha: 0.3)),
+                  ),
+                  Divider(height: 1, color: cs.outline),
+                  ListTile(
+                    onTap: () => exportBackup(),
+                    leading: Icon(Icons.backup_outlined,
+                        color: cs.primary, size: 20),
+                    title: Text(
+                      'Backup',
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: cs.onSurface,
+                      ),
+                    ),
+                    subtitle: Text(
+                      'Export all data as JSON',
+                      style: GoogleFonts.poppins(
+                        fontSize: 12,
+                        color: cs.onSurface.withValues(alpha: 0.5),
+                      ),
+                    ),
+                    trailing: Icon(Icons.chevron_right,
+                        color: cs.onSurface.withValues(alpha: 0.3)),
+                  ),
+                  Divider(height: 1, color: cs.outline),
+                  ListTile(
+                    onTap: () async {
+                      try {
+                        final msg = await importBackup();
+                        if (msg != null && context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(msg)),
+                          );
+                        }
+                      } catch (e) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Import failed: $e')),
+                          );
+                        }
+                      }
+                    },
+                    leading: Icon(Icons.restore_outlined,
+                        color: cs.primary, size: 20),
+                    title: Text(
+                      'Restore',
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: cs.onSurface,
+                      ),
+                    ),
+                    subtitle: Text(
+                      'Import from a backup file',
                       style: GoogleFonts.poppins(
                         fontSize: 12,
                         color: cs.onSurface.withValues(alpha: 0.5),
