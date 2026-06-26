@@ -145,7 +145,7 @@ class _WorkoutCalendarState extends ConsumerState<WorkoutCalendar> {
             if (hasWorkout) {
               bg = cs.primary.withValues(alpha: intensity * 0.85);
             } else if (isRest) {
-              bg = cs.onSurface.withValues(alpha: 0.06);
+              bg = cs.error.withValues(alpha: 0.10);
             } else {
               bg = cs.secondary;
             }
@@ -155,6 +155,9 @@ class _WorkoutCalendarState extends ConsumerState<WorkoutCalendar> {
             } else if (isScheduled && !hasWorkout) {
               border = Border.all(
                   color: cs.primary.withValues(alpha: 0.6), width: 1.5);
+            } else if (isRest) {
+              border = Border.all(
+                  color: cs.error.withValues(alpha: 0.35), width: 1);
             }
 
             return GestureDetector(
@@ -184,8 +187,9 @@ class _WorkoutCalendarState extends ConsumerState<WorkoutCalendar> {
                             ? (intensity > 0.5
                                 ? cs.onPrimary
                                 : cs.onSurface)
-                            : cs.onSurface.withValues(
-                                alpha: isRest ? 0.35 : 0.55),
+                            : isRest
+                                ? cs.error.withValues(alpha: 0.7)
+                                : cs.onSurface.withValues(alpha: 0.55),
                       ),
                     ),
                     if (isScheduled && !hasWorkout)
@@ -200,10 +204,11 @@ class _WorkoutCalendarState extends ConsumerState<WorkoutCalendar> {
                       ),
                     if (isRest)
                       Text(
-                        '—',
+                        'Z',
                         style: TextStyle(
-                          fontSize: 8,
-                          color: cs.onSurface.withValues(alpha: 0.3),
+                          fontSize: 7,
+                          fontWeight: FontWeight.w700,
+                          color: cs.error.withValues(alpha: 0.5),
                         ),
                       ),
                   ],
@@ -226,8 +231,8 @@ class _WorkoutCalendarState extends ConsumerState<WorkoutCalendar> {
                 cs: cs),
             const SizedBox(width: 14),
             _LegendDot(
-                color: cs.onSurface.withValues(alpha: 0.06),
-                border: cs.outline,
+                color: cs.error.withValues(alpha: 0.10),
+                border: cs.error.withValues(alpha: 0.35),
                 label: 'Rest',
                 cs: cs),
           ],
