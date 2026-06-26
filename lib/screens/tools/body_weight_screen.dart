@@ -25,6 +25,46 @@ class _BodyWeightScreenState extends ConsumerState<BodyWeightScreen> {
     super.dispose();
   }
 
+  Widget _buildStatsRow(
+    List<BodyWeightEntry> entries,
+    String unit,
+    bool useKg,
+    ColorScheme cs,
+  ) {
+    final current = formatWeightNum(entries.last.weight, useKg: useKg);
+    final minW = entries.map((e) => e.weight).reduce((a, b) => a < b ? a : b);
+    final maxW = entries.map((e) => e.weight).reduce((a, b) => a > b ? a : b);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      decoration: BoxDecoration(
+        color: cs.secondary,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: cs.outline),
+      ),
+      child: Row(
+        children: [
+          _StatCell(
+            label: 'Current',
+            value: '$current $unit',
+            highlight: true,
+            cs: cs,
+          ),
+          _StatCell(
+            label: 'Min',
+            value: '${formatWeightNum(minW, useKg: useKg)} $unit',
+            cs: cs,
+          ),
+          _StatCell(
+            label: 'Max',
+            value: '${formatWeightNum(maxW, useKg: useKg)} $unit',
+            cs: cs,
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<void> _addEntry(bool useKg) async {
     _weightCtrl.clear();
     final result = await showDialog<double>(
@@ -99,40 +139,17 @@ class _BodyWeightScreenState extends ConsumerState<BodyWeightScreen> {
           : ListView(
               padding: const EdgeInsets.all(16),
               children: [
+                // Current / Min / Max
+                _buildStatsRow(entries, unit, useKg, cs),
+                const SizedBox(height: 20),
+
+                // Graph
                 if (entries.length >= 2) ...[
                   _Chart(entries: entries, useKg: useKg, cs: cs),
                   const SizedBox(height: 24),
                 ],
-                // Latest weight badge
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: cs.primary.withValues(alpha: 0.08),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Current',
-                        style: GoogleFonts.poppins(
-                          fontSize: 14,
-                          color: cs.onSurface.withValues(alpha: 0.6),
-                        ),
-                      ),
-                      const Spacer(),
-                      Text(
-                        '${formatWeightNum(entries.last.weight, useKg: useKg)} $unit',
-                        style: GoogleFonts.poppins(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                          color: cs.primary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 20),
-                // History list
+
+                // History
                 Text(
                   'HISTORY',
                   style: TextStyle(
@@ -286,6 +303,46 @@ class _EntryRow extends StatelessWidget {
         'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
       ][m];
+}
+
+class _StatCell extends StatelessWidget {
+  final String label;
+  final String value;
+  final bool highlight;
+  final ColorScheme cs;
+
+  const _StatCell({
+    required this.label,
+    required this.value,
+    required this.cs,
+    this.highlight = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        children: [
+          Text(
+            value,
+            style: GoogleFonts.poppins(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              color: highlight ? cs.primary : cs.onSurface,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            label,
+            style: GoogleFonts.poppins(
+              fontSize: 11,
+              color: cs.onSurface.withValues(alpha: 0.5),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _Empty extends StatelessWidget {
