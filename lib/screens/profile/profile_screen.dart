@@ -8,7 +8,6 @@ import '../../providers/settings_provider.dart';
 import '../../utils/backup_restore.dart';
 import '../../utils/csv_export.dart';
 import '../../utils/format.dart';
-import '../../utils/streak.dart';
 import '../stats/muscle_heatmap_screen.dart';
 import '../tools/body_weight_screen.dart';
 import '../tools/plate_calculator_screen.dart';
@@ -165,73 +164,6 @@ class ProfileScreen extends ConsumerWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 28),
-
-            // Streak & achievements
-            _SectionLabel('ACHIEVEMENTS'),
-            const SizedBox(height: 10),
-            Builder(builder: (context) {
-              final streak = computeStreak(history);
-              final achievements = computeAchievements(history);
-              final unlocked = achievements.where((a) => a.unlocked).toList();
-              final locked = achievements.where((a) => !a.unlocked).toList();
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (streak > 0)
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12),
-                      margin: const EdgeInsets.only(bottom: 12),
-                      decoration: BoxDecoration(
-                        color: cs.primary.withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        children: [
-                          Text('🔥',
-                              style: const TextStyle(fontSize: 24)),
-                          const SizedBox(width: 12),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '$streak-day streak',
-                                style: GoogleFonts.poppins(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  color: cs.primary,
-                                ),
-                              ),
-                              Text(
-                                'Keep it going!',
-                                style: GoogleFonts.poppins(
-                                  fontSize: 12,
-                                  color: cs.onSurface.withValues(alpha: 0.5),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  Wrap(
-                    spacing: 10,
-                    runSpacing: 10,
-                    children: [
-                      ...unlocked.map((a) => _AchievementChip(
-                            achievement: a,
-                            cs: cs,
-                          )),
-                      ...locked.map((a) => _AchievementChip(
-                            achievement: a,
-                            cs: cs,
-                          )),
-                    ],
-                  ),
-                ],
-              );
-            }),
             const SizedBox(height: 28),
 
             // Stats
@@ -692,60 +624,6 @@ class _RestPicker extends StatelessWidget {
             const SizedBox(width: 4),
             Icon(Icons.expand_more,
                 size: 16, color: cs.onSurface.withValues(alpha: 0.4)),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _AchievementChip extends StatelessWidget {
-  final Achievement achievement;
-  final ColorScheme cs;
-
-  const _AchievementChip({required this.achievement, required this.cs});
-
-  @override
-  Widget build(BuildContext context) {
-    final unlocked = achievement.unlocked;
-    return Tooltip(
-      message: achievement.description,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-        decoration: BoxDecoration(
-          color: unlocked
-              ? cs.primary.withValues(alpha: 0.12)
-              : cs.secondary,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: unlocked ? cs.primary.withValues(alpha: 0.3) : cs.outline,
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              achievement.emoji,
-              style: TextStyle(
-                fontSize: 14,
-                color: unlocked ? null : const Color(0x00000000),
-              ).copyWith(
-                shadows: unlocked
-                    ? null
-                    : [const Shadow(color: Colors.grey, blurRadius: 8)],
-              ),
-            ),
-            const SizedBox(width: 6),
-            Text(
-              achievement.title,
-              style: GoogleFonts.poppins(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-                color: unlocked
-                    ? cs.primary
-                    : cs.onSurface.withValues(alpha: 0.35),
-              ),
-            ),
           ],
         ),
       ),
