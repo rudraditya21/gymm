@@ -243,8 +243,9 @@ class _MeasurementDetailScreenState
     final cs = Theme.of(context).colorScheme;
     final useCm = ref.watch(settingsProvider).useCm;
     final entries = ref
-        .watch(measurementProvider.notifier)
-        .forPart(widget.bodyPart);
+        .watch(measurementProvider)
+        .where((e) => e.bodyPart == widget.bodyPart)
+        .toList();
 
     return Scaffold(
       backgroundColor: cs.surface,
