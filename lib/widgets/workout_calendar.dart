@@ -139,7 +139,13 @@ class _WorkoutCalendarState extends ConsumerState<WorkoutCalendar> {
             final day = i - startOffset + 1;
             final date = DateTime(_month.year, _month.month, day);
             final ob = HiveService.onboardingDate;
-            final isBlocked = date.isBefore(ob);
+            // Compare components directly — avoids any local-midnight/UTC ambiguity.
+            final isBeforeObMonth = _month.year < ob.year ||
+                (_month.year == ob.year && _month.month < ob.month);
+            final isInObMonth =
+                _month.year == ob.year && _month.month == ob.month;
+            final isBlocked =
+                isBeforeObMonth || (isInObMonth && day < ob.day);
             final vol = volumeByDay[day];
             final sched = scheduleByDay[day];
             final isToday = day == now.day &&
