@@ -144,10 +144,8 @@ class _BodyWeightScreenState extends ConsumerState<BodyWeightScreen> {
                 const SizedBox(height: 20),
 
                 // Graph
-                if (entries.length >= 2) ...[
-                  _Chart(entries: entries, useKg: useKg, cs: cs),
-                  const SizedBox(height: 24),
-                ],
+                _Chart(entries: entries, useKg: useKg, cs: cs),
+                const SizedBox(height: 24),
 
                 // History
                 Text(
@@ -190,48 +188,87 @@ class _Chart extends StatelessWidget {
       return FlSpot(e.key.toDouble(), w);
     }).toList();
 
-    final minY =
-        spots.map((s) => s.y).reduce((a, b) => a < b ? a : b) - 2;
-    final maxY =
-        spots.map((s) => s.y).reduce((a, b) => a > b ? a : b) + 2;
+    final ys = spots.map((s) => s.y).toList();
+    final rawMin = ys.reduce((a, b) => a < b ? a : b);
+    final rawMax = ys.reduce((a, b) => a > b ? a : b);
+    // Give a visible range even when all values are identical
+    final minY = rawMin - 3;
+    final maxY = rawMax + 3;
 
     return Container(
-      height: 160,
-      padding: const EdgeInsets.only(right: 16, top: 8, bottom: 8),
+      height: 180,
+      padding: const EdgeInsets.fromLTRB(8, 12, 16, 12),
       decoration: BoxDecoration(
         color: cs.secondary,
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: cs.outline),
       ),
       child: LineChart(
         LineChartData(
+          minX: -0.3,
+          maxX: spots.last.x + 0.3,
           minY: minY,
           maxY: maxY,
-          gridData: const FlGridData(show: false),
+          clipData: const FlClipData.none(),
+          gridData: FlGridData(
+            show: true,
+            drawVerticalLine: false,
+            horizontalInterval: (maxY - minY) / 4,
+            getDrawingHorizontalLine: (_) => FlLine(
+              color: cs.outline.withValues(alpha: 0.35),
+              strokeWidth: 1,
+              dashArray: [4, 4],
+            ),
+          ),
           borderData: FlBorderData(show: false),
-          titlesData: const FlTitlesData(
-            leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            bottomTitles:
-                AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          titlesData: FlTitlesData(
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                reservedSize: 40,
+                interval: (maxY - minY) / 4,
+                getTitlesWidget: (value, _) => Text(
+                  value.toStringAsFixed(1),
+                  style: GoogleFonts.poppins(
+                    fontSize: 10,
+                    color: cs.onSurface.withValues(alpha: 0.4),
+                  ),
+                ),
+              ),
+            ),
+            rightTitles: const AxisTitles(
+                sideTitles: SideTitles(showTitles: false)),
+            topTitles: const AxisTitles(
+                sideTitles: SideTitles(showTitles: false)),
+            bottomTitles: const AxisTitles(
+                sideTitles: SideTitles(showTitles: false)),
           ),
           lineBarsData: [
             LineChartBarData(
               spots: spots,
-              isCurved: true,
+              isCurved: spots.length > 2,
+              curveSmoothness: 0.3,
               color: cs.primary,
               barWidth: 2,
               dotData: FlDotData(
                 show: true,
                 getDotPainter: (_, __, ___, ____) => FlDotCirclePainter(
-                  radius: 3,
+                  radius: 3.5,
                   color: cs.primary,
-                  strokeWidth: 0,
+                  strokeWidth: 2,
+                  strokeColor: cs.surface,
                 ),
               ),
               belowBarData: BarAreaData(
                 show: true,
-                color: cs.primary.withValues(alpha: 0.08),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    cs.primary.withValues(alpha: 0.18),
+                    cs.primary.withValues(alpha: 0.0),
+                  ],
+                ),
               ),
             ),
           ],
