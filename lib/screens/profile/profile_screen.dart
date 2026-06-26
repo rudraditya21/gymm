@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../app_theme.dart';
 import '../../providers/history_provider.dart';
 import '../../providers/settings_provider.dart';
+import '../../utils/csv_export.dart';
 import '../../utils/format.dart';
 import '../tools/body_weight_screen.dart';
 import '../tools/plate_calculator_screen.dart';
@@ -221,6 +222,29 @@ class ProfileScreen extends ConsumerWidget {
                     ),
                     subtitle: Text(
                       'Track weight over time',
+                      style: GoogleFonts.poppins(
+                        fontSize: 12,
+                        color: cs.onSurface.withValues(alpha: 0.5),
+                      ),
+                    ),
+                    trailing: Icon(Icons.chevron_right,
+                        color: cs.onSurface.withValues(alpha: 0.3)),
+                  ),
+                  Divider(height: 1, color: cs.outline),
+                  ListTile(
+                    onTap: () => exportWorkoutsAsCsv(),
+                    leading: Icon(Icons.download_outlined,
+                        color: cs.primary, size: 20),
+                    title: Text(
+                      'Export to CSV',
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: cs.onSurface,
+                      ),
+                    ),
+                    subtitle: Text(
+                      'Share all workout history',
                       style: GoogleFonts.poppins(
                         fontSize: 12,
                         color: cs.onSurface.withValues(alpha: 0.5),
