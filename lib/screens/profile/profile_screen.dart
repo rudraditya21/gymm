@@ -6,6 +6,7 @@ import '../../app_theme.dart';
 import '../../providers/history_provider.dart';
 import '../../providers/settings_provider.dart';
 import '../../utils/format.dart';
+import '../tools/body_weight_screen.dart';
 import '../tools/plate_calculator_screen.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -171,33 +172,67 @@ class ProfileScreen extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: cs.outline),
               ),
-              child: ListTile(
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => const PlateCalculatorScreen(),
+              child: Column(
+                children: [
+                  ListTile(
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const PlateCalculatorScreen(),
+                      ),
+                    ),
+                    leading: Icon(Icons.fitness_center, color: cs.primary, size: 20),
+                    title: Text(
+                      'Plate Calculator',
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: cs.onSurface,
+                      ),
+                    ),
+                    subtitle: Text(
+                      'How many plates per side',
+                      style: GoogleFonts.poppins(
+                        fontSize: 12,
+                        color: cs.onSurface.withValues(alpha: 0.5),
+                      ),
+                    ),
+                    trailing: Icon(Icons.chevron_right,
+                        color: cs.onSurface.withValues(alpha: 0.3)),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+                    ),
                   ),
-                ),
-                leading: Icon(Icons.fitness_center, color: cs.primary, size: 20),
-                title: Text(
-                  'Plate Calculator',
-                  style: GoogleFonts.poppins(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: cs.onSurface,
+                  Divider(height: 1, color: cs.outline),
+                  ListTile(
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const BodyWeightScreen(),
+                      ),
+                    ),
+                    leading: Icon(Icons.monitor_weight_outlined,
+                        color: cs.primary, size: 20),
+                    title: Text(
+                      'Body Weight',
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: cs.onSurface,
+                      ),
+                    ),
+                    subtitle: Text(
+                      'Track weight over time',
+                      style: GoogleFonts.poppins(
+                        fontSize: 12,
+                        color: cs.onSurface.withValues(alpha: 0.5),
+                      ),
+                    ),
+                    trailing: Icon(Icons.chevron_right,
+                        color: cs.onSurface.withValues(alpha: 0.3)),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
+                    ),
                   ),
-                ),
-                subtitle: Text(
-                  'How many plates per side',
-                  style: GoogleFonts.poppins(
-                    fontSize: 12,
-                    color: cs.onSurface.withValues(alpha: 0.5),
-                  ),
-                ),
-                trailing: Icon(Icons.chevron_right,
-                    color: cs.onSurface.withValues(alpha: 0.3)),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
+                ],
               ),
             ),
           ],
