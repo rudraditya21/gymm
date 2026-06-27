@@ -33,8 +33,10 @@ class ExerciseBlock extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final cs = Theme.of(context).colorScheme;
     final notifier = ref.read(activeWorkoutProvider.notifier);
-    final useKg = ref.watch(settingsProvider).useKg;
-    final restSeconds = ref.watch(settingsProvider).restSeconds;
+    final settings = ref.watch(settingsProvider);
+    final useKg = settings.useKg;
+    final restSeconds = settings.restSeconds;
+    final autoStartRest = settings.autoStartRest;
 
     // Detect exercise type via Hive exercise record
     final ex = HiveService.exercises.get(exercise.exerciseId);
@@ -224,7 +226,7 @@ class ExerciseBlock extends ConsumerWidget {
                 onComplete: (weight, reps, duration, distance) {
                   notifier.completeSet(
                       exerciseIndex, setIndex, weight, reps, duration, distance);
-                  if (!set.isCompleted && isLastInSuperset) {
+                  if (!set.isCompleted && isLastInSuperset && autoStartRest) {
                     ref
                         .read(restTimerProvider.notifier)
                         .start(restSeconds);
