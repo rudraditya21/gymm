@@ -36,6 +36,8 @@ class ExercisesNotifier extends Notifier<List<Exercise>> {
     await HiveService.exercises.delete(id);
     state = _load();
   }
+
+  void refresh() => state = _load();
 }
 
 final exercisesProvider = NotifierProvider<ExercisesNotifier, List<Exercise>>(

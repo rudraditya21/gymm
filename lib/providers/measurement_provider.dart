@@ -35,6 +35,8 @@ class MeasurementNotifier extends Notifier<List<MeasurementEntry>> {
       ..sort((a, b) => a.date.compareTo(b.date));
   }
 
+  void refresh() => _reload();
+
   static String _key(String part, DateTime d) {
     final n = _normalize(d);
     return '${part}_${n.year}-${n.month}-${n.day}';

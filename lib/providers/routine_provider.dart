@@ -37,6 +37,8 @@ class RoutinesNotifier extends Notifier<List<Routine>> {
     await HiveService.routines.delete(id);
     state = _load();
   }
+
+  void refresh() => state = _load();
 }
 
 final routinesProvider = NotifierProvider<RoutinesNotifier, List<Routine>>(
