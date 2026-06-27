@@ -3,28 +3,42 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../app_theme.dart';
+import '../../providers/body_weight_provider.dart';
+import '../../providers/exercise_provider.dart';
 import '../../providers/history_provider.dart';
+import '../../providers/measurement_provider.dart';
+import '../../providers/routine_provider.dart';
 import '../../providers/settings_provider.dart';
 import '../../utils/backup_restore.dart';
 import '../../utils/csv_export.dart';
 import '../../utils/format.dart';
 import '../stats/muscle_heatmap_screen.dart';
+import '../stats/pr_screen.dart';
+import '../stats/volume_chart_screen.dart';
 import '../tools/body_weight_screen.dart';
 import '../tools/measurements_screen.dart';
 import '../tools/plate_calculator_screen.dart';
 
-class ProfileScreen extends ConsumerWidget {
+class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+  bool _importing = false;
+  bool _exporting = false;
+
+  @override
+  Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     final settings = ref.watch(settingsProvider);
     final history = ref.watch(historyProvider);
 
     final totalWorkouts = history.length;
-    final totalVolume = history.fold<double>(
-        0, (sum, w) => sum + w.totalVolume);
+    final totalVolume =
+        history.fold<double>(0, (sum, w) => sum + w.totalVolume);
     final totalDuration = history.fold<Duration>(
         Duration.zero, (sum, w) => sum + w.duration);
 
@@ -44,7 +58,7 @@ class ProfileScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 24),
 
-            // Stats
+            // Lifetime stats
             _SectionLabel('LIFETIME STATS'),
             const SizedBox(height: 10),
             Container(
@@ -56,10 +70,7 @@ class ProfileScreen extends ConsumerWidget {
               child: Row(
                 children: [
                   _StatItem(
-                    label: 'Workouts',
-                    value: '$totalWorkouts',
-                    cs: cs,
-                  ),
+                      label: 'Workouts', value: '$totalWorkouts', cs: cs),
                   _StatItem(
                     label: 'Volume',
                     value: formatVolume(totalVolume, useKg: settings.useKg),
@@ -115,7 +126,8 @@ class ProfileScreen extends ConsumerWidget {
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 4),
                     child: Row(
                       children: [
                         Text(
@@ -138,7 +150,8 @@ class ProfileScreen extends ConsumerWidget {
                   ),
                   Divider(height: 1, color: cs.outline),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 4),
                     child: Row(
                       children: [
                         Text(
@@ -168,28 +181,61 @@ class ProfileScreen extends ConsumerWidget {
             _SectionLabel('REST TIMER'),
             const SizedBox(height: 10),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               decoration: BoxDecoration(
                 color: cs.surface,
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: cs.outline),
               ),
-              child: Row(
+              child: Column(
                 children: [
-                  Text(
-                    'Default rest',
-                    style: GoogleFonts.poppins(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: cs.onSurface,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 4),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Default rest',
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: cs.onSurface,
+                          ),
+                        ),
+                        const Spacer(),
+                        _RestPicker(
+                          seconds: settings.restSeconds,
+                          onChanged: (v) => ref
+                              .read(settingsProvider.notifier)
+                              .setRestSeconds(v),
+                          cs: cs,
+                        ),
+                      ],
                     ),
                   ),
-                  const Spacer(),
-                  _RestPicker(
-                    seconds: settings.restSeconds,
-                    onChanged: (v) =>
-                        ref.read(settingsProvider.notifier).setRestSeconds(v),
-                    cs: cs,
+                  Divider(height: 1, color: cs.outline),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 4),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Auto-start timer',
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: cs.onSurface,
+                          ),
+                        ),
+                        const Spacer(),
+                        Switch(
+                          value: settings.autoStartRest,
+                          onChanged: (v) => ref
+                              .read(settingsProvider.notifier)
+                              .setAutoStartRest(v),
+                          activeColor: cs.primary,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -205,33 +251,68 @@ class ProfileScreen extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: cs.outline),
               ),
-              child: ListTile(
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => const MuscleHeatmapScreen(),
+              child: Column(
+                children: [
+                  ListTile(
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => const MuscleHeatmapScreen())),
+                    leading:
+                        Icon(Icons.accessibility_new, color: cs.primary, size: 20),
+                    title: Text('Muscle Activity',
+                        style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: cs.onSurface)),
+                    subtitle: Text('Radar chart of recent sessions',
+                        style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            color: cs.onSurface.withValues(alpha: 0.5))),
+                    trailing: Icon(Icons.chevron_right,
+                        color: cs.onSurface.withValues(alpha: 0.3)),
+                    shape: const RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(10))),
                   ),
-                ),
-                leading: Icon(Icons.accessibility_new, color: cs.primary, size: 20),
-                title: Text(
-                  'Muscle Activity',
-                  style: GoogleFonts.poppins(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: cs.onSurface,
+                  Divider(height: 1, color: cs.outline),
+                  ListTile(
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => const VolumeChartScreen())),
+                    leading: Icon(Icons.bar_chart_rounded,
+                        color: cs.primary, size: 20),
+                    title: Text('Volume Trend',
+                        style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: cs.onSurface)),
+                    subtitle: Text('Weekly & monthly volume over time',
+                        style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            color: cs.onSurface.withValues(alpha: 0.5))),
+                    trailing: Icon(Icons.chevron_right,
+                        color: cs.onSurface.withValues(alpha: 0.3)),
                   ),
-                ),
-                subtitle: Text(
-                  'Front/back heatmap of recent sessions',
-                  style: GoogleFonts.poppins(
-                    fontSize: 12,
-                    color: cs.onSurface.withValues(alpha: 0.5),
+                  Divider(height: 1, color: cs.outline),
+                  ListTile(
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => const PRScreen())),
+                    leading: Icon(Icons.emoji_events_outlined,
+                        color: cs.primary, size: 20),
+                    title: Text('Personal Records',
+                        style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: cs.onSurface)),
+                    subtitle: Text('Best set per exercise, all time',
+                        style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            color: cs.onSurface.withValues(alpha: 0.5))),
+                    trailing: Icon(Icons.chevron_right,
+                        color: cs.onSurface.withValues(alpha: 0.3)),
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                            bottom: Radius.circular(10))),
                   ),
-                ),
-                trailing: Icon(Icons.chevron_right,
-                    color: cs.onSurface.withValues(alpha: 0.3)),
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
+                ],
               ),
             ),
             const SizedBox(height: 28),
@@ -248,84 +329,58 @@ class ProfileScreen extends ConsumerWidget {
               child: Column(
                 children: [
                   ListTile(
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => const PlateCalculatorScreen(),
-                      ),
-                    ),
-                    leading: Icon(Icons.fitness_center, color: cs.primary, size: 20),
-                    title: Text(
-                      'Plate Calculator',
-                      style: GoogleFonts.poppins(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: cs.onSurface,
-                      ),
-                    ),
-                    subtitle: Text(
-                      'How many plates per side',
-                      style: GoogleFonts.poppins(
-                        fontSize: 12,
-                        color: cs.onSurface.withValues(alpha: 0.5),
-                      ),
-                    ),
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => const PlateCalculatorScreen())),
+                    leading:
+                        Icon(Icons.fitness_center, color: cs.primary, size: 20),
+                    title: Text('Plate Calculator',
+                        style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: cs.onSurface)),
+                    subtitle: Text('How many plates per side',
+                        style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            color: cs.onSurface.withValues(alpha: 0.5))),
                     trailing: Icon(Icons.chevron_right,
                         color: cs.onSurface.withValues(alpha: 0.3)),
                     shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
-                    ),
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(10))),
                   ),
                   Divider(height: 1, color: cs.outline),
                   ListTile(
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => const BodyWeightScreen(),
-                      ),
-                    ),
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => const BodyWeightScreen())),
                     leading: Icon(Icons.monitor_weight_outlined,
                         color: cs.primary, size: 20),
-                    title: Text(
-                      'Body Weight',
-                      style: GoogleFonts.poppins(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: cs.onSurface,
-                      ),
-                    ),
-                    subtitle: Text(
-                      'Track weight over time',
-                      style: GoogleFonts.poppins(
-                        fontSize: 12,
-                        color: cs.onSurface.withValues(alpha: 0.5),
-                      ),
-                    ),
+                    title: Text('Body Weight',
+                        style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: cs.onSurface)),
+                    subtitle: Text('Track weight over time',
+                        style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            color: cs.onSurface.withValues(alpha: 0.5))),
                     trailing: Icon(Icons.chevron_right,
                         color: cs.onSurface.withValues(alpha: 0.3)),
                   ),
                   Divider(height: 1, color: cs.outline),
                   ListTile(
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => const MeasurementsScreen(),
-                      ),
-                    ),
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => const MeasurementsScreen())),
                     leading: Icon(Icons.straighten_outlined,
                         color: cs.primary, size: 20),
-                    title: Text(
-                      'Body Measurements',
-                      style: GoogleFonts.poppins(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: cs.onSurface,
-                      ),
-                    ),
-                    subtitle: Text(
-                      'Waist, chest, biceps and more',
-                      style: GoogleFonts.poppins(
-                        fontSize: 12,
-                        color: cs.onSurface.withValues(alpha: 0.5),
-                      ),
-                    ),
+                    title: Text('Body Measurements',
+                        style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: cs.onSurface)),
+                    subtitle: Text('Waist, chest, biceps and more',
+                        style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            color: cs.onSurface.withValues(alpha: 0.5))),
                     trailing: Icon(Icons.chevron_right,
                         color: cs.onSurface.withValues(alpha: 0.3)),
                   ),
@@ -334,87 +389,68 @@ class ProfileScreen extends ConsumerWidget {
                     onTap: () => exportWorkoutsAsCsv(),
                     leading: Icon(Icons.download_outlined,
                         color: cs.primary, size: 20),
-                    title: Text(
-                      'Export to CSV',
-                      style: GoogleFonts.poppins(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: cs.onSurface,
-                      ),
-                    ),
-                    subtitle: Text(
-                      'Share all workout history',
-                      style: GoogleFonts.poppins(
-                        fontSize: 12,
-                        color: cs.onSurface.withValues(alpha: 0.5),
-                      ),
-                    ),
+                    title: Text('Export to CSV',
+                        style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: cs.onSurface)),
+                    subtitle: Text('Share all workout history',
+                        style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            color: cs.onSurface.withValues(alpha: 0.5))),
                     trailing: Icon(Icons.chevron_right,
                         color: cs.onSurface.withValues(alpha: 0.3)),
                   ),
                   Divider(height: 1, color: cs.outline),
                   ListTile(
-                    onTap: () => exportBackup(),
-                    leading: Icon(Icons.backup_outlined,
-                        color: cs.primary, size: 20),
-                    title: Text(
-                      'Backup',
-                      style: GoogleFonts.poppins(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: cs.onSurface,
-                      ),
-                    ),
-                    subtitle: Text(
-                      'Export all data as JSON',
-                      style: GoogleFonts.poppins(
-                        fontSize: 12,
-                        color: cs.onSurface.withValues(alpha: 0.5),
-                      ),
-                    ),
+                    onTap: _exporting ? null : _doExport,
+                    leading: _exporting
+                        ? SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                                strokeWidth: 2, color: cs.primary),
+                          )
+                        : Icon(Icons.backup_outlined,
+                            color: cs.primary, size: 20),
+                    title: Text('Backup',
+                        style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: cs.onSurface)),
+                    subtitle: Text('Export all data as JSON',
+                        style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            color: cs.onSurface.withValues(alpha: 0.5))),
                     trailing: Icon(Icons.chevron_right,
                         color: cs.onSurface.withValues(alpha: 0.3)),
                   ),
                   Divider(height: 1, color: cs.outline),
                   ListTile(
-                    onTap: () async {
-                      try {
-                        final msg = await importBackup();
-                        if (msg != null && context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(msg)),
-                          );
-                        }
-                      } catch (e) {
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Import failed: $e')),
-                          );
-                        }
-                      }
-                    },
-                    leading: Icon(Icons.restore_outlined,
-                        color: cs.primary, size: 20),
-                    title: Text(
-                      'Restore',
-                      style: GoogleFonts.poppins(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: cs.onSurface,
-                      ),
-                    ),
-                    subtitle: Text(
-                      'Import from a backup file',
-                      style: GoogleFonts.poppins(
-                        fontSize: 12,
-                        color: cs.onSurface.withValues(alpha: 0.5),
-                      ),
-                    ),
+                    onTap: _importing ? null : _doImport,
+                    leading: _importing
+                        ? SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                                strokeWidth: 2, color: cs.primary),
+                          )
+                        : Icon(Icons.restore_outlined,
+                            color: cs.primary, size: 20),
+                    title: Text('Restore',
+                        style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: cs.onSurface)),
+                    subtitle: Text('Import from a backup file',
+                        style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            color: cs.onSurface.withValues(alpha: 0.5))),
                     trailing: Icon(Icons.chevron_right,
                         color: cs.onSurface.withValues(alpha: 0.3)),
                     shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
-                    ),
+                        borderRadius: BorderRadius.vertical(
+                            bottom: Radius.circular(10))),
                   ),
                 ],
               ),
@@ -425,12 +461,52 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
+  Future<void> _doExport() async {
+    setState(() => _exporting = true);
+    try {
+      await exportBackup();
+    } finally {
+      if (mounted) setState(() => _exporting = false);
+    }
+  }
+
+  Future<void> _doImport() async {
+    setState(() => _importing = true);
+    try {
+      final result = await importBackup();
+      if (result == null) return;
+
+      // Refresh all providers so UI reflects imported data without restart
+      ref.read(historyProvider.notifier).refresh();
+      ref.read(routinesProvider.notifier).refresh();
+      ref.read(exercisesProvider.notifier).refresh();
+      ref.read(bodyWeightProvider.notifier).refresh();
+      ref.read(measurementProvider.notifier).refresh();
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(result.toString())),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Import failed: $e')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _importing = false);
+    }
+  }
+
   String _formatTotalTime(Duration d) {
     final h = d.inHours;
     if (h == 0) return '${d.inMinutes}m';
     return '${h}h';
   }
 }
+
+// ── Shared widgets ────────────────────────────────────────────────────────────
 
 class _SectionLabel extends StatelessWidget {
   final String text;
@@ -505,9 +581,12 @@ class _ThemeSelector extends StatelessWidget {
           ),
           child: Row(
             children: [
-              _ThemeOption(label: 'Light', mode: ThemeMode.light, current: current),
-              _ThemeOption(label: 'Dark', mode: ThemeMode.dark, current: current),
-              _ThemeOption(label: 'System', mode: ThemeMode.system, current: current),
+              _ThemeOption(
+                  label: 'Light', mode: ThemeMode.light, current: current),
+              _ThemeOption(
+                  label: 'Dark', mode: ThemeMode.dark, current: current),
+              _ThemeOption(
+                  label: 'System', mode: ThemeMode.system, current: current),
             ],
           ),
         );
@@ -583,8 +662,16 @@ class _MeasurementUnitToggle extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _UnitOption(label: 'cm', selected: useCm, onTap: () => onChanged(true), cs: cs),
-          _UnitOption(label: 'in', selected: !useCm, onTap: () => onChanged(false), cs: cs),
+          _UnitOption(
+              label: 'cm',
+              selected: useCm,
+              onTap: () => onChanged(true),
+              cs: cs),
+          _UnitOption(
+              label: 'in',
+              selected: !useCm,
+              onTap: () => onChanged(false),
+              cs: cs),
         ],
       ),
     );
@@ -613,8 +700,16 @@ class _UnitToggle extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _UnitOption(label: 'kg', selected: useKg, onTap: () => onChanged(true), cs: cs),
-          _UnitOption(label: 'lb', selected: !useKg, onTap: () => onChanged(false), cs: cs),
+          _UnitOption(
+              label: 'kg',
+              selected: useKg,
+              onTap: () => onChanged(true),
+              cs: cs),
+          _UnitOption(
+              label: 'lb',
+              selected: !useKg,
+              onTap: () => onChanged(false),
+              cs: cs),
         ],
       ),
     );
@@ -650,7 +745,8 @@ class _UnitOption extends StatelessWidget {
           style: GoogleFonts.poppins(
             fontSize: 13,
             fontWeight: FontWeight.w500,
-            color: selected ? cs.onPrimary : cs.onSurface.withValues(alpha: 0.55),
+            color:
+                selected ? cs.onPrimary : cs.onSurface.withValues(alpha: 0.55),
           ),
         ),
       ),
@@ -670,7 +766,8 @@ class _RestPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final label = seconds >= 60 ? '${seconds ~/ 60}m' : '${seconds}s';
+    final label =
+        seconds >= 60 ? '${seconds ~/ 60}m' : '${seconds}s';
     return GestureDetector(
       onTap: () async {
         final picked = await showDialog<int>(
@@ -691,7 +788,8 @@ class _RestPicker extends StatelessWidget {
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 8),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+        padding:
+            const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
         decoration: BoxDecoration(
           color: cs.secondary,
           borderRadius: BorderRadius.circular(8),
