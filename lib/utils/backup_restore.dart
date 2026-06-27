@@ -8,6 +8,7 @@ import 'package:share_plus/share_plus.dart';
 import '../data/hive_service.dart';
 import '../models/body_weight_entry.dart';
 import '../models/exercise.dart';
+import '../models/measurement_entry.dart';
 import '../models/routine.dart';
 import '../models/workout.dart';
 
@@ -15,13 +16,23 @@ import '../models/workout.dart';
 
 Future<void> exportBackup() async {
   final data = {
-    'version': 1,
+    'version': 2,
     'workouts': HiveService.workouts.values.map(_workoutToJson).toList(),
     'routines': HiveService.routines.values.map(_routineToJson).toList(),
     'bodyWeight': HiveService.bodyWeight.values.map(_bwToJson).toList(),
+    'customExercises': HiveService.exercises.values
+        .where((e) => e.isCustom)
+        .map(_exerciseToJson)
+        .toList(),
+    'measurements':
+        HiveService.measurements.values.map(_measurementToJson).toList(),
     'settings': {
       'useKg': HiveService.settings.get('useKg', defaultValue: true),
-      'restSeconds': HiveService.settings.get('restSeconds', defaultValue: 90),
+      'useCm': HiveService.settings.get('useCm', defaultValue: true),
+      'restSeconds':
+          HiveService.settings.get('restSeconds', defaultValue: 90),
+      'autoStartRest':
+          HiveService.settings.get('autoStartRest', defaultValue: true),
     },
   };
 
@@ -38,8 +49,27 @@ Future<void> exportBackup() async {
 
 // ── Import ────────────────────────────────────────────────────────────────────
 
+class ImportResult {
+  final int workouts;
+  final int routines;
+  final int exercises;
+  final int measurements;
+
+  const ImportResult({
+    required this.workouts,
+    required this.routines,
+    required this.exercises,
+    required this.measurements,
+  });
+
+  @override
+  String toString() =>
+      'Imported $workouts workouts, $routines routines, '
+      '$exercises exercises, $measurements measurements';
+}
+
 /// Returns null on cancel, throws on parse/IO error.
-Future<String?> importBackup() async {
+Future<ImportResult?> importBackup() async {
   final result = await FilePicker.platform.pickFiles(
     type: FileType.custom,
     allowedExtensions: ['json'],
@@ -76,15 +106,45 @@ Future<String?> importBackup() async {
     await HiveService.bodyWeight.put(key, entry);
   }
 
+  // Custom exercises
+  final exRaw = data['customExercises'] as List<dynamic>? ?? [];
+  for (final e in exRaw) {
+    final ex = _exerciseFromJson(e as Map<String, dynamic>);
+    await HiveService.exercises.put(ex.id, ex);
+  }
+
+  // Measurements
+  final mRaw = data['measurements'] as List<dynamic>? ?? [];
+  for (final m in mRaw) {
+    final entry = _measurementFromJson(m as Map<String, dynamic>);
+    final key =
+        '${entry.bodyPart}_${entry.date.year}-${entry.date.month}-${entry.date.day}';
+    await HiveService.measurements.put(key, entry);
+  }
+
   // Settings
   final settings = data['settings'] as Map<String, dynamic>?;
   if (settings != null) {
-    await HiveService.settings.put('useKg', settings['useKg'] ?? true);
-    await HiveService.settings
-        .put('restSeconds', settings['restSeconds'] ?? 90);
+    if (settings['useKg'] != null) {
+      await HiveService.settings.put('useKg', settings['useKg']);
+    }
+    if (settings['useCm'] != null) {
+      await HiveService.settings.put('useCm', settings['useCm']);
+    }
+    if (settings['restSeconds'] != null) {
+      await HiveService.settings.put('restSeconds', settings['restSeconds']);
+    }
+    if (settings['autoStartRest'] != null) {
+      await HiveService.settings.put('autoStartRest', settings['autoStartRest']);
+    }
   }
 
-  return 'Imported ${workoutsRaw.length} workouts, ${routinesRaw.length} routines';
+  return ImportResult(
+    workouts: workoutsRaw.length,
+    routines: routinesRaw.length,
+    exercises: exRaw.length,
+    measurements: mRaw.length,
+  );
 }
 
 // ── Serialisation helpers ─────────────────────────────────────────────────────
@@ -111,13 +171,14 @@ Map<String, dynamic> _wsToJson(WorkoutSet s) => {
       'isWarmup': s.isWarmup,
       'isDropSet': s.isDropSet,
       'isAmrap': s.isAmrap,
+      'durationSeconds': s.durationSeconds,
+      'distanceMeters': s.distanceMeters,
     };
 
 Workout _workoutFromJson(Map<String, dynamic> m) => Workout(
       id: m['id'] as String,
       name: m['name'] as String,
-      startedAt:
-          DateTime.fromMillisecondsSinceEpoch(m['startedAt'] as int),
+      startedAt: DateTime.fromMillisecondsSinceEpoch(m['startedAt'] as int),
       finishedAt: m['finishedAt'] != null
           ? DateTime.fromMillisecondsSinceEpoch(m['finishedAt'] as int)
           : null,
@@ -142,6 +203,8 @@ WorkoutSet _wsFromJson(Map<String, dynamic> m) => WorkoutSet(
       isWarmup: m['isWarmup'] as bool? ?? false,
       isDropSet: m['isDropSet'] as bool? ?? false,
       isAmrap: m['isAmrap'] as bool? ?? false,
+      durationSeconds: m['durationSeconds'] as int?,
+      distanceMeters: (m['distanceMeters'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _routineToJson(Routine r) => {
@@ -192,4 +255,35 @@ Map<String, dynamic> _bwToJson(BodyWeightEntry e) => {
 BodyWeightEntry _bwFromJson(Map<String, dynamic> m) => BodyWeightEntry(
       date: DateTime.fromMillisecondsSinceEpoch(m['date'] as int),
       weight: (m['weight'] as num).toDouble(),
+    );
+
+Map<String, dynamic> _exerciseToJson(Exercise e) => {
+      'id': e.id,
+      'name': e.name,
+      'primaryMuscle': e.primaryMuscle,
+      'secondaryMuscles': e.secondaryMuscles,
+      'equipment': e.equipment,
+    };
+
+Exercise _exerciseFromJson(Map<String, dynamic> m) => Exercise(
+      id: m['id'] as String,
+      name: m['name'] as String,
+      primaryMuscle: m['primaryMuscle'] as String,
+      secondaryMuscles:
+          (m['secondaryMuscles'] as List<dynamic>).cast<String>(),
+      equipment: m['equipment'] as String,
+      isCustom: true,
+    );
+
+Map<String, dynamic> _measurementToJson(MeasurementEntry e) => {
+      'date': e.date.millisecondsSinceEpoch,
+      'bodyPart': e.bodyPart,
+      'valueCm': e.valueCm,
+    };
+
+MeasurementEntry _measurementFromJson(Map<String, dynamic> m) =>
+    MeasurementEntry(
+      date: DateTime.fromMillisecondsSinceEpoch(m['date'] as int),
+      bodyPart: m['bodyPart'] as String,
+      valueCm: (m['valueCm'] as num).toDouble(),
     );
