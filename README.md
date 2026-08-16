@@ -1,16 +1,42 @@
 # Gymm
 
-A new Flutter project.
+A workout tracking app built with Flutter.
 
-## Getting Started
+## Overview
 
-This project is a starting point for a Flutter application.
+Gymm is a mobile app for logging workouts, managing exercises, and reviewing training history. It includes a home dashboard, workout history, exercise management, and profile/settings screens.
 
-A few resources to get you started if this is your first Flutter project:
+## Features
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Start and track workouts
+- Browse and manage exercises
+- Review workout history
+- Create routines and reuse them
+- Export or back up workout data
+- Light and dark theme support
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Stack
+
+- Flutter
+- Dart
+- Riverpod
+- Hive
+
+## Run locally
+
+```bash
+flutter pub get
+flutter run
+```
+
+## Project structure
+
+```text
+lib/
+  data/
+  models/
+  providers/
+  screens/
+  utils/
+  widgets/
+```
