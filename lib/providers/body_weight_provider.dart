@@ -2,19 +2,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/hive_service.dart';
 import '../models/body_weight_entry.dart';
+import '../utils/date_range.dart';
 
 class BodyWeightNotifier extends Notifier<List<BodyWeightEntry>> {
   @override
   List<BodyWeightEntry> build() => _sorted();
 
   Future<void> add(DateTime date, double weight) async {
-    final key = _dateKey(date);
-    await HiveService.bodyWeight.put(key, BodyWeightEntry(date: date, weight: weight));
+    final localDate = startOfLocalDay(date);
+    await HiveService.bodyWeight.put(
+      localDateKey(localDate),
+      BodyWeightEntry(date: localDate, weight: weight),
+    );
     state = _sorted();
   }
 
   Future<void> remove(DateTime date) async {
-    await HiveService.bodyWeight.delete(_dateKey(date));
+    await HiveService.bodyWeight.delete(localDateKey(date));
     state = _sorted();
   }
 
@@ -25,9 +29,6 @@ class BodyWeightNotifier extends Notifier<List<BodyWeightEntry>> {
   }
 
   void refresh() => state = _sorted();
-
-  static String _dateKey(DateTime d) =>
-      '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
 }
 
 final bodyWeightProvider =

@@ -8,6 +8,7 @@ import '../models/scheduled_entry.dart';
 import '../models/workout.dart';
 import '../models/routine.dart';
 import '../constants/exercises.dart';
+import '../utils/date_range.dart';
 
 abstract final class HiveService {
   static const _exercises = 'exercises';
@@ -20,7 +21,7 @@ abstract final class HiveService {
   static const _seeded = 'seeded';
   static const _activeWorkoutDraft = 'active_workout_draft';
   static const _schemaVersion = 'schemaVersion';
-  static const currentSchemaVersion = 1;
+  static const currentSchemaVersion = 2;
 
   static Box<Exercise> get exercises => Hive.box<Exercise>(_exercises);
   static Box<Workout> get workouts => Hive.box<Workout>(_workouts);
@@ -58,6 +59,8 @@ abstract final class HiveService {
       Hive.openBox<MeasurementEntry>(_measurements),
     ]);
 
+    _validateSchema();
+    await _migrateDateKeys();
     await _initializeSchema();
     await _seedIfNeeded();
   }
@@ -66,7 +69,7 @@ abstract final class HiveService {
     final ms = settings.get('onboardingDate') as int?;
     if (ms == null) return DateTime.now();
     final d = DateTime.fromMillisecondsSinceEpoch(ms);
-    return DateTime(d.year, d.month, d.day);
+    return startOfLocalDay(d);
   }
 
   static ActiveWorkoutState? get activeWorkoutDraft {
@@ -92,8 +95,43 @@ abstract final class HiveService {
       await settings.put(_schemaVersion, currentSchemaVersion);
       return;
     }
-    if (version is! int || version > currentSchemaVersion) {
+    if (version < currentSchemaVersion) {
+      await settings.put(_schemaVersion, currentSchemaVersion);
+    }
+  }
+
+  static void _validateSchema() {
+    final version = settings.get(_schemaVersion);
+    if (version != null &&
+        (version is! int || version > currentSchemaVersion)) {
       throw StateError('Unsupported local data schema: $version');
+    }
+  }
+
+  static Future<void> _migrateDateKeys() async {
+    await _migrateKeys<BodyWeightEntry>(
+      bodyWeight,
+      (entry) => localDateKey(entry.date),
+    );
+    await _migrateKeys<ScheduledEntry>(
+      schedule,
+      (entry) => localDateKey(entry.date),
+    );
+    await _migrateKeys<MeasurementEntry>(
+      measurements,
+      (entry) => '${entry.bodyPart}_${localDateKey(entry.date)}',
+    );
+  }
+
+  static Future<void> _migrateKeys<T>(
+    Box<T> box,
+    String Function(T entry) keyFor,
+  ) async {
+    for (final key in box.keys.toList()) {
+      final entry = box.get(key);
+      if (entry == null || key == keyFor(entry)) continue;
+      await box.put(keyFor(entry), entry);
+      await box.delete(key);
     }
   }
 
@@ -104,7 +142,7 @@ abstract final class HiveService {
     if (box.get('onboardingDate') == null) {
       final now = DateTime.now();
       await box.put('onboardingDate',
-          DateTime(now.year, now.month, now.day).millisecondsSinceEpoch);
+          startOfLocalDay(now).millisecondsSinceEpoch);
     }
 
     if (box.get(_seeded, defaultValue: false) as bool) return;

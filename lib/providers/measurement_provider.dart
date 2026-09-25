@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/hive_service.dart';
 import '../models/measurement_entry.dart';
+import '../utils/date_range.dart';
 
 class MeasurementNotifier extends Notifier<List<MeasurementEntry>> {
   @override
@@ -13,11 +14,12 @@ class MeasurementNotifier extends Notifier<List<MeasurementEntry>> {
       state.where((e) => e.bodyPart == bodyPart).toList();
 
   Future<void> add(String bodyPart, DateTime date, double valueCm) async {
-    final key = _key(bodyPart, date);
+    final localDate = startOfLocalDay(date);
+    final key = _key(bodyPart, localDate);
     await HiveService.measurements.put(
       key,
       MeasurementEntry(
-        date: _normalize(date),
+        date: localDate,
         bodyPart: bodyPart,
         valueCm: valueCm,
       ),
@@ -38,11 +40,8 @@ class MeasurementNotifier extends Notifier<List<MeasurementEntry>> {
   void refresh() => _reload();
 
   static String _key(String part, DateTime d) {
-    final n = _normalize(d);
-    return '${part}_${n.year}-${n.month}-${n.day}';
+    return '${part}_${localDateKey(d)}';
   }
-
-  static DateTime _normalize(DateTime d) => DateTime(d.year, d.month, d.day);
 }
 
 final measurementProvider =

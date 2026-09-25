@@ -1,5 +1,13 @@
+DateTime startOfLocalDay(DateTime date) =>
+    DateTime(date.year, date.month, date.day);
+
+String localDateKey(DateTime date) {
+  final localDate = startOfLocalDay(date);
+  return '${localDate.year}-${localDate.month.toString().padLeft(2, '0')}-${localDate.day.toString().padLeft(2, '0')}';
+}
+
 DateTime startOfWeek(DateTime date) {
-  final startOfDay = DateTime(date.year, date.month, date.day);
+  final startOfDay = startOfLocalDay(date);
   return DateTime(
     startOfDay.year,
     startOfDay.month,
@@ -8,7 +16,7 @@ DateTime startOfWeek(DateTime date) {
 }
 
 DateTime addCalendarDays(DateTime date, int days) =>
-    DateTime(date.year, date.month, date.day + days);
+    startOfLocalDay(DateTime(date.year, date.month, date.day + days));
 
 bool isWithinDateRange(DateTime value, DateTime start, DateTime end) =>
     !value.isBefore(start) && value.isBefore(end);
