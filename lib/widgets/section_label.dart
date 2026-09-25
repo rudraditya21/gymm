@@ -11,7 +11,6 @@ class SectionLabel extends StatelessWidget {
       text,
       style: TextStyle(
         fontSize: 11,
-        fontWeight: FontWeight.w600,
         letterSpacing: 1.4,
         color: cs.onSurface.withValues(alpha: 0.45),
       ),

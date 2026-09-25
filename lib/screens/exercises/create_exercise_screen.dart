@@ -55,7 +55,6 @@ class _CreateExerciseScreenState extends ConsumerState<CreateExerciseScreen> {
         title: Text('New Exercise',
             style: GoogleFonts.dmSans(
                 fontSize: 17,
-                fontWeight: FontWeight.w600,
                 color: cs.onSurface)),
         actions: [
           TextButton(
@@ -63,7 +62,6 @@ class _CreateExerciseScreenState extends ConsumerState<CreateExerciseScreen> {
             child: Text('Save',
                 style: GoogleFonts.dmSans(
                     fontSize: 15,
-                    fontWeight: FontWeight.w600,
                     color: _saving
                         ? cs.onSurface.withValues(alpha: 0.3)
                         : cs.primary)),
@@ -143,7 +141,6 @@ class _CreateExerciseScreenState extends ConsumerState<CreateExerciseScreen> {
                     m,
                     style: GoogleFonts.dmSans(
                       fontSize: 13,
-                      fontWeight: FontWeight.w500,
                       color:
                           selected ? cs.onPrimary : cs.onSurface,
                     ),
@@ -181,7 +178,6 @@ class _Label extends StatelessWidget {
         text,
         style: TextStyle(
           fontSize: 11,
-          fontWeight: FontWeight.w600,
           letterSpacing: 1.4,
           color: cs.onSurface.withValues(alpha: 0.45),
         ),
@@ -212,12 +208,10 @@ class _PickerTile extends StatelessWidget {
             children: options
                 .map((o) => SimpleDialogOption(
                       onPressed: () => Navigator.of(ctx).pop(o),
-                      child: Text(o,
-                          style: GoogleFonts.dmSans(
-                              fontSize: 14,
-                              fontWeight: o == value
-                                  ? FontWeight.w600
-                                  : FontWeight.w400)),
+                      child: Text(
+                        o,
+                        style: GoogleFonts.dmSans(fontSize: 14),
+                      ),
                     ))
                 .toList(),
           ),

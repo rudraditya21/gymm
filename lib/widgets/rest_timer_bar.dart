@@ -39,7 +39,6 @@ class RestTimerBar extends ConsumerWidget {
               'REST',
               style: TextStyle(
                 fontSize: 11,
-                fontWeight: FontWeight.w600,
                 letterSpacing: 1.4,
                 color: cs.onSurface.withValues(alpha: 0.45),
               ),
@@ -61,7 +60,6 @@ class RestTimerBar extends ConsumerWidget {
               timeStr,
               style: GoogleFonts.dmSans(
                 fontSize: 16,
-                fontWeight: FontWeight.w600,
                 color: cs.onSurface,
               ),
             ),
@@ -109,7 +107,6 @@ class _TimerButton extends StatelessWidget {
           label,
           style: GoogleFonts.dmSans(
             fontSize: 12,
-            fontWeight: FontWeight.w500,
             color: cs.onSurface,
           ),
         ),

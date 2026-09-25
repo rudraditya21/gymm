@@ -122,7 +122,6 @@ class _RoutineEditorScreenState extends ConsumerState<RoutineEditorScreen> {
           widget.existing == null ? 'New Routine' : 'Edit Routine',
           style: GoogleFonts.dmSans(
             fontSize: 17,
-            fontWeight: FontWeight.w600,
             color: cs.onSurface,
           ),
         ),
@@ -133,7 +132,6 @@ class _RoutineEditorScreenState extends ConsumerState<RoutineEditorScreen> {
               'Save',
               style: GoogleFonts.dmSans(
                 fontSize: 15,
-                fontWeight: FontWeight.w600,
                 color: cs.primary,
               ),
             ),
@@ -147,7 +145,6 @@ class _RoutineEditorScreenState extends ConsumerState<RoutineEditorScreen> {
             controller: _nameCtrl,
             style: GoogleFonts.dmSans(
               fontSize: 16,
-              fontWeight: FontWeight.w500,
               color: cs.onSurface,
             ),
             decoration: InputDecoration(
@@ -260,7 +257,6 @@ class _RoutineExerciseCard extends StatelessWidget {
                     exercise.exerciseName,
                     style: GoogleFonts.dmSans(
                       fontSize: 14,
-                      fontWeight: FontWeight.w600,
                       color: cs.onSurface,
                     ),
                   ),
@@ -310,7 +306,6 @@ class _RoutineExerciseCard extends StatelessWidget {
             label: Text('Add Set',
                 style: GoogleFonts.dmSans(
                     fontSize: 12,
-                    fontWeight: FontWeight.w500,
                     color: cs.primary)),
           ),
         ],

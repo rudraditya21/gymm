@@ -42,7 +42,6 @@ class _ExercisePickerScreenState
           'Add Exercise',
           style: GoogleFonts.dmSans(
             fontSize: 17,
-            fontWeight: FontWeight.w600,
             color: cs.onSurface,
           ),
         ),
@@ -170,7 +169,6 @@ class _ExerciseGroup extends StatelessWidget {
             muscle.toUpperCase(),
             style: TextStyle(
               fontSize: 11,
-              fontWeight: FontWeight.w600,
               letterSpacing: 1.4,
               color: cs.onSurface.withValues(alpha: 0.45),
             ),
@@ -182,7 +180,6 @@ class _ExerciseGroup extends StatelessWidget {
                 ex.name,
                 style: GoogleFonts.dmSans(
                   fontSize: 14,
-                  fontWeight: FontWeight.w500,
                   color: cs.onSurface,
                 ),
               ),
@@ -248,7 +245,6 @@ class _FilterChip extends StatelessWidget {
           label,
           style: GoogleFonts.dmSans(
             fontSize: 12,
-            fontWeight: FontWeight.w500,
             color: selected ? cs.onPrimary : cs.onSurface,
           ),
         ),

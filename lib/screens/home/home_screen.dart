@@ -45,7 +45,6 @@ class HomeScreen extends ConsumerWidget {
                 'Gymm',
                 style: GoogleFonts.dmSans(
                   fontSize: 28,
-                  fontWeight: FontWeight.w700,
                   color: cs.onSurface,
                 ),
               ),
@@ -101,7 +100,6 @@ class HomeScreen extends ConsumerWidget {
                     'Start Workout',
                     style: GoogleFonts.dmSans(
                       fontSize: 15,
-                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
@@ -119,7 +117,6 @@ class HomeScreen extends ConsumerWidget {
                       'ROUTINES',
                       style: TextStyle(
                         fontSize: 11,
-                        fontWeight: FontWeight.w600,
                         letterSpacing: 1.4,
                         color: cs.onSurface.withValues(alpha: 0.45),
                       ),
@@ -135,7 +132,6 @@ class HomeScreen extends ConsumerWidget {
                         'New',
                         style: GoogleFonts.dmSans(
                           fontSize: 13,
-                          fontWeight: FontWeight.w500,
                           color: cs.primary,
                         ),
                       ),
@@ -201,7 +197,6 @@ class HomeScreen extends ConsumerWidget {
                   'RECENT',
                   style: TextStyle(
                     fontSize: 11,
-                    fontWeight: FontWeight.w600,
                     letterSpacing: 1.4,
                     color: cs.onSurface.withValues(alpha: 0.45),
                   ),
@@ -302,7 +297,6 @@ class _WeekStat extends StatelessWidget {
           value,
           style: GoogleFonts.dmSans(
             fontSize: 18,
-            fontWeight: FontWeight.w700,
             color: cs.onSurface,
           ),
         ),
@@ -392,7 +386,6 @@ class _RoutineCard extends StatelessWidget {
               routine.name,
               style: GoogleFonts.dmSans(
                 fontSize: 13,
-                fontWeight: FontWeight.w600,
                 color: cs.onSurface,
               ),
               maxLines: 1,
@@ -416,7 +409,6 @@ class _RoutineCard extends StatelessWidget {
                   'Start',
                   style: GoogleFonts.dmSans(
                     fontSize: 12,
-                    fontWeight: FontWeight.w500,
                     color: cs.primary,
                   ),
                 ),
@@ -478,7 +470,6 @@ class _StartSheet extends StatelessWidget {
                   'Empty Workout',
                   style: GoogleFonts.dmSans(
                     fontSize: 15,
-                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -489,7 +480,6 @@ class _StartSheet extends StatelessWidget {
                 'START FROM ROUTINE',
                 style: TextStyle(
                   fontSize: 11,
-                  fontWeight: FontWeight.w600,
                   letterSpacing: 1.4,
                   color: cs.onSurface.withValues(alpha: 0.45),
                 ),
@@ -502,7 +492,6 @@ class _StartSheet extends StatelessWidget {
                       r.name,
                       style: GoogleFonts.dmSans(
                         fontSize: 15,
-                        fontWeight: FontWeight.w500,
                         color: cs.onSurface,
                       ),
                     ),

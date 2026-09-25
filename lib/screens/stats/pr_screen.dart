@@ -27,7 +27,6 @@ class PRScreen extends ConsumerWidget {
           'Personal Records',
           style: GoogleFonts.dmSans(
             fontSize: 17,
-            fontWeight: FontWeight.w600,
             color: cs.onSurface,
           ),
         ),
@@ -141,7 +140,6 @@ class _PRCard extends StatelessWidget {
                   pr.exerciseName,
                   style: GoogleFonts.dmSans(
                     fontSize: 14,
-                    fontWeight: FontWeight.w600,
                     color: cs.onSurface,
                   ),
                 ),
@@ -163,7 +161,6 @@ class _PRCard extends StatelessWidget {
                 '${formatWeightNum(pr.weight, useKg: useKg)} ${useKg ? 'kg' : 'lb'} × ${pr.reps}',
                 style: GoogleFonts.dmSans(
                   fontSize: 14,
-                  fontWeight: FontWeight.w600,
                   color: cs.onSurface,
                 ),
               ),

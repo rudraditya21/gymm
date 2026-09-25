@@ -42,7 +42,6 @@ class WorkoutCard extends StatelessWidget {
                     workout.name,
                     style: GoogleFonts.dmSans(
                       fontSize: 16,
-                      fontWeight: FontWeight.w600,
                       color: cs.onSurface,
                     ),
                   ),

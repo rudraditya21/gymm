@@ -94,7 +94,6 @@ class _WorkoutCalendarState extends ConsumerState<WorkoutCalendar> {
                   '${_monthName(_month.month)} ${_month.year}',
                   style: GoogleFonts.dmSans(
                     fontSize: 13,
-                    fontWeight: FontWeight.w600,
                     color: cs.onSurface.withValues(alpha: 0.7),
                   ),
                 ),
@@ -215,9 +214,6 @@ class _WorkoutCalendarState extends ConsumerState<WorkoutCalendar> {
                       '$day',
                       style: GoogleFonts.dmSans(
                         fontSize: 10,
-                        fontWeight: isToday
-                            ? FontWeight.w700
-                            : FontWeight.w400,
                         color: hasWorkout
                             ? (intensity > 0.5
                                 ? cs.onPrimary
@@ -242,7 +238,6 @@ class _WorkoutCalendarState extends ConsumerState<WorkoutCalendar> {
                         'zzz',
                         style: TextStyle(
                           fontSize: 6,
-                          fontWeight: FontWeight.w700,
                           color: cs.error.withValues(alpha: 0.5),
                           letterSpacing: 0.5,
                         ),
@@ -413,7 +408,6 @@ class _DaySheet extends ConsumerWidget {
               dateStr,
               style: GoogleFonts.dmSans(
                 fontSize: 16,
-                fontWeight: FontWeight.w600,
                 color: cs.onSurface,
               ),
             ),
@@ -496,7 +490,6 @@ class _DaySheet extends ConsumerWidget {
                   'SCHEDULE FROM ROUTINE',
                   style: TextStyle(
                     fontSize: 10,
-                    fontWeight: FontWeight.w600,
                     letterSpacing: 1.2,
                     color: cs.onSurface.withValues(alpha: 0.4),
                   ),
@@ -629,7 +622,6 @@ class _SheetRow extends StatelessWidget {
                     title,
                     style: GoogleFonts.dmSans(
                       fontSize: 14,
-                      fontWeight: FontWeight.w500,
                       color: cs.onSurface,
                     ),
                   ),
@@ -687,7 +679,6 @@ class _RoutineOption extends StatelessWidget {
                       routine.name,
                       style: GoogleFonts.dmSans(
                         fontSize: 14,
-                        fontWeight: FontWeight.w500,
                         color: cs.onSurface,
                       ),
                     ),

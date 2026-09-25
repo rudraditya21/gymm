@@ -52,7 +52,6 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
                 workout.name,
                 style: GoogleFonts.dmSans(
                   fontSize: 15,
-                  fontWeight: FontWeight.w600,
                   color: cs.onSurface,
                 ),
                 maxLines: 1,
@@ -73,7 +72,6 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
                 'Finish',
                 style: GoogleFonts.dmSans(
                   fontSize: 14,
-                  fontWeight: FontWeight.w600,
                   color: workout.exercises.isEmpty
                       ? cs.onSurface.withValues(alpha: 0.3)
                       : cs.primary,
@@ -121,7 +119,6 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
                 'Add Exercise',
                 style: GoogleFonts.dmSans(
                   fontSize: 14,
-                  fontWeight: FontWeight.w500,
                   color: cs.primary,
                 ),
               ),
@@ -353,7 +350,6 @@ class _ElapsedTimerState extends State<_ElapsedTimer> {
       text,
       style: GoogleFonts.dmSans(
         fontSize: 12,
-        fontWeight: FontWeight.w400,
         color: widget.cs.onSurface.withValues(alpha: 0.5),
       ),
     );

@@ -58,7 +58,6 @@ class _MuscleHeatmapScreenState extends ConsumerState<MuscleHeatmapScreen> {
           'Muscle Activity',
           style: GoogleFonts.dmSans(
             fontSize: 17,
-            fontWeight: FontWeight.w600,
             color: cs.onSurface,
           ),
         ),
@@ -104,7 +103,6 @@ class _MuscleHeatmapScreenState extends ConsumerState<MuscleHeatmapScreen> {
                 'BREAKDOWN',
                 style: TextStyle(
                   fontSize: 11,
-                  fontWeight: FontWeight.w600,
                   letterSpacing: 1.4,
                   color: cs.onSurface.withValues(alpha: 0.45),
                 ),
@@ -175,7 +173,6 @@ class _RadarCard extends StatelessWidget {
             ),
             titleTextStyle: GoogleFonts.dmSans(
               fontSize: 10.5,
-              fontWeight: FontWeight.w500,
               color: cs.onSurface.withValues(alpha: 0.7),
             ),
             getTitle: (index, angle) =>
@@ -231,7 +228,6 @@ class _SegmentRow extends StatelessWidget {
                   e.value,
                   style: GoogleFonts.dmSans(
                     fontSize: 12,
-                    fontWeight: FontWeight.w500,
                     color: active
                         ? cs.onPrimary
                         : cs.onSurface.withValues(alpha: 0.6),
@@ -304,7 +300,6 @@ class _MuscleBar extends StatelessWidget {
               textAlign: TextAlign.right,
               style: GoogleFonts.dmSans(
                 fontSize: 12,
-                fontWeight: FontWeight.w600,
                 color: cs.onSurface.withValues(alpha: 0.55),
               ),
             ),

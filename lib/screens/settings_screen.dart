@@ -19,7 +19,6 @@ class SettingsScreen extends StatelessWidget {
               'Settings',
               style: GoogleFonts.dmSans(
                 fontSize: 28,
-                fontWeight: FontWeight.w600,
                 color: cs.onSurface,
               ),
             ),
@@ -45,7 +44,6 @@ class _SectionLabel extends StatelessWidget {
       text,
       style: TextStyle(
         fontSize: 11,
-        fontWeight: FontWeight.w600,
         letterSpacing: 1.4,
         color: cs.onSurface.withValues(alpha: 0.45),
       ),
@@ -73,7 +71,6 @@ class _AppearanceTile extends StatelessWidget {
             'Theme',
             style: GoogleFonts.dmSans(
               fontSize: 14,
-              fontWeight: FontWeight.w500,
               color: cs.onSurface,
             ),
           ),
@@ -147,7 +144,6 @@ class _ThemeOption extends StatelessWidget {
             duration: const Duration(milliseconds: 150),
             style: GoogleFonts.dmSans(
               fontSize: 13,
-              fontWeight: FontWeight.w500,
               color: selected
                   ? cs.onPrimary
                   : cs.onSurface.withValues(alpha: 0.55),

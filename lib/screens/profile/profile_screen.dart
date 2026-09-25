@@ -52,7 +52,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               'Profile',
               style: GoogleFonts.dmSans(
                 fontSize: 28,
-                fontWeight: FontWeight.w700,
                 color: cs.onSurface,
               ),
             ),
@@ -103,7 +102,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     'Theme',
                     style: GoogleFonts.dmSans(
                       fontSize: 14,
-                      fontWeight: FontWeight.w500,
                       color: cs.onSurface,
                     ),
                   ),
@@ -134,7 +132,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           'Weight unit',
                           style: GoogleFonts.dmSans(
                             fontSize: 14,
-                            fontWeight: FontWeight.w500,
                             color: cs.onSurface,
                           ),
                         ),
@@ -158,7 +155,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           'Measurement unit',
                           style: GoogleFonts.dmSans(
                             fontSize: 14,
-                            fontWeight: FontWeight.w500,
                             color: cs.onSurface,
                           ),
                         ),
@@ -197,7 +193,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           'Default rest',
                           style: GoogleFonts.dmSans(
                             fontSize: 14,
-                            fontWeight: FontWeight.w500,
                             color: cs.onSurface,
                           ),
                         ),
@@ -222,7 +217,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           'Auto-start timer',
                           style: GoogleFonts.dmSans(
                             fontSize: 14,
-                            fontWeight: FontWeight.w500,
                             color: cs.onSurface,
                           ),
                         ),
@@ -261,7 +255,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     title: Text('Muscle Activity',
                         style: GoogleFonts.dmSans(
                             fontSize: 14,
-                            fontWeight: FontWeight.w500,
                             color: cs.onSurface)),
                     subtitle: Text('Radar chart of recent sessions',
                         style: GoogleFonts.dmSans(
@@ -282,7 +275,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     title: Text('Volume Trend',
                         style: GoogleFonts.dmSans(
                             fontSize: 14,
-                            fontWeight: FontWeight.w500,
                             color: cs.onSurface)),
                     subtitle: Text('Weekly & monthly volume over time',
                         style: GoogleFonts.dmSans(
@@ -300,7 +292,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     title: Text('Personal Records',
                         style: GoogleFonts.dmSans(
                             fontSize: 14,
-                            fontWeight: FontWeight.w500,
                             color: cs.onSurface)),
                     subtitle: Text('Best set per exercise, all time',
                         style: GoogleFonts.dmSans(
@@ -336,7 +327,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     title: Text('Plate Calculator',
                         style: GoogleFonts.dmSans(
                             fontSize: 14,
-                            fontWeight: FontWeight.w500,
                             color: cs.onSurface)),
                     subtitle: Text('How many plates per side',
                         style: GoogleFonts.dmSans(
@@ -357,7 +347,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     title: Text('Body Weight',
                         style: GoogleFonts.dmSans(
                             fontSize: 14,
-                            fontWeight: FontWeight.w500,
                             color: cs.onSurface)),
                     subtitle: Text('Track weight over time',
                         style: GoogleFonts.dmSans(
@@ -375,7 +364,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     title: Text('Body Measurements',
                         style: GoogleFonts.dmSans(
                             fontSize: 14,
-                            fontWeight: FontWeight.w500,
                             color: cs.onSurface)),
                     subtitle: Text('Waist, chest, biceps and more',
                         style: GoogleFonts.dmSans(
@@ -392,7 +380,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     title: Text('Export to CSV',
                         style: GoogleFonts.dmSans(
                             fontSize: 14,
-                            fontWeight: FontWeight.w500,
                             color: cs.onSurface)),
                     subtitle: Text('Share all workout history',
                         style: GoogleFonts.dmSans(
@@ -416,7 +403,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     title: Text('Backup',
                         style: GoogleFonts.dmSans(
                             fontSize: 14,
-                            fontWeight: FontWeight.w500,
                             color: cs.onSurface)),
                     subtitle: Text('Export all data as JSON',
                         style: GoogleFonts.dmSans(
@@ -440,7 +426,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     title: Text('Restore',
                         style: GoogleFonts.dmSans(
                             fontSize: 14,
-                            fontWeight: FontWeight.w500,
                             color: cs.onSurface)),
                     subtitle: Text('Import from a backup file',
                         style: GoogleFonts.dmSans(
@@ -519,7 +504,6 @@ class _SectionLabel extends StatelessWidget {
       text,
       style: TextStyle(
         fontSize: 11,
-        fontWeight: FontWeight.w600,
         letterSpacing: 1.4,
         color: cs.onSurface.withValues(alpha: 0.45),
       ),
@@ -544,7 +528,6 @@ class _StatItem extends StatelessWidget {
             value,
             style: GoogleFonts.dmSans(
               fontSize: 20,
-              fontWeight: FontWeight.w700,
               color: cs.onSurface,
             ),
           ),
@@ -626,7 +609,6 @@ class _ThemeOption extends StatelessWidget {
             duration: const Duration(milliseconds: 150),
             style: GoogleFonts.dmSans(
               fontSize: 13,
-              fontWeight: FontWeight.w500,
               color: selected
                   ? cs.onPrimary
                   : cs.onSurface.withValues(alpha: 0.55),
@@ -743,7 +725,6 @@ class _UnitOption extends StatelessWidget {
           label,
           style: GoogleFonts.dmSans(
             fontSize: 13,
-            fontWeight: FontWeight.w500,
             color:
                 selected ? cs.onPrimary : cs.onSurface.withValues(alpha: 0.55),
           ),
@@ -801,7 +782,6 @@ class _RestPicker extends StatelessWidget {
               label,
               style: GoogleFonts.dmSans(
                 fontSize: 14,
-                fontWeight: FontWeight.w500,
                 color: cs.onSurface,
               ),
             ),

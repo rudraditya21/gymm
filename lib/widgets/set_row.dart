@@ -165,7 +165,6 @@ class _SetRowState extends State<SetRow> {
                 textAlign: TextAlign.center,
                 style: GoogleFonts.dmSans(
                   fontSize: 13,
-                  fontWeight: FontWeight.w600,
                   color: _typeColor(set, cs),
                 ),
               ),
@@ -272,7 +271,6 @@ class _NumberField extends StatelessWidget {
       },
       style: GoogleFonts.dmSans(
         fontSize: 14,
-        fontWeight: FontWeight.w500,
         color: completed
             ? cs.onSurface.withValues(alpha: 0.55)
             : cs.onSurface,

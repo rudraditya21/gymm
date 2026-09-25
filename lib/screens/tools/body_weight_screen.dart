@@ -123,7 +123,6 @@ class _BodyWeightScreenState extends ConsumerState<BodyWeightScreen> {
           'Body Weight',
           style: GoogleFonts.dmSans(
             fontSize: 17,
-            fontWeight: FontWeight.w600,
             color: cs.onSurface,
           ),
         ),
@@ -152,7 +151,6 @@ class _BodyWeightScreenState extends ConsumerState<BodyWeightScreen> {
                   'HISTORY',
                   style: TextStyle(
                     fontSize: 11,
-                    fontWeight: FontWeight.w600,
                     letterSpacing: 1.4,
                     color: cs.onSurface.withValues(alpha: 0.45),
                   ),
@@ -324,7 +322,6 @@ class _EntryRow extends StatelessWidget {
               '$w $unit',
               style: GoogleFonts.dmSans(
                 fontSize: 15,
-                fontWeight: FontWeight.w600,
                 color: cs.onSurface,
               ),
             ),
@@ -363,7 +360,6 @@ class _StatCell extends StatelessWidget {
             value,
             style: GoogleFonts.dmSans(
               fontSize: 16,
-              fontWeight: FontWeight.w700,
               color: highlight ? cs.primary : cs.onSurface,
             ),
           ),

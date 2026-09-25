@@ -54,7 +54,6 @@ class _ExercisesScreenState extends ConsumerState<ExercisesScreen> {
                 'Exercises',
                 style: GoogleFonts.dmSans(
                   fontSize: 28,
-                  fontWeight: FontWeight.w700,
                   color: cs.onSurface,
                 ),
               ),
@@ -134,7 +133,6 @@ class _ExercisesScreenState extends ConsumerState<ExercisesScreen> {
                             ex.name,
                             style: GoogleFonts.dmSans(
                               fontSize: 14,
-                              fontWeight: FontWeight.w500,
                               color: cs.onSurface,
                             ),
                           ),
@@ -238,7 +236,6 @@ class _Chip extends StatelessWidget {
           label,
           style: GoogleFonts.dmSans(
             fontSize: 12,
-            fontWeight: FontWeight.w500,
             color: selected ? cs.onPrimary : cs.onSurface,
           ),
         ),

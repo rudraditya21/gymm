@@ -30,7 +30,6 @@ class HistoryScreen extends ConsumerWidget {
                         'History',
                         style: GoogleFonts.dmSans(
                           fontSize: 28,
-                          fontWeight: FontWeight.w700,
                           color: cs.onSurface,
                         ),
                       ),
@@ -114,7 +113,6 @@ class _EmptyHistory extends StatelessWidget {
             'No workouts yet',
             style: GoogleFonts.dmSans(
               fontSize: 18,
-              fontWeight: FontWeight.w600,
               color: cs.onSurface.withValues(alpha: 0.4),
             ),
           ),

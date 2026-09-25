@@ -68,7 +68,6 @@ class _PlateCalculatorScreenState
           'Plate Calculator',
           style: GoogleFonts.dmSans(
             fontSize: 17,
-            fontWeight: FontWeight.w600,
             color: cs.onSurface,
           ),
         ),
@@ -96,21 +95,18 @@ class _PlateCalculatorScreenState
               ],
               style: GoogleFonts.dmSans(
                 fontSize: 32,
-                fontWeight: FontWeight.w700,
                 color: cs.onSurface,
               ),
               decoration: InputDecoration(
                 hintText: '100',
                 hintStyle: GoogleFonts.dmSans(
                   fontSize: 32,
-                  fontWeight: FontWeight.w700,
                   color: cs.onSurface.withValues(alpha: 0.2),
                 ),
                 suffix: Text(
                   unit,
                   style: GoogleFonts.dmSans(
                     fontSize: 20,
-                    fontWeight: FontWeight.w500,
                     color: cs.onSurface.withValues(alpha: 0.4),
                   ),
                 ),
@@ -155,7 +151,6 @@ class _PlateCalculatorScreenState
                 'PLATES PER SIDE',
                 style: TextStyle(
                   fontSize: 11,
-                  fontWeight: FontWeight.w600,
                   letterSpacing: 1.4,
                   color: cs.onSurface.withValues(alpha: 0.45),
                 ),
@@ -197,7 +192,6 @@ class _PlateCalculatorScreenState
                       '${loadedWeight!.toStringAsFixed(loadedWeight % 1 == 0 ? 0 : 1)} $unit',
                       style: GoogleFonts.dmSans(
                         fontSize: 16,
-                        fontWeight: FontWeight.w700,
                         color: cs.primary,
                       ),
                     ),
@@ -245,7 +239,6 @@ class _PlateRow extends StatelessWidget {
               w,
               style: GoogleFonts.dmSans(
                 fontSize: 14,
-                fontWeight: FontWeight.w700,
                 color: cs.primary,
               ),
             ),
@@ -255,7 +248,6 @@ class _PlateRow extends StatelessWidget {
             '$w $unit  ×  $count',
             style: GoogleFonts.dmSans(
               fontSize: 16,
-              fontWeight: FontWeight.w500,
               color: cs.onSurface,
             ),
           ),

@@ -39,7 +39,6 @@ class WorkoutDetailScreen extends ConsumerWidget {
           workout.name,
           style: GoogleFonts.dmSans(
             fontSize: 17,
-            fontWeight: FontWeight.w600,
             color: cs.onSurface,
           ),
         ),
@@ -124,7 +123,6 @@ class WorkoutDetailScreen extends ConsumerWidget {
                     ex.exerciseName,
                     style: GoogleFonts.dmSans(
                       fontSize: 15,
-                      fontWeight: FontWeight.w600,
                       color: cs.onSurface,
                     ),
                   ),
@@ -278,7 +276,6 @@ class _SummaryItem extends StatelessWidget {
             label,
             style: TextStyle(
               fontSize: 10,
-              fontWeight: FontWeight.w600,
               letterSpacing: 1.2,
               color: cs.onSurface.withValues(alpha: 0.4),
             ),
@@ -288,7 +285,6 @@ class _SummaryItem extends StatelessWidget {
             value,
             style: GoogleFonts.dmSans(
               fontSize: 16,
-              fontWeight: FontWeight.w600,
               color: cs.onSurface,
             ),
           ),

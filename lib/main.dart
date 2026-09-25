@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'app_theme.dart';
 import 'constants/colors.dart';
@@ -29,7 +28,7 @@ class GymmApp extends StatelessWidget {
         themeMode: mode,
         theme: ThemeData(
           useMaterial3: true,
-          textTheme: GoogleFonts.dmSansTextTheme(),
+          textTheme: dmSansTextTheme(),
           scaffoldBackgroundColor: AppLightColors.background,
           colorScheme: const ColorScheme.light(
             primary: AppLightColors.primary,
@@ -44,7 +43,7 @@ class GymmApp extends StatelessWidget {
         ),
         darkTheme: ThemeData(
           useMaterial3: true,
-          textTheme: GoogleFonts.dmSansTextTheme(ThemeData.dark().textTheme),
+          textTheme: dmSansTextTheme(ThemeData.dark().textTheme),
           scaffoldBackgroundColor: AppDarkColors.background,
           colorScheme: const ColorScheme.dark(
             primary: AppDarkColors.primary,

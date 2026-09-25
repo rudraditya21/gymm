@@ -38,7 +38,6 @@ class ExerciseDetailScreen extends ConsumerWidget {
           exercise.name,
           style: GoogleFonts.dmSans(
             fontSize: 17,
-            fontWeight: FontWeight.w600,
             color: cs.onSurface,
           ),
         ),
@@ -85,7 +84,6 @@ class ExerciseDetailScreen extends ConsumerWidget {
                     'Est. 1RM: ${formatWeight(bestE1RM, useKg: useKg)}',
                     style: GoogleFonts.dmSans(
                       fontSize: 15,
-                      fontWeight: FontWeight.w600,
                       color: cs.onSurface,
                     ),
                   ),
@@ -193,7 +191,6 @@ class _SectionHeader extends StatelessWidget {
       text,
       style: TextStyle(
         fontSize: 11,
-        fontWeight: FontWeight.w600,
         letterSpacing: 1.4,
         color: cs.onSurface.withValues(alpha: 0.45),
       ),
@@ -219,7 +216,6 @@ class _InfoTag extends StatelessWidget {
         label,
         style: GoogleFonts.dmSans(
           fontSize: 12,
-          fontWeight: FontWeight.w500,
           color: cs.onSurface.withValues(alpha: 0.7),
         ),
       ),
@@ -355,7 +351,6 @@ class _HistoryEntry extends StatelessWidget {
               'Best: ${formatWeight(bestSet.weight, useKg: useKg)} × ${bestSet.reps ?? '–'}',
               style: GoogleFonts.dmSans(
                 fontSize: 13,
-                fontWeight: FontWeight.w500,
                 color: cs.onSurface,
               ),
             ),

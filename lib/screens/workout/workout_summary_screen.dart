@@ -37,7 +37,6 @@ class WorkoutSummaryScreen extends ConsumerWidget {
                 'Workout done!',
                 style: GoogleFonts.dmSans(
                   fontSize: 28,
-                  fontWeight: FontWeight.w700,
                   color: cs.onSurface,
                 ),
               ),
@@ -80,7 +79,6 @@ class WorkoutSummaryScreen extends ConsumerWidget {
                   'NEW PERSONAL RECORDS',
                   style: TextStyle(
                     fontSize: 11,
-                    fontWeight: FontWeight.w600,
                     letterSpacing: 1.4,
                     color: cs.onSurface.withValues(alpha: 0.45),
                   ),
@@ -111,8 +109,7 @@ class WorkoutSummaryScreen extends ConsumerWidget {
                   ),
                   child: Text(
                     'View Details',
-                    style: GoogleFonts.dmSans(
-                        fontSize: 15, fontWeight: FontWeight.w600),
+                    style: GoogleFonts.dmSans(fontSize: 15),
                   ),
                 ),
               ),
@@ -131,7 +128,6 @@ class WorkoutSummaryScreen extends ConsumerWidget {
                     'Done',
                     style: GoogleFonts.dmSans(
                         fontSize: 15,
-                        fontWeight: FontWeight.w500,
                         color: cs.onSurface),
                   ),
                 ),
@@ -167,7 +163,6 @@ class _StatBox extends StatelessWidget {
               value,
               style: GoogleFonts.dmSans(
                 fontSize: 18,
-                fontWeight: FontWeight.w700,
                 color: cs.onSurface,
               ),
             ),
@@ -206,7 +201,6 @@ class _PRRow extends StatelessWidget {
               pr.exerciseName,
               style: GoogleFonts.dmSans(
                 fontSize: 14,
-                fontWeight: FontWeight.w500,
                 color: cs.onSurface,
               ),
             ),
@@ -215,7 +209,6 @@ class _PRRow extends StatelessWidget {
             '${formatWeightNum(pr.weight, useKg: useKg)} × ${pr.reps}',
             style: GoogleFonts.dmSans(
               fontSize: 14,
-              fontWeight: FontWeight.w600,
               color: cs.primary,
             ),
           ),

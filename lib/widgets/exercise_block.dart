@@ -80,7 +80,6 @@ class ExerciseBlock extends ConsumerWidget {
                       supersetLabel!,
                       style: GoogleFonts.dmSans(
                         fontSize: 11,
-                        fontWeight: FontWeight.w700,
                         color: cs.onPrimary,
                       ),
                     ),
@@ -94,7 +93,6 @@ class ExerciseBlock extends ConsumerWidget {
                         exercise.exerciseName,
                         style: GoogleFonts.dmSans(
                           fontSize: 15,
-                          fontWeight: FontWeight.w600,
                           color: cs.onSurface,
                         ),
                       ),
@@ -247,7 +245,6 @@ class ExerciseBlock extends ConsumerWidget {
               'Add Set',
               style: GoogleFonts.dmSans(
                 fontSize: 13,
-                fontWeight: FontWeight.w500,
                 color: cs.primary,
               ),
             ),
@@ -289,7 +286,6 @@ class ExerciseBlock extends ConsumerWidget {
 
   TextStyle _headerStyle(ColorScheme cs) => TextStyle(
         fontSize: 10,
-        fontWeight: FontWeight.w600,
         letterSpacing: 1.2,
         color: cs.onSurface.withValues(alpha: 0.4),
       );

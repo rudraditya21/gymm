@@ -51,7 +51,6 @@ class MeasurementsScreen extends ConsumerWidget {
           'Body Measurements',
           style: GoogleFonts.dmSans(
             fontSize: 17,
-            fontWeight: FontWeight.w600,
             color: cs.onSurface,
           ),
         ),
@@ -128,7 +127,6 @@ class _PartCard extends StatelessWidget {
                 part,
                 style: GoogleFonts.dmSans(
                   fontSize: 14,
-                  fontWeight: FontWeight.w500,
                   color: cs.onSurface,
                 ),
               ),
@@ -146,7 +144,6 @@ class _PartCard extends StatelessWidget {
                 _fmtVal(latest!.valueCm, useCm),
                 style: GoogleFonts.dmSans(
                   fontSize: 15,
-                  fontWeight: FontWeight.w600,
                   color: cs.onSurface,
                 ),
               ),
@@ -256,7 +253,6 @@ class _MeasurementDetailScreenState
           widget.bodyPart,
           style: GoogleFonts.dmSans(
             fontSize: 17,
-            fontWeight: FontWeight.w600,
             color: cs.onSurface,
           ),
         ),
@@ -280,7 +276,6 @@ class _MeasurementDetailScreenState
                   'HISTORY',
                   style: TextStyle(
                     fontSize: 11,
-                    fontWeight: FontWeight.w600,
                     letterSpacing: 1.4,
                     color: cs.onSurface.withValues(alpha: 0.45),
                   ),
@@ -354,7 +349,6 @@ class _Cell extends StatelessWidget {
             value,
             style: GoogleFonts.dmSans(
               fontSize: 15,
-              fontWeight: FontWeight.w700,
               color: highlight ? cs.primary : cs.onSurface,
             ),
           ),
@@ -518,7 +512,6 @@ class _EntryRow extends StatelessWidget {
               v,
               style: GoogleFonts.dmSans(
                 fontSize: 15,
-                fontWeight: FontWeight.w600,
                 color: cs.onSurface,
               ),
             ),
