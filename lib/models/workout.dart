@@ -5,7 +5,6 @@ class WorkoutSet {
   final int? reps;
   final bool isCompleted;
   final bool isWarmup;
-  final int? rpe;
   final bool isDropSet;
   final bool isAmrap;
   final int? durationSeconds;
@@ -16,7 +15,6 @@ class WorkoutSet {
     this.reps,
     this.isCompleted = false,
     this.isWarmup = false,
-    this.rpe,
     this.isDropSet = false,
     this.isAmrap = false,
     this.durationSeconds,
@@ -87,7 +85,6 @@ class WorkoutSetAdapter extends TypeAdapter<WorkoutSet> {
       reps: fields[1] as int?,
       isCompleted: fields[2] as bool? ?? false,
       isWarmup: fields[3] as bool? ?? false,
-      rpe: fields[4] as int?,
       isDropSet: fields[5] as bool? ?? false,
       isAmrap: fields[6] as bool? ?? false,
       durationSeconds: fields[7] as int?,
@@ -98,7 +95,7 @@ class WorkoutSetAdapter extends TypeAdapter<WorkoutSet> {
   @override
   void write(BinaryWriter writer, WorkoutSet obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.weight)
       ..writeByte(1)
@@ -107,8 +104,6 @@ class WorkoutSetAdapter extends TypeAdapter<WorkoutSet> {
       ..write(obj.isCompleted)
       ..writeByte(3)
       ..write(obj.isWarmup)
-      ..writeByte(4)
-      ..write(obj.rpe)
       ..writeByte(5)
       ..write(obj.isDropSet)
       ..writeByte(6)

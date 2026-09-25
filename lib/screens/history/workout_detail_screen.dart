@@ -199,16 +199,6 @@ class WorkoutDetailScreen extends ConsumerWidget {
                               ),
                             ),
                           ],
-                          if (s.rpe != null) ...[
-                            const SizedBox(width: 8),
-                            Text(
-                              'RPE ${s.rpe}',
-                              style: GoogleFonts.dmSans(
-                                fontSize: 11,
-                                color: cs.primary.withValues(alpha: 0.7),
-                              ),
-                            ),
-                          ],
                         ],
                       ),
                     );
