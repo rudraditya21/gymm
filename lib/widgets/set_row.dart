@@ -34,6 +34,7 @@ class SetRow extends StatefulWidget {
 class _SetRowState extends State<SetRow> {
   late TextEditingController _primaryCtrl;  // weight or duration-min
   late TextEditingController _secondaryCtrl; // reps or distance-km
+  String? _validationError;
 
   @override
   void initState() {
@@ -91,13 +92,33 @@ class _SetRowState extends State<SetRow> {
     if (widget.isCardio) {
       final mins = int.tryParse(_primaryCtrl.text.trim());
       final km = double.tryParse(_secondaryCtrl.text.trim());
+      if (!widget.set.isCompleted &&
+          (mins == null || mins <= 0 || km == null || km <= 0)) {
+        setState(
+            () => _validationError = 'Enter a positive duration and distance.');
+        return;
+      }
+      setState(() => _validationError = null);
       widget.onComplete(null, null, mins != null ? mins * 60 : null,
           km != null ? km * 1000 : null);
     } else {
       final weight = _parseWeight(_primaryCtrl.text.trim());
       final reps = int.tryParse(_secondaryCtrl.text.trim());
+      final hasInvalidWeight =
+          _primaryCtrl.text.trim().isNotEmpty && weight == null;
+      if (!widget.set.isCompleted &&
+          (hasInvalidWeight || reps == null || reps <= 0)) {
+        setState(
+            () => _validationError = 'Enter a valid weight and positive reps.');
+        return;
+      }
+      setState(() => _validationError = null);
       widget.onComplete(weight, reps, null, null);
     }
+  }
+
+  void _clearValidationError(String _) {
+    if (_validationError != null) setState(() => _validationError = null);
   }
 
   static String _typeLabel(ActiveSet set) {
@@ -152,8 +173,11 @@ class _SetRowState extends State<SetRow> {
       duration: const Duration(milliseconds: 150),
       color: rowColor,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Row(
+            children: [
           // Set type indicator — tap to cycle, long-press to remove
           GestureDetector(
             onTap: widget.onCycleType,
@@ -195,6 +219,7 @@ class _SetRowState extends State<SetRow> {
               decimal: !widget.isCardio,
               completed: completed,
               cs: cs,
+              onChanged: _clearValidationError,
             ),
           ),
           const SizedBox(width: 8),
@@ -207,6 +232,7 @@ class _SetRowState extends State<SetRow> {
               decimal: widget.isCardio,
               completed: completed,
               cs: cs,
+              onChanged: _clearValidationError,
             ),
           ),
           const SizedBox(width: 8),
@@ -230,6 +256,19 @@ class _SetRowState extends State<SetRow> {
               ),
             ),
           ),
+            ],
+          ),
+          if (_validationError != null)
+            Padding(
+              padding: const EdgeInsets.only(left: 88, top: 4),
+              child: Text(
+                _validationError!,
+                style: GoogleFonts.dmSans(
+                  fontSize: 11,
+                  color: cs.error,
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -242,6 +281,7 @@ class _NumberField extends StatelessWidget {
   final bool decimal;
   final bool completed;
   final ColorScheme cs;
+  final ValueChanged<String>? onChanged;
 
   const _NumberField({
     required this.controller,
@@ -249,6 +289,7 @@ class _NumberField extends StatelessWidget {
     required this.decimal,
     required this.completed,
     required this.cs,
+    this.onChanged,
   });
 
   @override
@@ -269,6 +310,7 @@ class _NumberField extends StatelessWidget {
           extentOffset: controller.text.length,
         );
       },
+      onChanged: onChanged,
       style: GoogleFonts.dmSans(
         fontSize: 14,
         color: completed
