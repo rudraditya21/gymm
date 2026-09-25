@@ -10,7 +10,6 @@ class SectionLabel extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(
-        fontFamily: 'monospace',
         fontSize: 11,
         fontWeight: FontWeight.w600,
         letterSpacing: 1.4,

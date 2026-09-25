@@ -35,7 +35,7 @@ class WorkoutSummaryScreen extends ConsumerWidget {
               // Title
               Text(
                 'Workout done!',
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.dmSans(
                   fontSize: 28,
                   fontWeight: FontWeight.w700,
                   color: cs.onSurface,
@@ -43,7 +43,7 @@ class WorkoutSummaryScreen extends ConsumerWidget {
               ),
               Text(
                 workout.name,
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.dmSans(
                   fontSize: 16,
                   color: cs.onSurface.withValues(alpha: 0.55),
                 ),
@@ -79,7 +79,6 @@ class WorkoutSummaryScreen extends ConsumerWidget {
                 Text(
                   'NEW PERSONAL RECORDS',
                   style: TextStyle(
-                    fontFamily: 'monospace',
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
                     letterSpacing: 1.4,
@@ -112,7 +111,7 @@ class WorkoutSummaryScreen extends ConsumerWidget {
                   ),
                   child: Text(
                     'View Details',
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.dmSans(
                         fontSize: 15, fontWeight: FontWeight.w600),
                   ),
                 ),
@@ -130,7 +129,7 @@ class WorkoutSummaryScreen extends ConsumerWidget {
                   ),
                   child: Text(
                     'Done',
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.dmSans(
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
                         color: cs.onSurface),
@@ -166,7 +165,7 @@ class _StatBox extends StatelessWidget {
           children: [
             Text(
               value,
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.dmSans(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
                 color: cs.onSurface,
@@ -174,7 +173,7 @@ class _StatBox extends StatelessWidget {
             ),
             Text(
               label,
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.dmSans(
                 fontSize: 11,
                 color: cs.onSurface.withValues(alpha: 0.5),
               ),
@@ -205,7 +204,7 @@ class _PRRow extends StatelessWidget {
           Expanded(
             child: Text(
               pr.exerciseName,
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.dmSans(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
                 color: cs.onSurface,
@@ -214,7 +213,7 @@ class _PRRow extends StatelessWidget {
           ),
           Text(
             '${formatWeightNum(pr.weight, useKg: useKg)} × ${pr.reps}',
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.dmSans(
               fontSize: 14,
               fontWeight: FontWeight.w600,
               color: cs.primary,

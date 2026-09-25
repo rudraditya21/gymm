@@ -163,7 +163,7 @@ class _SetRowState extends State<SetRow> {
               child: Text(
                 _typeLabel(set),
                 textAlign: TextAlign.center,
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.dmSans(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                   color: _typeColor(set, cs),
@@ -177,7 +177,7 @@ class _SetRowState extends State<SetRow> {
             child: Text(
               prevText,
               textAlign: TextAlign.center,
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.dmSans(
                 fontSize: 12,
                 color: cs.onSurface.withValues(alpha: 0.35),
               ),
@@ -270,7 +270,7 @@ class _NumberField extends StatelessWidget {
           extentOffset: controller.text.length,
         );
       },
-      style: GoogleFonts.poppins(
+      style: GoogleFonts.dmSans(
         fontSize: 14,
         fontWeight: FontWeight.w500,
         color: completed
@@ -279,7 +279,7 @@ class _NumberField extends StatelessWidget {
       ),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: GoogleFonts.poppins(
+        hintStyle: GoogleFonts.dmSans(
           fontSize: 13,
           color: cs.onSurface.withValues(alpha: 0.25),
         ),

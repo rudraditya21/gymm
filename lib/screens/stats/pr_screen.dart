@@ -25,7 +25,7 @@ class PRScreen extends ConsumerWidget {
         surfaceTintColor: Colors.transparent,
         title: Text(
           'Personal Records',
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.dmSans(
             fontSize: 17,
             fontWeight: FontWeight.w600,
             color: cs.onSurface,
@@ -43,7 +43,7 @@ class PRScreen extends ConsumerWidget {
                   const SizedBox(height: 16),
                   Text(
                     'No records yet',
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.dmSans(
                       fontSize: 16,
                       color: cs.onSurface.withValues(alpha: 0.4),
                     ),
@@ -51,7 +51,7 @@ class PRScreen extends ConsumerWidget {
                   const SizedBox(height: 6),
                   Text(
                     'Complete a workout to see your PRs',
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.dmSans(
                       fontSize: 13,
                       color: cs.onSurface.withValues(alpha: 0.3),
                     ),
@@ -139,7 +139,7 @@ class _PRCard extends StatelessWidget {
               children: [
                 Text(
                   pr.exerciseName,
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.dmSans(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: cs.onSurface,
@@ -148,7 +148,7 @@ class _PRCard extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   dateStr,
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.dmSans(
                     fontSize: 12,
                     color: cs.onSurface.withValues(alpha: 0.45),
                   ),
@@ -161,7 +161,7 @@ class _PRCard extends StatelessWidget {
             children: [
               Text(
                 '${formatWeightNum(pr.weight, useKg: useKg)} ${useKg ? 'kg' : 'lb'} × ${pr.reps}',
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.dmSans(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: cs.onSurface,
@@ -169,7 +169,7 @@ class _PRCard extends StatelessWidget {
               ),
               Text(
                 'Est. 1RM ${formatWeight(pr.estimated1RM, useKg: useKg)}',
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.dmSans(
                   fontSize: 11,
                   color: cs.onSurface.withValues(alpha: 0.45),
                 ),

@@ -17,7 +17,7 @@ class SettingsScreen extends StatelessWidget {
           children: [
             Text(
               'Settings',
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.dmSans(
                 fontSize: 28,
                 fontWeight: FontWeight.w600,
                 color: cs.onSurface,
@@ -44,7 +44,6 @@ class _SectionLabel extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(
-        fontFamily: 'monospace',
         fontSize: 11,
         fontWeight: FontWeight.w600,
         letterSpacing: 1.4,
@@ -72,7 +71,7 @@ class _AppearanceTile extends StatelessWidget {
         children: [
           Text(
             'Theme',
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.dmSans(
               fontSize: 14,
               fontWeight: FontWeight.w500,
               color: cs.onSurface,
@@ -146,7 +145,7 @@ class _ThemeOption extends StatelessWidget {
           alignment: Alignment.center,
           child: AnimatedDefaultTextStyle(
             duration: const Duration(milliseconds: 150),
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.dmSans(
               fontSize: 13,
               fontWeight: FontWeight.w500,
               color: selected

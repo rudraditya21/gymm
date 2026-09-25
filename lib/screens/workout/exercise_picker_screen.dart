@@ -40,7 +40,7 @@ class _ExercisePickerScreenState
         surfaceTintColor: Colors.transparent,
         title: Text(
           'Add Exercise',
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.dmSans(
             fontSize: 17,
             fontWeight: FontWeight.w600,
             color: cs.onSurface,
@@ -56,10 +56,10 @@ class _ExercisePickerScreenState
                   controller: _searchCtrl,
                   onChanged: (v) =>
                       ref.read(exerciseSearchProvider.notifier).state = v,
-                  style: GoogleFonts.poppins(fontSize: 14, color: cs.onSurface),
+                  style: GoogleFonts.dmSans(fontSize: 14, color: cs.onSurface),
                   decoration: InputDecoration(
                     hintText: 'Search exercises…',
-                    hintStyle: GoogleFonts.poppins(
+                    hintStyle: GoogleFonts.dmSans(
                       fontSize: 14,
                       color: cs.onSurface.withValues(alpha: 0.35),
                     ),
@@ -108,7 +108,7 @@ class _ExercisePickerScreenState
       body: grouped.isEmpty
           ? Center(
               child: Text('No exercises found',
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.dmSans(
                       color: cs.onSurface.withValues(alpha: 0.5))))
           : ListView.builder(
               itemCount: grouped.length,
@@ -169,7 +169,6 @@ class _ExerciseGroup extends StatelessWidget {
           child: Text(
             muscle.toUpperCase(),
             style: TextStyle(
-              fontFamily: 'monospace',
               fontSize: 11,
               fontWeight: FontWeight.w600,
               letterSpacing: 1.4,
@@ -181,7 +180,7 @@ class _ExerciseGroup extends StatelessWidget {
               onTap: () => onSelect(ex),
               title: Text(
                 ex.name,
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.dmSans(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: cs.onSurface,
@@ -189,7 +188,7 @@ class _ExerciseGroup extends StatelessWidget {
               ),
               subtitle: Text(
                 ex.equipment,
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.dmSans(
                   fontSize: 12,
                   color: cs.onSurface.withValues(alpha: 0.5),
                 ),
@@ -204,7 +203,7 @@ class _ExerciseGroup extends StatelessWidget {
                       ),
                       child: Text(
                         'Custom',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.dmSans(
                           fontSize: 11,
                           color: cs.onSurface.withValues(alpha: 0.5),
                         ),
@@ -247,7 +246,7 @@ class _FilterChip extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.dmSans(
             fontSize: 12,
             fontWeight: FontWeight.w500,
             color: selected ? cs.onPrimary : cs.onSurface,

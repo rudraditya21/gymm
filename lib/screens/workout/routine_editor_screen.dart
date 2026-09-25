@@ -120,7 +120,7 @@ class _RoutineEditorScreenState extends ConsumerState<RoutineEditorScreen> {
         surfaceTintColor: Colors.transparent,
         title: Text(
           widget.existing == null ? 'New Routine' : 'Edit Routine',
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.dmSans(
             fontSize: 17,
             fontWeight: FontWeight.w600,
             color: cs.onSurface,
@@ -131,7 +131,7 @@ class _RoutineEditorScreenState extends ConsumerState<RoutineEditorScreen> {
             onPressed: _save,
             child: Text(
               'Save',
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.dmSans(
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
                 color: cs.primary,
@@ -145,14 +145,14 @@ class _RoutineEditorScreenState extends ConsumerState<RoutineEditorScreen> {
         children: [
           TextField(
             controller: _nameCtrl,
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.dmSans(
               fontSize: 16,
               fontWeight: FontWeight.w500,
               color: cs.onSurface,
             ),
             decoration: InputDecoration(
               hintText: 'Routine name',
-              hintStyle: GoogleFonts.poppins(
+              hintStyle: GoogleFonts.dmSans(
                 fontSize: 16,
                 color: cs.onSurface.withValues(alpha: 0.35),
               ),
@@ -191,7 +191,7 @@ class _RoutineEditorScreenState extends ConsumerState<RoutineEditorScreen> {
             icon: const Icon(Icons.add),
             label: Text(
               'Add Exercise',
-              style: GoogleFonts.poppins(fontSize: 14),
+              style: GoogleFonts.dmSans(fontSize: 14),
             ),
             style: OutlinedButton.styleFrom(
               side: BorderSide(color: cs.outline),
@@ -258,7 +258,7 @@ class _RoutineExerciseCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     exercise.exerciseName,
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.dmSans(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       color: cs.onSurface,
@@ -281,7 +281,7 @@ class _RoutineExerciseCard extends StatelessWidget {
               child: Row(
                 children: [
                   Text('${si + 1}',
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.dmSans(
                           fontSize: 13,
                           color: cs.onSurface.withValues(alpha: 0.45))),
                   const SizedBox(width: 12),
@@ -308,7 +308,7 @@ class _RoutineExerciseCard extends StatelessWidget {
             onPressed: onAddSet,
             icon: Icon(Icons.add, size: 14, color: cs.primary),
             label: Text('Add Set',
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.dmSans(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                     color: cs.primary)),
@@ -333,10 +333,10 @@ class _SmallField extends StatelessWidget {
       keyboardType:
           TextInputType.numberWithOptions(decimal: hint == 'weight'),
       textAlign: TextAlign.center,
-      style: GoogleFonts.poppins(fontSize: 13, color: cs.onSurface),
+      style: GoogleFonts.dmSans(fontSize: 13, color: cs.onSurface),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: GoogleFonts.poppins(
+        hintStyle: GoogleFonts.dmSans(
           fontSize: 12,
           color: cs.onSurface.withValues(alpha: 0.3),
         ),

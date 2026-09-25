@@ -36,7 +36,7 @@ class ExerciseDetailScreen extends ConsumerWidget {
         surfaceTintColor: Colors.transparent,
         title: Text(
           exercise.name,
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.dmSans(
             fontSize: 17,
             fontWeight: FontWeight.w600,
             color: cs.onSurface,
@@ -83,7 +83,7 @@ class ExerciseDetailScreen extends ConsumerWidget {
                   const SizedBox(width: 8),
                   Text(
                     'Est. 1RM: ${formatWeight(bestE1RM, useKg: useKg)}',
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.dmSans(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
                       color: cs.onSurface,
@@ -117,7 +117,7 @@ class ExerciseDetailScreen extends ConsumerWidget {
                 padding: const EdgeInsets.only(top: 32),
                 child: Text(
                   'No workout history yet',
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.dmSans(
                     fontSize: 14,
                     color: cs.onSurface.withValues(alpha: 0.4),
                   ),
@@ -192,7 +192,6 @@ class _SectionHeader extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(
-        fontFamily: 'monospace',
         fontSize: 11,
         fontWeight: FontWeight.w600,
         letterSpacing: 1.4,
@@ -218,7 +217,7 @@ class _InfoTag extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: GoogleFonts.poppins(
+        style: GoogleFonts.dmSans(
           fontSize: 12,
           fontWeight: FontWeight.w500,
           color: cs.onSurface.withValues(alpha: 0.7),
@@ -269,7 +268,7 @@ class _ProgressChart extends StatelessWidget {
                 reservedSize: 36,
                 getTitlesWidget: (val, _) => Text(
                   val.toInt().toString(),
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.dmSans(
                     fontSize: 10,
                     color: cs.onSurface.withValues(alpha: 0.4),
                   ),
@@ -336,7 +335,7 @@ class _HistoryEntry extends StatelessWidget {
             width: 56,
             child: Text(
               dateStr,
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.dmSans(
                 fontSize: 12,
                 color: cs.onSurface.withValues(alpha: 0.45),
               ),
@@ -345,7 +344,7 @@ class _HistoryEntry extends StatelessWidget {
           const SizedBox(width: 12),
           Text(
             '${sets.length} sets',
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.dmSans(
               fontSize: 13,
               color: cs.onSurface.withValues(alpha: 0.6),
             ),
@@ -354,7 +353,7 @@ class _HistoryEntry extends StatelessWidget {
           if (bestSet.weight != null)
             Text(
               'Best: ${formatWeight(bestSet.weight, useKg: useKg)} × ${bestSet.reps ?? '–'}',
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.dmSans(
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
                 color: cs.onSurface,

@@ -121,7 +121,7 @@ class _BodyWeightScreenState extends ConsumerState<BodyWeightScreen> {
         surfaceTintColor: Colors.transparent,
         title: Text(
           'Body Weight',
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.dmSans(
             fontSize: 17,
             fontWeight: FontWeight.w600,
             color: cs.onSurface,
@@ -151,7 +151,6 @@ class _BodyWeightScreenState extends ConsumerState<BodyWeightScreen> {
                 Text(
                   'HISTORY',
                   style: TextStyle(
-                    fontFamily: 'monospace',
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
                     letterSpacing: 1.4,
@@ -229,7 +228,7 @@ class _Chart extends StatelessWidget {
                 interval: (maxY - minY) / 4,
                 getTitlesWidget: (value, _) => Text(
                   value.toStringAsFixed(1),
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.dmSans(
                     fontSize: 10,
                     color: cs.onSurface.withValues(alpha: 0.4),
                   ),
@@ -315,7 +314,7 @@ class _EntryRow extends StatelessWidget {
           children: [
             Text(
               dateStr,
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.dmSans(
                 fontSize: 14,
                 color: cs.onSurface.withValues(alpha: 0.7),
               ),
@@ -323,7 +322,7 @@ class _EntryRow extends StatelessWidget {
             const Spacer(),
             Text(
               '$w $unit',
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.dmSans(
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
                 color: cs.onSurface,
@@ -362,7 +361,7 @@ class _StatCell extends StatelessWidget {
         children: [
           Text(
             value,
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.dmSans(
               fontSize: 16,
               fontWeight: FontWeight.w700,
               color: highlight ? cs.primary : cs.onSurface,
@@ -371,7 +370,7 @@ class _StatCell extends StatelessWidget {
           const SizedBox(height: 2),
           Text(
             label,
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.dmSans(
               fontSize: 11,
               color: cs.onSurface.withValues(alpha: 0.5),
             ),
@@ -399,7 +398,7 @@ class _Empty extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             'No entries yet',
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.dmSans(
               fontSize: 16,
               color: cs.onSurface.withValues(alpha: 0.4),
             ),

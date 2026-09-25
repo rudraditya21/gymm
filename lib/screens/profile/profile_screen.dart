@@ -50,7 +50,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           children: [
             Text(
               'Profile',
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.dmSans(
                 fontSize: 28,
                 fontWeight: FontWeight.w700,
                 color: cs.onSurface,
@@ -101,7 +101,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 children: [
                   Text(
                     'Theme',
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.dmSans(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                       color: cs.onSurface,
@@ -132,7 +132,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       children: [
                         Text(
                           'Weight unit',
-                          style: GoogleFonts.poppins(
+                          style: GoogleFonts.dmSans(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             color: cs.onSurface,
@@ -156,7 +156,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       children: [
                         Text(
                           'Measurement unit',
-                          style: GoogleFonts.poppins(
+                          style: GoogleFonts.dmSans(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             color: cs.onSurface,
@@ -195,7 +195,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       children: [
                         Text(
                           'Default rest',
-                          style: GoogleFonts.poppins(
+                          style: GoogleFonts.dmSans(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             color: cs.onSurface,
@@ -220,7 +220,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       children: [
                         Text(
                           'Auto-start timer',
-                          style: GoogleFonts.poppins(
+                          style: GoogleFonts.dmSans(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             color: cs.onSurface,
@@ -259,12 +259,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     leading:
                         Icon(Icons.accessibility_new, color: cs.primary, size: 20),
                     title: Text('Muscle Activity',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.dmSans(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             color: cs.onSurface)),
                     subtitle: Text('Radar chart of recent sessions',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.dmSans(
                             fontSize: 12,
                             color: cs.onSurface.withValues(alpha: 0.5))),
                     trailing: Icon(Icons.chevron_right,
@@ -280,12 +280,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     leading: Icon(Icons.bar_chart_rounded,
                         color: cs.primary, size: 20),
                     title: Text('Volume Trend',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.dmSans(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             color: cs.onSurface)),
                     subtitle: Text('Weekly & monthly volume over time',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.dmSans(
                             fontSize: 12,
                             color: cs.onSurface.withValues(alpha: 0.5))),
                     trailing: Icon(Icons.chevron_right,
@@ -298,12 +298,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     leading: Icon(Icons.emoji_events_outlined,
                         color: cs.primary, size: 20),
                     title: Text('Personal Records',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.dmSans(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             color: cs.onSurface)),
                     subtitle: Text('Best set per exercise, all time',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.dmSans(
                             fontSize: 12,
                             color: cs.onSurface.withValues(alpha: 0.5))),
                     trailing: Icon(Icons.chevron_right,
@@ -334,12 +334,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     leading:
                         Icon(Icons.fitness_center, color: cs.primary, size: 20),
                     title: Text('Plate Calculator',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.dmSans(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             color: cs.onSurface)),
                     subtitle: Text('How many plates per side',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.dmSans(
                             fontSize: 12,
                             color: cs.onSurface.withValues(alpha: 0.5))),
                     trailing: Icon(Icons.chevron_right,
@@ -355,12 +355,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     leading: Icon(Icons.monitor_weight_outlined,
                         color: cs.primary, size: 20),
                     title: Text('Body Weight',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.dmSans(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             color: cs.onSurface)),
                     subtitle: Text('Track weight over time',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.dmSans(
                             fontSize: 12,
                             color: cs.onSurface.withValues(alpha: 0.5))),
                     trailing: Icon(Icons.chevron_right,
@@ -373,12 +373,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     leading: Icon(Icons.straighten_outlined,
                         color: cs.primary, size: 20),
                     title: Text('Body Measurements',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.dmSans(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             color: cs.onSurface)),
                     subtitle: Text('Waist, chest, biceps and more',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.dmSans(
                             fontSize: 12,
                             color: cs.onSurface.withValues(alpha: 0.5))),
                     trailing: Icon(Icons.chevron_right,
@@ -390,12 +390,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     leading: Icon(Icons.download_outlined,
                         color: cs.primary, size: 20),
                     title: Text('Export to CSV',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.dmSans(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             color: cs.onSurface)),
                     subtitle: Text('Share all workout history',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.dmSans(
                             fontSize: 12,
                             color: cs.onSurface.withValues(alpha: 0.5))),
                     trailing: Icon(Icons.chevron_right,
@@ -414,12 +414,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         : Icon(Icons.backup_outlined,
                             color: cs.primary, size: 20),
                     title: Text('Backup',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.dmSans(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             color: cs.onSurface)),
                     subtitle: Text('Export all data as JSON',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.dmSans(
                             fontSize: 12,
                             color: cs.onSurface.withValues(alpha: 0.5))),
                     trailing: Icon(Icons.chevron_right,
@@ -438,12 +438,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         : Icon(Icons.restore_outlined,
                             color: cs.primary, size: 20),
                     title: Text('Restore',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.dmSans(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             color: cs.onSurface)),
                     subtitle: Text('Import from a backup file',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.dmSans(
                             fontSize: 12,
                             color: cs.onSurface.withValues(alpha: 0.5))),
                     trailing: Icon(Icons.chevron_right,
@@ -518,7 +518,6 @@ class _SectionLabel extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(
-        fontFamily: 'monospace',
         fontSize: 11,
         fontWeight: FontWeight.w600,
         letterSpacing: 1.4,
@@ -543,7 +542,7 @@ class _StatItem extends StatelessWidget {
         children: [
           Text(
             value,
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.dmSans(
               fontSize: 20,
               fontWeight: FontWeight.w700,
               color: cs.onSurface,
@@ -551,7 +550,7 @@ class _StatItem extends StatelessWidget {
           ),
           Text(
             label,
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.dmSans(
               fontSize: 11,
               color: cs.onSurface.withValues(alpha: 0.5),
             ),
@@ -625,7 +624,7 @@ class _ThemeOption extends StatelessWidget {
           alignment: Alignment.center,
           child: AnimatedDefaultTextStyle(
             duration: const Duration(milliseconds: 150),
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.dmSans(
               fontSize: 13,
               fontWeight: FontWeight.w500,
               color: selected
@@ -742,7 +741,7 @@ class _UnitOption extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.dmSans(
             fontSize: 13,
             fontWeight: FontWeight.w500,
             color:
@@ -800,7 +799,7 @@ class _RestPicker extends StatelessWidget {
           children: [
             Text(
               label,
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.dmSans(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
                 color: cs.onSurface,

@@ -52,7 +52,7 @@ class _ExercisesScreenState extends ConsumerState<ExercisesScreen> {
               padding: const EdgeInsets.fromLTRB(24, 40, 24, 16),
               child: Text(
                 'Exercises',
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.dmSans(
                   fontSize: 28,
                   fontWeight: FontWeight.w700,
                   color: cs.onSurface,
@@ -66,10 +66,10 @@ class _ExercisesScreenState extends ConsumerState<ExercisesScreen> {
                 onChanged: (v) =>
                     ref.read(exerciseSearchProvider.notifier).state = v,
                 style:
-                    GoogleFonts.poppins(fontSize: 14, color: cs.onSurface),
+                    GoogleFonts.dmSans(fontSize: 14, color: cs.onSurface),
                 decoration: InputDecoration(
                   hintText: 'Search…',
-                  hintStyle: GoogleFonts.poppins(
+                  hintStyle: GoogleFonts.dmSans(
                     fontSize: 14,
                     color: cs.onSurface.withValues(alpha: 0.35),
                   ),
@@ -117,7 +117,7 @@ class _ExercisesScreenState extends ConsumerState<ExercisesScreen> {
               child: exercises.isEmpty
                   ? Center(
                       child: Text('No results',
-                          style: GoogleFonts.poppins(
+                          style: GoogleFonts.dmSans(
                               color: cs.onSurface.withValues(alpha: 0.4))))
                   : ListView.builder(
                       itemCount: exercises.length,
@@ -132,7 +132,7 @@ class _ExercisesScreenState extends ConsumerState<ExercisesScreen> {
                           ),
                           title: Text(
                             ex.name,
-                            style: GoogleFonts.poppins(
+                            style: GoogleFonts.dmSans(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                               color: cs.onSurface,
@@ -140,7 +140,7 @@ class _ExercisesScreenState extends ConsumerState<ExercisesScreen> {
                           ),
                           subtitle: Text(
                             '${ex.primaryMuscle} · ${ex.equipment}',
-                            style: GoogleFonts.poppins(
+                            style: GoogleFonts.dmSans(
                               fontSize: 12,
                               color: cs.onSurface.withValues(alpha: 0.5),
                             ),
@@ -236,7 +236,7 @@ class _Chip extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.dmSans(
             fontSize: 12,
             fontWeight: FontWeight.w500,
             color: selected ? cs.onPrimary : cs.onSurface,

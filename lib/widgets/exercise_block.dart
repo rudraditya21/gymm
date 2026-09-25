@@ -78,7 +78,7 @@ class ExerciseBlock extends ConsumerWidget {
                     alignment: Alignment.center,
                     child: Text(
                       supersetLabel!,
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.dmSans(
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
                         color: cs.onPrimary,
@@ -92,7 +92,7 @@ class ExerciseBlock extends ConsumerWidget {
                     children: [
                       Text(
                         exercise.exerciseName,
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.dmSans(
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
                           color: cs.onSurface,
@@ -101,7 +101,7 @@ class ExerciseBlock extends ConsumerWidget {
                       if (suggestion != null)
                         Text(
                           suggestion,
-                          style: GoogleFonts.poppins(
+                          style: GoogleFonts.dmSans(
                             fontSize: 11,
                             color: cs.onSurface.withValues(alpha: 0.45),
                           ),
@@ -109,7 +109,7 @@ class ExerciseBlock extends ConsumerWidget {
                       if (isCardio)
                         Text(
                           'Cardio — log time & distance',
-                          style: GoogleFonts.poppins(
+                          style: GoogleFonts.dmSans(
                             fontSize: 11,
                             color: cs.onSurface.withValues(alpha: 0.4),
                           ),
@@ -117,7 +117,7 @@ class ExerciseBlock extends ConsumerWidget {
                       if (isBodyweight)
                         Text(
                           'Bodyweight — weight is optional',
-                          style: GoogleFonts.poppins(
+                          style: GoogleFonts.dmSans(
                             fontSize: 11,
                             color: cs.onSurface.withValues(alpha: 0.4),
                           ),
@@ -245,7 +245,7 @@ class ExerciseBlock extends ConsumerWidget {
             icon: Icon(Icons.add, size: 16, color: cs.primary),
             label: Text(
               'Add Set',
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.dmSans(
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
                 color: cs.primary,
@@ -288,7 +288,6 @@ class ExerciseBlock extends ConsumerWidget {
   }
 
   TextStyle _headerStyle(ColorScheme cs) => TextStyle(
-        fontFamily: 'monospace',
         fontSize: 10,
         fontWeight: FontWeight.w600,
         letterSpacing: 1.2,

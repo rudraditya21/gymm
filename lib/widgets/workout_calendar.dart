@@ -92,7 +92,7 @@ class _WorkoutCalendarState extends ConsumerState<WorkoutCalendar> {
               child: Center(
                 child: Text(
                   '${_monthName(_month.month)} ${_month.year}',
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.dmSans(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                     color: cs.onSurface.withValues(alpha: 0.7),
@@ -113,7 +113,6 @@ class _WorkoutCalendarState extends ConsumerState<WorkoutCalendar> {
                       child: Text(
                         l,
                         style: TextStyle(
-                          fontFamily: 'monospace',
                           fontSize: 10,
                           color: cs.onSurface.withValues(alpha: 0.35),
                         ),
@@ -168,7 +167,7 @@ class _WorkoutCalendarState extends ConsumerState<WorkoutCalendar> {
                 alignment: Alignment.center,
                 child: Text(
                   '$day',
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.dmSans(
                     fontSize: 10,
                     color: cs.onSurface.withValues(alpha: 0.15),
                   ),
@@ -214,7 +213,7 @@ class _WorkoutCalendarState extends ConsumerState<WorkoutCalendar> {
                   children: [
                     Text(
                       '$day',
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.dmSans(
                         fontSize: 10,
                         fontWeight: isToday
                             ? FontWeight.w700
@@ -359,7 +358,7 @@ class _LegendDot extends StatelessWidget {
         const SizedBox(width: 5),
         Text(
           label,
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.dmSans(
             fontSize: 11,
             color: cs.onSurface.withValues(alpha: 0.45),
           ),
@@ -412,7 +411,7 @@ class _DaySheet extends ConsumerWidget {
             const SizedBox(height: 16),
             Text(
               dateStr,
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.dmSans(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
                 color: cs.onSurface,
@@ -496,7 +495,6 @@ class _DaySheet extends ConsumerWidget {
                 Text(
                   'SCHEDULE FROM ROUTINE',
                   style: TextStyle(
-                    fontFamily: 'monospace',
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
                     letterSpacing: 1.2,
@@ -530,7 +528,7 @@ class _DaySheet extends ConsumerWidget {
                   routines.isEmpty
                       ? 'Create Routine to Schedule'
                       : 'Create New Routine',
-                  style: GoogleFonts.poppins(fontSize: 13),
+                  style: GoogleFonts.dmSans(fontSize: 13),
                 ),
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(color: cs.outline),
@@ -553,7 +551,7 @@ class _DaySheet extends ConsumerWidget {
                   icon: const Icon(Icons.bedtime_outlined, size: 16),
                   label: Text(
                     'Mark as Rest Day',
-                    style: GoogleFonts.poppins(fontSize: 13),
+                    style: GoogleFonts.dmSans(fontSize: 13),
                   ),
                   style: OutlinedButton.styleFrom(
                     side: BorderSide(color: cs.outline),
@@ -629,7 +627,7 @@ class _SheetRow extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.dmSans(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                       color: cs.onSurface,
@@ -637,7 +635,7 @@ class _SheetRow extends StatelessWidget {
                   ),
                   Text(
                     subtitle,
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.dmSans(
                       fontSize: 12,
                       color: cs.onSurface.withValues(alpha: 0.5),
                     ),
@@ -687,7 +685,7 @@ class _RoutineOption extends StatelessWidget {
                   children: [
                     Text(
                       routine.name,
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.dmSans(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                         color: cs.onSurface,
@@ -695,7 +693,7 @@ class _RoutineOption extends StatelessWidget {
                     ),
                     Text(
                       '${routine.exercises.length} exercises',
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.dmSans(
                         fontSize: 12,
                         color: cs.onSurface.withValues(alpha: 0.5),
                       ),

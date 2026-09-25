@@ -53,7 +53,7 @@ class _CreateExerciseScreenState extends ConsumerState<CreateExerciseScreen> {
         backgroundColor: cs.surface,
         surfaceTintColor: Colors.transparent,
         title: Text('New Exercise',
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.dmSans(
                 fontSize: 17,
                 fontWeight: FontWeight.w600,
                 color: cs.onSurface)),
@@ -61,7 +61,7 @@ class _CreateExerciseScreenState extends ConsumerState<CreateExerciseScreen> {
           TextButton(
             onPressed: _saving ? null : _save,
             child: Text('Save',
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.dmSans(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
                     color: _saving
@@ -78,7 +78,7 @@ class _CreateExerciseScreenState extends ConsumerState<CreateExerciseScreen> {
           TextField(
             controller: _nameCtrl,
             autofocus: true,
-            style: GoogleFonts.poppins(fontSize: 15, color: cs.onSurface),
+            style: GoogleFonts.dmSans(fontSize: 15, color: cs.onSurface),
             decoration: _fieldDecor('e.g. Incline Cable Fly', cs),
           ),
           const SizedBox(height: 24),
@@ -141,7 +141,7 @@ class _CreateExerciseScreenState extends ConsumerState<CreateExerciseScreen> {
                   ),
                   child: Text(
                     m,
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.dmSans(
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
                       color:
@@ -159,7 +159,7 @@ class _CreateExerciseScreenState extends ConsumerState<CreateExerciseScreen> {
 
   InputDecoration _fieldDecor(String hint, ColorScheme cs) => InputDecoration(
         hintText: hint,
-        hintStyle: GoogleFonts.poppins(
+        hintStyle: GoogleFonts.dmSans(
             fontSize: 15, color: cs.onSurface.withValues(alpha: 0.3)),
         filled: true,
         fillColor: cs.secondary,
@@ -180,7 +180,6 @@ class _Label extends StatelessWidget {
   Widget build(BuildContext context) => Text(
         text,
         style: TextStyle(
-          fontFamily: 'monospace',
           fontSize: 11,
           fontWeight: FontWeight.w600,
           letterSpacing: 1.4,
@@ -214,7 +213,7 @@ class _PickerTile extends StatelessWidget {
                 .map((o) => SimpleDialogOption(
                       onPressed: () => Navigator.of(ctx).pop(o),
                       child: Text(o,
-                          style: GoogleFonts.poppins(
+                          style: GoogleFonts.dmSans(
                               fontSize: 14,
                               fontWeight: o == value
                                   ? FontWeight.w600
@@ -235,7 +234,7 @@ class _PickerTile extends StatelessWidget {
         child: Row(
           children: [
             Text(value,
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.dmSans(
                     fontSize: 15, color: cs.onSurface)),
             const Spacer(),
             Icon(Icons.expand_more,

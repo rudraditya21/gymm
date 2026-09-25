@@ -49,7 +49,7 @@ class MeasurementsScreen extends ConsumerWidget {
         surfaceTintColor: Colors.transparent,
         title: Text(
           'Body Measurements',
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.dmSans(
             fontSize: 17,
             fontWeight: FontWeight.w600,
             color: cs.onSurface,
@@ -126,7 +126,7 @@ class _PartCard extends StatelessWidget {
             Expanded(
               child: Text(
                 part,
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.dmSans(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: cs.onSurface,
@@ -136,7 +136,7 @@ class _PartCard extends StatelessWidget {
             if (latest == null)
               Text(
                 '— $unit',
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.dmSans(
                   fontSize: 14,
                   color: cs.onSurface.withValues(alpha: 0.3),
                 ),
@@ -144,7 +144,7 @@ class _PartCard extends StatelessWidget {
             else ...[
               Text(
                 _fmtVal(latest!.valueCm, useCm),
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.dmSans(
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                   color: cs.onSurface,
@@ -254,7 +254,7 @@ class _MeasurementDetailScreenState
         surfaceTintColor: Colors.transparent,
         title: Text(
           widget.bodyPart,
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.dmSans(
             fontSize: 17,
             fontWeight: FontWeight.w600,
             color: cs.onSurface,
@@ -279,7 +279,6 @@ class _MeasurementDetailScreenState
                 Text(
                   'HISTORY',
                   style: TextStyle(
-                    fontFamily: 'monospace',
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
                     letterSpacing: 1.4,
@@ -353,7 +352,7 @@ class _Cell extends StatelessWidget {
         children: [
           Text(
             value,
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.dmSans(
               fontSize: 15,
               fontWeight: FontWeight.w700,
               color: highlight ? cs.primary : cs.onSurface,
@@ -362,7 +361,7 @@ class _Cell extends StatelessWidget {
           const SizedBox(height: 2),
           Text(
             label,
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.dmSans(
               fontSize: 11,
               color: cs.onSurface.withValues(alpha: 0.5),
             ),
@@ -427,7 +426,7 @@ class _Chart extends StatelessWidget {
                 interval: (maxY - minY) / 4,
                 getTitlesWidget: (value, _) => Text(
                   value.toStringAsFixed(1),
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.dmSans(
                     fontSize: 10,
                     color: cs.onSurface.withValues(alpha: 0.4),
                   ),
@@ -509,7 +508,7 @@ class _EntryRow extends StatelessWidget {
           children: [
             Text(
               dateStr,
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.dmSans(
                 fontSize: 14,
                 color: cs.onSurface.withValues(alpha: 0.7),
               ),
@@ -517,7 +516,7 @@ class _EntryRow extends StatelessWidget {
             const Spacer(),
             Text(
               v,
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.dmSans(
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
                 color: cs.onSurface,
@@ -554,7 +553,7 @@ class _Empty extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             'No entries yet',
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.dmSans(
               fontSize: 16,
               color: cs.onSurface.withValues(alpha: 0.4),
             ),

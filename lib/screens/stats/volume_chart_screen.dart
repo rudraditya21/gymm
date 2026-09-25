@@ -40,7 +40,7 @@ class _VolumeChartScreenState extends ConsumerState<VolumeChartScreen> {
         surfaceTintColor: Colors.transparent,
         title: Text(
           'Volume',
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.dmSans(
             fontSize: 17,
             fontWeight: FontWeight.w600,
             color: cs.onSurface,
@@ -84,7 +84,7 @@ class _VolumeChartScreenState extends ConsumerState<VolumeChartScreen> {
                 padding: const EdgeInsets.only(top: 64),
                 child: Text(
                   'No workout data yet',
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.dmSans(
                     fontSize: 14,
                     color: cs.onSurface.withValues(alpha: 0.4),
                   ),
@@ -122,7 +122,7 @@ class _VolumeChartScreenState extends ConsumerState<VolumeChartScreen> {
                         interval: maxY / 4,
                         getTitlesWidget: (val, _) => Text(
                           _shortVolume(val, useKg),
-                          style: GoogleFonts.poppins(
+                          style: GoogleFonts.dmSans(
                             fontSize: 9,
                             color: cs.onSurface.withValues(alpha: 0.4),
                           ),
@@ -142,7 +142,7 @@ class _VolumeChartScreenState extends ConsumerState<VolumeChartScreen> {
                             padding: const EdgeInsets.only(top: 4),
                             child: Text(
                               buckets[i].label,
-                              style: GoogleFonts.poppins(
+                              style: GoogleFonts.dmSans(
                                 fontSize: 9,
                                 color: cs.onSurface.withValues(alpha: 0.4),
                               ),
@@ -179,7 +179,7 @@ class _VolumeChartScreenState extends ConsumerState<VolumeChartScreen> {
                         final b = buckets[group.x];
                         return BarTooltipItem(
                           '${b.label}\n',
-                          GoogleFonts.poppins(
+                          GoogleFonts.dmSans(
                             fontSize: 11,
                             color: cs.onSurface.withValues(alpha: 0.5),
                           ),
@@ -188,7 +188,7 @@ class _VolumeChartScreenState extends ConsumerState<VolumeChartScreen> {
                               text: formatVolume(
                                   useKg ? rod.toY : rod.toY / 2.20462,
                                   useKg: useKg),
-                              style: GoogleFonts.poppins(
+                              style: GoogleFonts.dmSans(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
                                 color: cs.onSurface,
@@ -226,7 +226,6 @@ class _VolumeChartScreenState extends ConsumerState<VolumeChartScreen> {
   Widget _sectionHeader(String text, ColorScheme cs) => Text(
         text,
         style: TextStyle(
-          fontFamily: 'monospace',
           fontSize: 11,
           fontWeight: FontWeight.w600,
           letterSpacing: 1.4,
@@ -325,7 +324,7 @@ class _PeriodBtn extends StatelessWidget {
           alignment: Alignment.center,
           child: Text(
             label,
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.dmSans(
               fontSize: 13,
               fontWeight: FontWeight.w500,
               color: selected
@@ -360,7 +359,7 @@ class _BucketRow extends StatelessWidget {
             width: 52,
             child: Text(
               bucket.label,
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.dmSans(
                 fontSize: 13,
                 color: cs.onSurface.withValues(alpha: 0.5),
               ),
@@ -369,7 +368,7 @@ class _BucketRow extends StatelessWidget {
           const SizedBox(width: 12),
           Text(
             formatVolume(bucket.volume, useKg: useKg),
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.dmSans(
               fontSize: 14,
               fontWeight: FontWeight.w500,
               color: cs.onSurface,

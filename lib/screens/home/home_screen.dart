@@ -43,7 +43,7 @@ class HomeScreen extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Text(
                 'Gymm',
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.dmSans(
                   fontSize: 28,
                   fontWeight: FontWeight.w700,
                   color: cs.onSurface,
@@ -99,7 +99,7 @@ class HomeScreen extends ConsumerWidget {
                   ),
                   child: Text(
                     'Start Workout',
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.dmSans(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
                     ),
@@ -118,7 +118,6 @@ class HomeScreen extends ConsumerWidget {
                     Text(
                       'ROUTINES',
                       style: TextStyle(
-                        fontFamily: 'monospace',
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
                         letterSpacing: 1.4,
@@ -134,7 +133,7 @@ class HomeScreen extends ConsumerWidget {
                       ),
                       child: Text(
                         'New',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.dmSans(
                           fontSize: 13,
                           fontWeight: FontWeight.w500,
                           color: cs.primary,
@@ -180,7 +179,7 @@ class HomeScreen extends ConsumerWidget {
                   icon: const Icon(Icons.add),
                   label: Text(
                     'Create Routine',
-                    style: GoogleFonts.poppins(fontSize: 14),
+                    style: GoogleFonts.dmSans(fontSize: 14),
                   ),
                   style: OutlinedButton.styleFrom(
                     side: BorderSide(color: cs.outline),
@@ -201,7 +200,6 @@ class HomeScreen extends ConsumerWidget {
                 child: Text(
                   'RECENT',
                   style: TextStyle(
-                    fontFamily: 'monospace',
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
                     letterSpacing: 1.4,
@@ -302,7 +300,7 @@ class _WeekStat extends StatelessWidget {
       children: [
         Text(
           value,
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.dmSans(
             fontSize: 18,
             fontWeight: FontWeight.w700,
             color: cs.onSurface,
@@ -310,7 +308,7 @@ class _WeekStat extends StatelessWidget {
         ),
         Text(
           label,
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.dmSans(
             fontSize: 12,
             color: cs.onSurface.withValues(alpha: 0.5),
           ),
@@ -350,7 +348,7 @@ class _RoutineCard extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.edit_outlined, color: cs.onSurface),
               title: Text('Edit',
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.dmSans(
                       fontSize: 15, color: cs.onSurface)),
               onTap: () {
                 Navigator.of(context).pop();
@@ -360,7 +358,7 @@ class _RoutineCard extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.delete_outline, color: cs.error),
               title: Text('Delete',
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.dmSans(
                       fontSize: 15, color: cs.error)),
               onTap: () {
                 Navigator.of(context).pop();
@@ -392,7 +390,7 @@ class _RoutineCard extends StatelessWidget {
           children: [
             Text(
               routine.name,
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.dmSans(
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
                 color: cs.onSurface,
@@ -403,7 +401,7 @@ class _RoutineCard extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               '${routine.exercises.length} exercises',
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.dmSans(
                 fontSize: 12,
                 color: cs.onSurface.withValues(alpha: 0.5),
               ),
@@ -416,7 +414,7 @@ class _RoutineCard extends StatelessWidget {
                 const SizedBox(width: 4),
                 Text(
                   'Start',
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.dmSans(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                     color: cs.primary,
@@ -478,7 +476,7 @@ class _StartSheet extends StatelessWidget {
                 ),
                 child: Text(
                   'Empty Workout',
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.dmSans(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
                   ),
@@ -490,7 +488,6 @@ class _StartSheet extends StatelessWidget {
               Text(
                 'START FROM ROUTINE',
                 style: TextStyle(
-                  fontFamily: 'monospace',
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 1.4,
@@ -503,7 +500,7 @@ class _StartSheet extends StatelessWidget {
                     contentPadding: const EdgeInsets.symmetric(horizontal: 4),
                     title: Text(
                       r.name,
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.dmSans(
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
                         color: cs.onSurface,
@@ -511,7 +508,7 @@ class _StartSheet extends StatelessWidget {
                     ),
                     subtitle: Text(
                       '${r.exercises.length} exercises',
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.dmSans(
                         fontSize: 12,
                         color: cs.onSurface.withValues(alpha: 0.5),
                       ),

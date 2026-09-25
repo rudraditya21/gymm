@@ -37,7 +37,7 @@ class WorkoutDetailScreen extends ConsumerWidget {
         surfaceTintColor: Colors.transparent,
         title: Text(
           workout.name,
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.dmSans(
             fontSize: 17,
             fontWeight: FontWeight.w600,
             color: cs.onSurface,
@@ -66,7 +66,7 @@ class WorkoutDetailScreen extends ConsumerWidget {
               children: [
                 Text(
                   dateStr,
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.dmSans(
                     fontSize: 13,
                     color: cs.onSurface.withValues(alpha: 0.55),
                   ),
@@ -98,7 +98,7 @@ class WorkoutDetailScreen extends ConsumerWidget {
             const SizedBox(height: 16),
             Text(
               workout.notes!,
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.dmSans(
                 fontSize: 14,
                 color: cs.onSurface.withValues(alpha: 0.7),
                 height: 1.5,
@@ -122,7 +122,7 @@ class WorkoutDetailScreen extends ConsumerWidget {
                 children: [
                   Text(
                     ex.exerciseName,
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.dmSans(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
                       color: cs.onSurface,
@@ -158,7 +158,7 @@ class WorkoutDetailScreen extends ConsumerWidget {
                             width: 24,
                             child: Text(
                               '${i + 1}',
-                              style: GoogleFonts.poppins(
+                              style: GoogleFonts.dmSans(
                                 fontSize: 13,
                                 color: cs.onSurface.withValues(alpha: 0.4),
                               ),
@@ -166,7 +166,7 @@ class WorkoutDetailScreen extends ConsumerWidget {
                           ),
                           Text(
                             setLabel,
-                            style: GoogleFonts.poppins(
+                            style: GoogleFonts.dmSans(
                               fontSize: 14,
                               color: cs.onSurface,
                             ),
@@ -175,7 +175,7 @@ class WorkoutDetailScreen extends ConsumerWidget {
                             const SizedBox(width: 8),
                             Text(
                               'W',
-                              style: GoogleFonts.poppins(
+                              style: GoogleFonts.dmSans(
                                 fontSize: 11,
                                 color: cs.onSurface.withValues(alpha: 0.4),
                               ),
@@ -185,7 +185,7 @@ class WorkoutDetailScreen extends ConsumerWidget {
                             const SizedBox(width: 8),
                             Text(
                               'D',
-                              style: GoogleFonts.poppins(
+                              style: GoogleFonts.dmSans(
                                 fontSize: 11,
                                 color: Colors.orange.withValues(alpha: 0.8),
                               ),
@@ -195,7 +195,7 @@ class WorkoutDetailScreen extends ConsumerWidget {
                             const SizedBox(width: 8),
                             Text(
                               'AMRAP',
-                              style: GoogleFonts.poppins(
+                              style: GoogleFonts.dmSans(
                                 fontSize: 11,
                                 color: Colors.red.withValues(alpha: 0.7),
                               ),
@@ -205,7 +205,7 @@ class WorkoutDetailScreen extends ConsumerWidget {
                             const SizedBox(width: 8),
                             Text(
                               'RPE ${s.rpe}',
-                              style: GoogleFonts.poppins(
+                              style: GoogleFonts.dmSans(
                                 fontSize: 11,
                                 color: cs.primary.withValues(alpha: 0.7),
                               ),
@@ -277,7 +277,6 @@ class _SummaryItem extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              fontFamily: 'monospace',
               fontSize: 10,
               fontWeight: FontWeight.w600,
               letterSpacing: 1.2,
@@ -287,7 +286,7 @@ class _SummaryItem extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             value,
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.dmSans(
               fontSize: 16,
               fontWeight: FontWeight.w600,
               color: cs.onSurface,

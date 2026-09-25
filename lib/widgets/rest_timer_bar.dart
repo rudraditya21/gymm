@@ -38,7 +38,6 @@ class RestTimerBar extends ConsumerWidget {
             Text(
               'REST',
               style: TextStyle(
-                fontFamily: 'monospace',
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
                 letterSpacing: 1.4,
@@ -60,7 +59,7 @@ class RestTimerBar extends ConsumerWidget {
             const SizedBox(width: 12),
             Text(
               timeStr,
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.dmSans(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
                 color: cs.onSurface,
@@ -108,7 +107,7 @@ class _TimerButton extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.dmSans(
             fontSize: 12,
             fontWeight: FontWeight.w500,
             color: cs.onSurface,

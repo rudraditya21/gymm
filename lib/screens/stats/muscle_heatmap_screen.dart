@@ -56,7 +56,7 @@ class _MuscleHeatmapScreenState extends ConsumerState<MuscleHeatmapScreen> {
         surfaceTintColor: Colors.transparent,
         title: Text(
           'Muscle Activity',
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.dmSans(
             fontSize: 17,
             fontWeight: FontWeight.w600,
             color: cs.onSurface,
@@ -88,7 +88,7 @@ class _MuscleHeatmapScreenState extends ConsumerState<MuscleHeatmapScreen> {
                     Text(
                       'No workout data for this period.',
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.dmSans(
                         fontSize: 14,
                         color: cs.onSurface.withValues(alpha: 0.4),
                         height: 1.6,
@@ -103,7 +103,6 @@ class _MuscleHeatmapScreenState extends ConsumerState<MuscleHeatmapScreen> {
               Text(
                 'BREAKDOWN',
                 style: TextStyle(
-                  fontFamily: 'monospace',
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 1.4,
@@ -174,7 +173,7 @@ class _RadarCard extends StatelessWidget {
               color: cs.onSurface.withValues(alpha: 0.08),
               width: 1,
             ),
-            titleTextStyle: GoogleFonts.poppins(
+            titleTextStyle: GoogleFonts.dmSans(
               fontSize: 10.5,
               fontWeight: FontWeight.w500,
               color: cs.onSurface.withValues(alpha: 0.7),
@@ -230,7 +229,7 @@ class _SegmentRow extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Text(
                   e.value,
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.dmSans(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                     color: active
@@ -270,7 +269,7 @@ class _MuscleBar extends StatelessWidget {
             width: 110,
             child: Text(
               name,
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.dmSans(
                 fontSize: 13,
                 color: cs.onSurface,
               ),
@@ -303,7 +302,7 @@ class _MuscleBar extends StatelessWidget {
             child: Text(
               '${(intensity * 100).round()}%',
               textAlign: TextAlign.right,
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.dmSans(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
                 color: cs.onSurface.withValues(alpha: 0.55),

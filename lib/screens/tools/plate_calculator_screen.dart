@@ -66,7 +66,7 @@ class _PlateCalculatorScreenState
         surfaceTintColor: Colors.transparent,
         title: Text(
           'Plate Calculator',
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.dmSans(
             fontSize: 17,
             fontWeight: FontWeight.w600,
             color: cs.onSurface,
@@ -81,7 +81,7 @@ class _PlateCalculatorScreenState
             // Input
             Text(
               'Target weight ($unit)',
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.dmSans(
                 fontSize: 13,
                 color: cs.onSurface.withValues(alpha: 0.6),
               ),
@@ -94,21 +94,21 @@ class _PlateCalculatorScreenState
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
               ],
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.dmSans(
                 fontSize: 32,
                 fontWeight: FontWeight.w700,
                 color: cs.onSurface,
               ),
               decoration: InputDecoration(
                 hintText: '100',
-                hintStyle: GoogleFonts.poppins(
+                hintStyle: GoogleFonts.dmSans(
                   fontSize: 32,
                   fontWeight: FontWeight.w700,
                   color: cs.onSurface.withValues(alpha: 0.2),
                 ),
                 suffix: Text(
                   unit,
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.dmSans(
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
                     color: cs.onSurface.withValues(alpha: 0.4),
@@ -130,7 +130,7 @@ class _PlateCalculatorScreenState
             const SizedBox(height: 8),
             Text(
               'Bar: $bar $unit',
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.dmSans(
                 fontSize: 12,
                 color: cs.onSurface.withValues(alpha: 0.4),
               ),
@@ -144,7 +144,7 @@ class _PlateCalculatorScreenState
                       ? 'Target must be heavier than the bar ($bar $unit)'
                       : 'Enter a target weight above',
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.dmSans(
                     fontSize: 14,
                     color: cs.onSurface.withValues(alpha: 0.4),
                   ),
@@ -154,7 +154,6 @@ class _PlateCalculatorScreenState
               Text(
                 'PLATES PER SIDE',
                 style: TextStyle(
-                  fontFamily: 'monospace',
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 1.4,
@@ -171,7 +170,7 @@ class _PlateCalculatorScreenState
               if (plates.isEmpty)
                 Text(
                   'No standard plates fit — adjust target',
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.dmSans(
                     fontSize: 14,
                     color: cs.onSurface.withValues(alpha: 0.4),
                   ),
@@ -188,7 +187,7 @@ class _PlateCalculatorScreenState
                   children: [
                     Text(
                       'Loaded weight',
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.dmSans(
                         fontSize: 14,
                         color: cs.onSurface.withValues(alpha: 0.6),
                       ),
@@ -196,7 +195,7 @@ class _PlateCalculatorScreenState
                     const Spacer(),
                     Text(
                       '${loadedWeight!.toStringAsFixed(loadedWeight % 1 == 0 ? 0 : 1)} $unit',
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.dmSans(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                         color: cs.primary,
@@ -244,7 +243,7 @@ class _PlateRow extends StatelessWidget {
             alignment: Alignment.center,
             child: Text(
               w,
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.dmSans(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
                 color: cs.primary,
@@ -254,7 +253,7 @@ class _PlateRow extends StatelessWidget {
           const SizedBox(width: 14),
           Text(
             '$w $unit  ×  $count',
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.dmSans(
               fontSize: 16,
               fontWeight: FontWeight.w500,
               color: cs.onSurface,

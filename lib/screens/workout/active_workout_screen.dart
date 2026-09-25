@@ -50,7 +50,7 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
             children: [
               Text(
                 workout.name,
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.dmSans(
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                   color: cs.onSurface,
@@ -71,7 +71,7 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
                   : () => _finish(context, notifier),
               child: Text(
                 'Finish',
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.dmSans(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: workout.exercises.isEmpty
@@ -119,7 +119,7 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
               icon: Icon(Icons.add, size: 18, color: cs.primary),
               label: Text(
                 'Add Exercise',
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.dmSans(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: cs.primary,
@@ -294,10 +294,10 @@ class _NotesFieldState extends State<_NotesField> {
         controller: _ctrl,
         onChanged: widget.onChanged,
         maxLines: null,
-        style: GoogleFonts.poppins(fontSize: 14, color: cs.onSurface),
+        style: GoogleFonts.dmSans(fontSize: 14, color: cs.onSurface),
         decoration: InputDecoration(
           hintText: 'Workout notes…',
-          hintStyle: GoogleFonts.poppins(
+          hintStyle: GoogleFonts.dmSans(
               fontSize: 14,
               color: cs.onSurface.withValues(alpha: 0.3)),
           filled: true,
@@ -351,7 +351,7 @@ class _ElapsedTimerState extends State<_ElapsedTimer> {
 
     return Text(
       text,
-      style: GoogleFonts.poppins(
+      style: GoogleFonts.dmSans(
         fontSize: 12,
         fontWeight: FontWeight.w400,
         color: widget.cs.onSurface.withValues(alpha: 0.5),
@@ -377,7 +377,7 @@ class _EmptyState extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             'No exercises yet',
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.dmSans(
               fontSize: 16,
               color: cs.onSurface.withValues(alpha: 0.4),
             ),
@@ -385,7 +385,7 @@ class _EmptyState extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             'Tap "Add Exercise" below to get started',
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.dmSans(
               fontSize: 13,
               color: cs.onSurface.withValues(alpha: 0.3),
             ),

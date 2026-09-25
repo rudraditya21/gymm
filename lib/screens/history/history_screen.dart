@@ -28,7 +28,7 @@ class HistoryScreen extends ConsumerWidget {
                       padding: const EdgeInsets.fromLTRB(24, 40, 24, 24),
                       child: Text(
                         'History',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.dmSans(
                           fontSize: 28,
                           fontWeight: FontWeight.w700,
                           color: cs.onSurface,
@@ -112,7 +112,7 @@ class _EmptyHistory extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             'No workouts yet',
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.dmSans(
               fontSize: 18,
               fontWeight: FontWeight.w600,
               color: cs.onSurface.withValues(alpha: 0.4),
@@ -121,7 +121,7 @@ class _EmptyHistory extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             'Finish your first workout to see it here',
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.dmSans(
               fontSize: 13,
               color: cs.onSurface.withValues(alpha: 0.3),
             ),

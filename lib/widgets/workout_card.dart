@@ -40,7 +40,7 @@ class WorkoutCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     workout.name,
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.dmSans(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: cs.onSurface,
@@ -49,7 +49,7 @@ class WorkoutCard extends StatelessWidget {
                 ),
                 Text(
                   dateStr,
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.dmSans(
                     fontSize: 12,
                     color: cs.onSurface.withValues(alpha: 0.5),
                   ),
@@ -82,7 +82,7 @@ class WorkoutCard extends StatelessWidget {
               const SizedBox(height: 10),
               Text(
                 workout.exercises.map((e) => e.exerciseName).join(' · '),
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.dmSans(
                   fontSize: 12,
                   color: cs.onSurface.withValues(alpha: 0.5),
                 ),
@@ -129,7 +129,7 @@ class _Stat extends StatelessWidget {
         const SizedBox(width: 4),
         Text(
           label,
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.dmSans(
             fontSize: 12,
             color: cs.onSurface.withValues(alpha: 0.6),
           ),
