@@ -131,7 +131,7 @@ class WorkoutExerciseAdapter extends TypeAdapter<WorkoutExercise> {
     return WorkoutExercise(
       exerciseId: fields[0] as String,
       exerciseName: fields[1] as String,
-      sets: (fields[2] as List).cast<WorkoutSet>(),
+      sets: (fields[2] as List<dynamic>).cast<WorkoutSet>(),
     );
   }
 
@@ -164,7 +164,7 @@ class WorkoutAdapter extends TypeAdapter<Workout> {
       name: fields[1] as String,
       startedAt: fields[2] as DateTime,
       finishedAt: fields[3] as DateTime?,
-      exercises: (fields[4] as List).cast<WorkoutExercise>(),
+      exercises: (fields[4] as List<dynamic>).cast<WorkoutExercise>(),
       notes: fields[5] as String?,
     );
   }

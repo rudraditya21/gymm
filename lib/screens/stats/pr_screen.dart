@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../models/workout.dart';
 import '../../providers/history_provider.dart';
 import '../../providers/settings_provider.dart';
 import '../../utils/format.dart';
@@ -67,7 +68,7 @@ class PRScreen extends ConsumerWidget {
     );
   }
 
-  List<_PR> _computePRs(List history) {
+  List<_PR> _computePRs(List<Workout> history) {
     final map = <String, _PR>{};
 
     for (final workout in history) {

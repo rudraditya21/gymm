@@ -33,7 +33,7 @@ class ExerciseAdapter extends TypeAdapter<Exercise> {
       id: fields[0] as String,
       name: fields[1] as String,
       primaryMuscle: fields[2] as String,
-      secondaryMuscles: (fields[3] as List).cast<String>(),
+      secondaryMuscles: (fields[3] as List<dynamic>).cast<String>(),
       equipment: fields[4] as String,
       isCustom: fields[5] as bool,
     );

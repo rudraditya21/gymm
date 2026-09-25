@@ -68,7 +68,7 @@ abstract final class HiveService {
 
   static ActiveWorkoutState? get activeWorkoutDraft {
     final value = settings.get(_activeWorkoutDraft);
-    if (value is! Map) return null;
+    if (value is! Map<dynamic, dynamic>) return null;
 
     try {
       return ActiveWorkoutState.fromStorageMap(value);

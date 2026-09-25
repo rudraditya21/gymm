@@ -77,7 +77,7 @@ class RoutineExerciseAdapter extends TypeAdapter<RoutineExercise> {
     return RoutineExercise(
       exerciseId: fields[0] as String,
       exerciseName: fields[1] as String,
-      sets: (fields[2] as List).cast<RoutineSet>(),
+      sets: (fields[2] as List<dynamic>).cast<RoutineSet>(),
     );
   }
 
@@ -109,7 +109,7 @@ class RoutineAdapter extends TypeAdapter<Routine> {
       id: fields[0] as String,
       name: fields[1] as String,
       createdAt: fields[2] as DateTime,
-      exercises: (fields[3] as List).cast<RoutineExercise>(),
+      exercises: (fields[3] as List<dynamic>).cast<RoutineExercise>(),
     );
   }
 

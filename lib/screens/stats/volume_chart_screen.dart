@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../models/workout.dart';
 import '../../providers/history_provider.dart';
 import '../../providers/settings_provider.dart';
 import '../../utils/format.dart';
@@ -240,7 +241,7 @@ class _Bucket {
   const _Bucket({required this.label, required this.volume});
 }
 
-List<_Bucket> _weeklyBuckets(List history, bool useKg) {
+List<_Bucket> _weeklyBuckets(List<Workout> history, bool useKg) {
   final now = DateTime.now();
   final buckets = <_Bucket>[];
 
@@ -263,7 +264,7 @@ List<_Bucket> _weeklyBuckets(List history, bool useKg) {
   return buckets;
 }
 
-List<_Bucket> _monthlyBuckets(List history, bool useKg) {
+List<_Bucket> _monthlyBuckets(List<Workout> history, bool useKg) {
   final now = DateTime.now();
   final buckets = <_Bucket>[];
 
