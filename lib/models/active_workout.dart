@@ -131,4 +131,73 @@ class ActiveWorkoutState {
 
   int get completedSetsCount =>
       exercises.fold(0, (sum, e) => sum + e.sets.where((s) => s.isCompleted).length);
+
+  Map<String, dynamic> toStorageMap() => {
+        'id': id,
+        'name': name,
+        'startedAt': startedAt.millisecondsSinceEpoch,
+        'notes': notes,
+        'exercises': exercises
+            .map(
+              (exercise) => {
+                'exerciseId': exercise.exerciseId,
+                'exerciseName': exercise.exerciseName,
+                'supersetGroupId': exercise.supersetGroupId,
+                'sets': exercise.sets
+                    .map(
+                      (set) => {
+                        'index': set.index,
+                        'isWarmup': set.isWarmup,
+                        'isCompleted': set.isCompleted,
+                        'isDropSet': set.isDropSet,
+                        'isAmrap': set.isAmrap,
+                        'weight': set.weight,
+                        'reps': set.reps,
+                        'prevWeight': set.prevWeight,
+                        'prevReps': set.prevReps,
+                        'durationSeconds': set.durationSeconds,
+                        'distanceMeters': set.distanceMeters,
+                      },
+                    )
+                    .toList(),
+              },
+            )
+            .toList(),
+      };
+
+  static ActiveWorkoutState fromStorageMap(Map<dynamic, dynamic> map) {
+    ActiveSet setFromMap(Map<dynamic, dynamic> set) => ActiveSet(
+          index: set['index'] as int,
+          isWarmup: set['isWarmup'] as bool? ?? false,
+          isCompleted: set['isCompleted'] as bool? ?? false,
+          isDropSet: set['isDropSet'] as bool? ?? false,
+          isAmrap: set['isAmrap'] as bool? ?? false,
+          weight: (set['weight'] as num?)?.toDouble(),
+          reps: set['reps'] as int?,
+          prevWeight: (set['prevWeight'] as num?)?.toDouble(),
+          prevReps: set['prevReps'] as int?,
+          durationSeconds: set['durationSeconds'] as int?,
+          distanceMeters: (set['distanceMeters'] as num?)?.toDouble(),
+        );
+
+    ActiveExercise exerciseFromMap(Map<dynamic, dynamic> exercise) =>
+        ActiveExercise(
+          exerciseId: exercise['exerciseId'] as String,
+          exerciseName: exercise['exerciseName'] as String,
+          supersetGroupId: exercise['supersetGroupId'] as String?,
+          sets: (exercise['sets'] as List<dynamic>)
+              .map((set) => setFromMap(set as Map<dynamic, dynamic>))
+              .toList(),
+        );
+
+    return ActiveWorkoutState(
+      id: map['id'] as String,
+      name: map['name'] as String,
+      startedAt: DateTime.fromMillisecondsSinceEpoch(map['startedAt'] as int),
+      notes: map['notes'] as String? ?? '',
+      exercises: (map['exercises'] as List<dynamic>)
+          .map((exercise) => exerciseFromMap(exercise as Map<dynamic, dynamic>))
+          .toList(),
+    );
+  }
 }

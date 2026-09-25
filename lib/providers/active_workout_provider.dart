@@ -11,18 +11,20 @@ import '../utils/format.dart';
 import 'history_provider.dart';
 
 class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
+  Future<void> _draftWrite = Future.value();
+
   @override
-  ActiveWorkoutState? build() => null;
+  ActiveWorkoutState? build() => HiveService.activeWorkoutDraft;
 
   bool get isActive => state != null;
 
   void startEmpty() {
-    state = ActiveWorkoutState(
+    _setState(ActiveWorkoutState(
       id: const Uuid().v4(),
       name: _defaultName(),
       startedAt: DateTime.now(),
       exercises: [],
-    );
+    ));
   }
 
   void startFromRoutine(Routine routine) {
@@ -48,22 +50,22 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
       );
     }).toList();
 
-    state = ActiveWorkoutState(
+    _setState(ActiveWorkoutState(
       id: const Uuid().v4(),
       name: routine.name,
       startedAt: DateTime.now(),
       exercises: exercises,
-    );
+    ));
   }
 
   void rename(String name) {
     if (state == null) return;
-    state = state!.copyWith(name: name);
+    _setState(state!.copyWith(name: name));
   }
 
   void setNotes(String notes) {
     if (state == null) return;
-    state = state!.copyWith(notes: notes);
+    _setState(state!.copyWith(notes: notes));
   }
 
   void addExercise(Exercise exercise) {
@@ -83,13 +85,13 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
         ),
       ],
     );
-    state = state!.copyWith(exercises: [...state!.exercises, newExercise]);
+    _setState(state!.copyWith(exercises: [...state!.exercises, newExercise]));
   }
 
   void removeExercise(int exerciseIndex) {
     if (state == null) return;
     final updated = [...state!.exercises]..removeAt(exerciseIndex);
-    state = state!.copyWith(exercises: updated);
+    _setState(state!.copyWith(exercises: updated));
   }
 
   void addSet(int exerciseIndex) {
@@ -105,7 +107,7 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
       prevReps: null,
     );
     exercises[exerciseIndex] = ex.copyWith(sets: [...ex.sets, newSet]);
-    state = state!.copyWith(exercises: exercises);
+    _setState(state!.copyWith(exercises: exercises));
   }
 
   void removeSet(int exerciseIndex, int setIndex) {
@@ -132,7 +134,7 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
             ))
         .toList();
     exercises[exerciseIndex] = ex.copyWith(sets: reindexed);
-    state = state!.copyWith(exercises: exercises);
+    _setState(state!.copyWith(exercises: exercises));
   }
 
   void toggleWarmup(int exerciseIndex, int setIndex) {
@@ -221,7 +223,8 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
 
     await HiveService.workouts.put(workout.id, workout);
     ref.read(historyProvider.notifier).refresh();
-    state = null;
+    _setState(null);
+    await _draftWrite;
     return (workout, prs);
   }
 
@@ -278,7 +281,7 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
     final exercises = [...state!.exercises];
     exercises[index1] = exercises[index1].copyWith(supersetGroupId: groupId);
     exercises[index2] = exercises[index2].copyWith(supersetGroupId: groupId);
-    state = state!.copyWith(exercises: exercises);
+    _setState(state!.copyWith(exercises: exercises));
   }
 
   void removeFromSuperset(int exerciseIndex) {
@@ -286,7 +289,7 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
     final exercises = [...state!.exercises];
     exercises[exerciseIndex] =
         exercises[exerciseIndex].copyWith(clearSuperset: true);
-    state = state!.copyWith(exercises: exercises);
+    _setState(state!.copyWith(exercises: exercises));
   }
 
   void reorderExercises(int oldIndex, int newIndex) {
@@ -295,10 +298,10 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
     if (newIndex > oldIndex) newIndex--;
     final item = exercises.removeAt(oldIndex);
     exercises.insert(newIndex, item);
-    state = state!.copyWith(exercises: exercises);
+    _setState(state!.copyWith(exercises: exercises));
   }
 
-  void cancel() => state = null;
+  void cancel() => _setState(null);
 
   // ── Helpers ────────────────────────────────────────────────────────────────
 
@@ -309,8 +312,20 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
     final sets = [...ex.sets];
     sets[si] = fn(sets[si]);
     exercises[ei] = ex.copyWith(sets: sets);
-    state = state!.copyWith(exercises: exercises);
+    _setState(state!.copyWith(exercises: exercises));
   }
+
+  void _setState(ActiveWorkoutState? next) {
+    state = next;
+    _draftWrite = _draftWrite.then<void>(
+      (_) => _persistDraft(next),
+      onError: (_, __) => _persistDraft(next),
+    );
+  }
+
+  Future<void> _persistDraft(ActiveWorkoutState? draft) => draft == null
+      ? HiveService.clearActiveWorkoutDraft()
+      : HiveService.saveActiveWorkoutDraft(draft);
 
   List<WorkoutSet> _lastSets(String exerciseId) {
     final workouts = HiveService.workouts.values.toList()

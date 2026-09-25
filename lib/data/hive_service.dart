@@ -1,5 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '../models/active_workout.dart';
 import '../models/body_weight_entry.dart';
 import '../models/exercise.dart';
 import '../models/measurement_entry.dart';
@@ -17,6 +18,7 @@ abstract final class HiveService {
   static const _schedule = 'schedule';
   static const _measurements = 'measurements';
   static const _seeded = 'seeded';
+  static const _activeWorkoutDraft = 'active_workout_draft';
 
   static Box<Exercise> get exercises => Hive.box<Exercise>(_exercises);
   static Box<Workout> get workouts => Hive.box<Workout>(_workouts);
@@ -63,6 +65,23 @@ abstract final class HiveService {
     final d = DateTime.fromMillisecondsSinceEpoch(ms);
     return DateTime(d.year, d.month, d.day);
   }
+
+  static ActiveWorkoutState? get activeWorkoutDraft {
+    final value = settings.get(_activeWorkoutDraft);
+    if (value is! Map) return null;
+
+    try {
+      return ActiveWorkoutState.fromStorageMap(value);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  static Future<void> saveActiveWorkoutDraft(ActiveWorkoutState draft) =>
+      settings.put(_activeWorkoutDraft, draft.toStorageMap());
+
+  static Future<void> clearActiveWorkoutDraft() =>
+      settings.delete(_activeWorkoutDraft);
 
   static Future<void> _seedIfNeeded() async {
     final box = settings;
