@@ -3,14 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../app_theme.dart';
-import '../../providers/body_weight_provider.dart';
-import '../../providers/exercise_provider.dart';
 import '../../providers/history_provider.dart';
-import '../../providers/measurement_provider.dart';
-import '../../providers/routine_provider.dart';
 import '../../providers/settings_provider.dart';
-import '../../utils/backup_restore.dart';
-import '../../utils/csv_export.dart';
 import '../../utils/format.dart';
 import '../stats/muscle_heatmap_screen.dart';
 import '../stats/pr_screen.dart';
@@ -19,16 +13,8 @@ import '../tools/body_weight_screen.dart';
 import '../tools/measurements_screen.dart';
 import '../tools/plate_calculator_screen.dart';
 
-class ProfileScreen extends ConsumerStatefulWidget {
+class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
-
-  @override
-  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends ConsumerState<ProfileScreen> {
-  bool _importing = false;
-  bool _exporting = false;
 
   @override
   Widget build(BuildContext context) {
@@ -372,71 +358,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     trailing: Icon(Icons.chevron_right,
                         color: cs.onSurface.withValues(alpha: 0.3)),
                   ),
-                  Divider(height: 1, color: cs.outline),
-                  ListTile(
-                    onTap: () => exportWorkoutsAsCsv(),
-                    leading: Icon(Icons.download_outlined,
-                        color: cs.primary, size: 20),
-                    title: Text('Export to CSV',
-                        style: GoogleFonts.dmSans(
-                            fontSize: 14,
-                            color: cs.onSurface)),
-                    subtitle: Text('Share all workout history',
-                        style: GoogleFonts.dmSans(
-                            fontSize: 12,
-                            color: cs.onSurface.withValues(alpha: 0.5))),
-                    trailing: Icon(Icons.chevron_right,
-                        color: cs.onSurface.withValues(alpha: 0.3)),
-                  ),
-                  Divider(height: 1, color: cs.outline),
-                  ListTile(
-                    onTap: _exporting ? null : _doExport,
-                    leading: _exporting
-                        ? SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                                strokeWidth: 2, color: cs.primary),
-                          )
-                        : Icon(Icons.backup_outlined,
-                            color: cs.primary, size: 20),
-                    title: Text('Backup',
-                        style: GoogleFonts.dmSans(
-                            fontSize: 14,
-                            color: cs.onSurface)),
-                    subtitle: Text('Export all data as JSON',
-                        style: GoogleFonts.dmSans(
-                            fontSize: 12,
-                            color: cs.onSurface.withValues(alpha: 0.5))),
-                    trailing: Icon(Icons.chevron_right,
-                        color: cs.onSurface.withValues(alpha: 0.3)),
-                  ),
-                  Divider(height: 1, color: cs.outline),
-                  ListTile(
-                    onTap: _importing ? null : _doImport,
-                    leading: _importing
-                        ? SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                                strokeWidth: 2, color: cs.primary),
-                          )
-                        : Icon(Icons.restore_outlined,
-                            color: cs.primary, size: 20),
-                    title: Text('Restore',
-                        style: GoogleFonts.dmSans(
-                            fontSize: 14,
-                            color: cs.onSurface)),
-                    subtitle: Text('Import from a backup file',
-                        style: GoogleFonts.dmSans(
-                            fontSize: 12,
-                            color: cs.onSurface.withValues(alpha: 0.5))),
-                    trailing: Icon(Icons.chevron_right,
-                        color: cs.onSurface.withValues(alpha: 0.3)),
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.vertical(
                             bottom: Radius.circular(10))),
-                  ),
                 ],
               ),
             ),
@@ -444,44 +368,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         ),
       ),
     );
-  }
-
-  Future<void> _doExport() async {
-    setState(() => _exporting = true);
-    try {
-      await exportBackup();
-    } finally {
-      if (mounted) setState(() => _exporting = false);
-    }
-  }
-
-  Future<void> _doImport() async {
-    setState(() => _importing = true);
-    try {
-      final result = await importBackup();
-      if (result == null) return;
-
-      // Refresh all providers so UI reflects imported data without restart
-      ref.read(historyProvider.notifier).refresh();
-      ref.read(routinesProvider.notifier).refresh();
-      ref.read(exercisesProvider.notifier).refresh();
-      ref.read(bodyWeightProvider.notifier).refresh();
-      ref.read(measurementProvider.notifier).refresh();
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(result.toString())),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Import failed: $e')),
-        );
-      }
-    } finally {
-      if (mounted) setState(() => _importing = false);
-    }
   }
 
   String _formatTotalTime(Duration d) {
