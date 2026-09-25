@@ -4,6 +4,8 @@ import 'package:uuid/uuid.dart';
 import '../data/hive_service.dart';
 import '../models/exercise.dart';
 
+enum ExerciseDeletionResult { deleted, referencedByHistory }
+
 class ExercisesNotifier extends Notifier<List<Exercise>> {
   @override
   List<Exercise> build() => _load();
@@ -32,9 +34,17 @@ class ExercisesNotifier extends Notifier<List<Exercise>> {
     state = _load();
   }
 
-  Future<void> delete(String id) async {
+  Future<ExerciseDeletionResult> delete(String id) async {
+    final isReferencedByHistory = HiveService.workouts.values.any(
+      (workout) => workout.exercises.any((exercise) => exercise.exerciseId == id),
+    );
+    if (isReferencedByHistory) {
+      return ExerciseDeletionResult.referencedByHistory;
+    }
+
     await HiveService.exercises.delete(id);
     state = _load();
+    return ExerciseDeletionResult.deleted;
   }
 
   void refresh() => state = _load();

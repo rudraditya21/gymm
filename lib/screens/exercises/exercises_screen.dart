@@ -177,9 +177,22 @@ class _ExercisesScreenState extends ConsumerState<ExercisesScreen> {
                                         ),
                                       );
                                       if (confirmed == true) {
-                                        ref
+                                        final result = await ref
                                             .read(exercisesProvider.notifier)
                                             .delete(ex.id);
+                                        if (!context.mounted ||
+                                            result ==
+                                                ExerciseDeletionResult.deleted) {
+                                          return;
+                                        }
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                              'Exercises in workout history cannot be deleted.',
+                                            ),
+                                          ),
+                                        );
                                       }
                                     }
                                   },
