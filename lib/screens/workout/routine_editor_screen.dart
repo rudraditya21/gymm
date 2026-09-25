@@ -49,10 +49,7 @@ class _RoutineEditorScreenState extends ConsumerState<RoutineEditorScreen> {
   void dispose() {
     _nameCtrl.dispose();
     for (final ex in _exercises) {
-      for (final s in ex.sets) {
-        s.weightCtrl.dispose();
-        s.repsCtrl.dispose();
-      }
+      ex.dispose();
     }
     super.dispose();
   }
@@ -170,12 +167,18 @@ class _RoutineEditorScreenState extends ConsumerState<RoutineEditorScreen> {
             return _RoutineExerciseCard(
               exercise: ex,
               cs: cs,
-              onRemove: () => setState(() => _exercises.removeAt(ei)),
+              onRemove: () => setState(() {
+                ex.dispose();
+                _exercises.removeAt(ei);
+              }),
               onAddSet: () => setState(() => ex.sets.add(_EditableSet(
                     weightCtrl: TextEditingController(),
                     repsCtrl: TextEditingController(),
                   ))),
-              onRemoveSet: (si) => setState(() => ex.sets.removeAt(si)),
+              onRemoveSet: (si) => setState(() {
+                ex.sets[si].dispose();
+                ex.sets.removeAt(si);
+              }),
             );
           }),
           const SizedBox(height: 8),
@@ -207,6 +210,11 @@ class _EditableSet {
   final TextEditingController weightCtrl;
   final TextEditingController repsCtrl;
   _EditableSet({required this.weightCtrl, required this.repsCtrl});
+
+  void dispose() {
+    weightCtrl.dispose();
+    repsCtrl.dispose();
+  }
 }
 
 class _EditableExercise {
@@ -219,6 +227,12 @@ class _EditableExercise {
     required this.exerciseName,
     required this.sets,
   });
+
+  void dispose() {
+    for (final set in sets) {
+      set.dispose();
+    }
+  }
 }
 
 class _RoutineExerciseCard extends StatelessWidget {
