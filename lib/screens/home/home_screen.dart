@@ -277,7 +277,7 @@ class HomeScreen extends ConsumerWidget {
       ),
     );
     if (confirmed == true) {
-      ref.read(routinesProvider.notifier).delete(id);
+      await ref.read(routinesProvider.notifier).delete(id);
     }
   }
 }

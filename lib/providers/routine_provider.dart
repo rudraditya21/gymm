@@ -3,6 +3,7 @@ import 'package:uuid/uuid.dart';
 
 import '../data/hive_service.dart';
 import '../models/routine.dart';
+import 'schedule_provider.dart';
 
 class RoutinesNotifier extends Notifier<List<Routine>> {
   @override
@@ -34,6 +35,7 @@ class RoutinesNotifier extends Notifier<List<Routine>> {
   }
 
   Future<void> delete(String id) async {
+    await ref.read(scheduleProvider.notifier).removeForRoutine(id);
     await HiveService.routines.delete(id);
     state = _load();
   }

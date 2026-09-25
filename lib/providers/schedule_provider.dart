@@ -34,6 +34,14 @@ class ScheduleNotifier extends Notifier<List<ScheduledEntry>> {
     state = HiveService.schedule.values.toList();
   }
 
+  Future<void> removeForRoutine(String routineId) async {
+    final keys = HiveService.schedule.keys
+        .where((key) => HiveService.schedule.get(key)?.routineId == routineId)
+        .toList();
+    await HiveService.schedule.deleteAll(keys);
+    state = HiveService.schedule.values.toList();
+  }
+
   // String key avoids Hive's int key limit (max 0xFFFFFFFF).
   static String _key(DateTime d) {
     final n = _normalize(d);
