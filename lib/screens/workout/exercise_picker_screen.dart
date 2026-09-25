@@ -21,8 +21,17 @@ class _ExercisePickerScreenState
   final _searchCtrl = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    ref.read(exerciseSearchProvider.notifier).state = '';
+    ref.read(exerciseFilterProvider.notifier).state = null;
+  }
+
+  @override
   void dispose() {
     _searchCtrl.dispose();
+    ref.read(exerciseSearchProvider.notifier).state = '';
+    ref.read(exerciseFilterProvider.notifier).state = null;
     super.dispose();
   }
 
