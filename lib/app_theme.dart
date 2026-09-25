@@ -1,7 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'data/hive_service.dart';
+
+const _themeModeKey = 'themeMode';
+
 final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.system);
+
+void restoreThemeMode() {
+  final savedMode = HiveService.settings.get(_themeModeKey) as String?;
+  themeNotifier.value = ThemeMode.values
+      .where((mode) => mode.name == savedMode)
+      .firstOrNull ?? ThemeMode.system;
+}
+
+void setThemeMode(ThemeMode mode) {
+  themeNotifier.value = mode;
+  HiveService.settings.put(_themeModeKey, mode.name);
+}
 
 TextTheme dmSansTextTheme([TextTheme? base]) {
   final textTheme = GoogleFonts.dmSansTextTheme(base);

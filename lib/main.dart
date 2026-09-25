@@ -12,6 +12,7 @@ import 'screens/profile/profile_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await HiveService.init();
+  restoreThemeMode();
   runApp(const ProviderScope(child: GymmApp()));
 }
 

@@ -131,7 +131,7 @@ class _ThemeOption extends StatelessWidget {
     return Expanded(
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTap: () => themeNotifier.value = mode,
+        onTap: () => setThemeMode(mode),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           curve: Curves.easeOut,
