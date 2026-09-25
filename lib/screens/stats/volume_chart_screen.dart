@@ -31,9 +31,12 @@ class _VolumeChartScreenState extends ConsumerState<VolumeChartScreen> {
         ? _weeklyBuckets(history, useKg)
         : _monthlyBuckets(history, useKg);
 
-    final maxY = buckets.isEmpty
-        ? 100.0
-        : buckets.map((b) => b.volume).reduce((a, b) => a > b ? a : b);
+    final hasVolume = buckets.any((bucket) => bucket.volume > 0);
+    final maxY = hasVolume
+        ? buckets.map((bucket) => bucket.volume).reduce(
+              (current, volume) => current > volume ? current : volume,
+            )
+        : 100.0;
 
     return Scaffold(
       backgroundColor: cs.surface,
@@ -79,7 +82,7 @@ class _VolumeChartScreenState extends ConsumerState<VolumeChartScreen> {
           ),
           const SizedBox(height: 20),
 
-          if (buckets.isEmpty)
+          if (!hasVolume)
             Center(
               child: Padding(
                 padding: const EdgeInsets.only(top: 64),
