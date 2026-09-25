@@ -92,7 +92,12 @@ class ProfileScreen extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  const _ThemeSelector(),
+                  _ThemeSelector(
+                    onChanged: (mode) => _saveSetting(
+                      context,
+                      () => setThemeMode(mode),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -124,8 +129,12 @@ class ProfileScreen extends ConsumerWidget {
                         const Spacer(),
                         _UnitToggle(
                           useKg: settings.useKg,
-                          onChanged: (v) =>
-                              ref.read(settingsProvider.notifier).setUseKg(v),
+                          onChanged: (v) => _saveSetting(
+                            context,
+                            () => ref
+                                .read(settingsProvider.notifier)
+                                .setUseKg(v),
+                          ),
                           cs: cs,
                         ),
                       ],
@@ -147,8 +156,12 @@ class ProfileScreen extends ConsumerWidget {
                         const Spacer(),
                         _MeasurementUnitToggle(
                           useCm: settings.useCm,
-                          onChanged: (v) =>
-                              ref.read(settingsProvider.notifier).setUseCm(v),
+                          onChanged: (v) => _saveSetting(
+                            context,
+                            () => ref
+                                .read(settingsProvider.notifier)
+                                .setUseCm(v),
+                          ),
                           cs: cs,
                         ),
                       ],
@@ -185,9 +198,12 @@ class ProfileScreen extends ConsumerWidget {
                         const Spacer(),
                         _RestPicker(
                           seconds: settings.restSeconds,
-                          onChanged: (v) => ref
-                              .read(settingsProvider.notifier)
-                              .setRestSeconds(v),
+                          onChanged: (v) => _saveSetting(
+                            context,
+                            () => ref
+                                .read(settingsProvider.notifier)
+                                .setRestSeconds(v),
+                          ),
                           cs: cs,
                         ),
                       ],
@@ -209,9 +225,12 @@ class ProfileScreen extends ConsumerWidget {
                         const Spacer(),
                         Switch(
                           value: settings.autoStartRest,
-                          onChanged: (v) => ref
-                              .read(settingsProvider.notifier)
-                              .setAutoStartRest(v),
+                          onChanged: (v) => _saveSetting(
+                            context,
+                            () => ref
+                                .read(settingsProvider.notifier)
+                                .setAutoStartRest(v),
+                          ),
                           activeColor: cs.primary,
                         ),
                       ],
@@ -375,6 +394,20 @@ class ProfileScreen extends ConsumerWidget {
     if (h == 0) return '${d.inMinutes}m';
     return '${h}h';
   }
+
+  Future<void> _saveSetting(
+    BuildContext context,
+    Future<void> Function() save,
+  ) async {
+    try {
+      await save();
+    } catch (_) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Unable to save setting.')),
+      );
+    }
+  }
 }
 
 // ── Shared widgets ────────────────────────────────────────────────────────────
@@ -431,7 +464,9 @@ class _StatItem extends StatelessWidget {
 }
 
 class _ThemeSelector extends StatelessWidget {
-  const _ThemeSelector();
+  final ValueChanged<ThemeMode> onChanged;
+
+  const _ThemeSelector({required this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -450,11 +485,23 @@ class _ThemeSelector extends StatelessWidget {
           child: Row(
             children: [
               _ThemeOption(
-                  label: 'Light', mode: ThemeMode.light, current: current),
+                label: 'Light',
+                mode: ThemeMode.light,
+                current: current,
+                onTap: onChanged,
+              ),
               _ThemeOption(
-                  label: 'Dark', mode: ThemeMode.dark, current: current),
+                label: 'Dark',
+                mode: ThemeMode.dark,
+                current: current,
+                onTap: onChanged,
+              ),
               _ThemeOption(
-                  label: 'System', mode: ThemeMode.system, current: current),
+                label: 'System',
+                mode: ThemeMode.system,
+                current: current,
+                onTap: onChanged,
+              ),
             ],
           ),
         );
@@ -467,11 +514,13 @@ class _ThemeOption extends StatelessWidget {
   final String label;
   final ThemeMode mode;
   final ThemeMode current;
+  final ValueChanged<ThemeMode> onTap;
 
   const _ThemeOption({
     required this.label,
     required this.mode,
     required this.current,
+    required this.onTap,
   });
 
   @override
@@ -482,7 +531,7 @@ class _ThemeOption extends StatelessWidget {
     return Expanded(
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTap: () => setThemeMode(mode),
+        onTap: () => onTap(mode),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           curve: Curves.easeOut,

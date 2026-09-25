@@ -15,23 +15,23 @@ class SettingsNotifier extends Notifier<AppSettings> {
     );
   }
 
-  void setUseKg(bool value) {
-    HiveService.settings.put('useKg', value);
+  Future<void> setUseKg(bool value) async {
+    await HiveService.settings.put('useKg', value);
     state = state.copyWith(useKg: value);
   }
 
-  void setUseCm(bool value) {
-    HiveService.settings.put('useCm', value);
+  Future<void> setUseCm(bool value) async {
+    await HiveService.settings.put('useCm', value);
     state = state.copyWith(useCm: value);
   }
 
-  void setRestSeconds(int value) {
-    HiveService.settings.put('restSeconds', value);
+  Future<void> setRestSeconds(int value) async {
+    await HiveService.settings.put('restSeconds', value);
     state = state.copyWith(restSeconds: value);
   }
 
-  void setAutoStartRest(bool value) {
-    HiveService.settings.put('autoStartRest', value);
+  Future<void> setAutoStartRest(bool value) async {
+    await HiveService.settings.put('autoStartRest', value);
     state = state.copyWith(autoStartRest: value);
   }
 }

@@ -14,9 +14,9 @@ void restoreThemeMode() {
       .firstOrNull ?? ThemeMode.system;
 }
 
-void setThemeMode(ThemeMode mode) {
+Future<void> setThemeMode(ThemeMode mode) async {
+  await HiveService.settings.put(_themeModeKey, mode.name);
   themeNotifier.value = mode;
-  HiveService.settings.put(_themeModeKey, mode.name);
 }
 
 TextTheme dmSansTextTheme([TextTheme? base]) {
