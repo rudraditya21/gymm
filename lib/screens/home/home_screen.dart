@@ -9,6 +9,7 @@ import '../../providers/routine_provider.dart';
 import '../../providers/settings_provider.dart';
 import '../../screens/workout/active_workout_screen.dart';
 import '../../screens/workout/routine_editor_screen.dart';
+import '../../utils/date_range.dart';
 import '../../utils/format.dart';
 import '../../widgets/workout_calendar.dart';
 import '../../widgets/workout_card.dart';
@@ -25,10 +26,11 @@ class HomeScreen extends ConsumerWidget {
 
     // This week stats
     final now = DateTime.now();
-    final weekStart = now.subtract(Duration(days: now.weekday - 1));
-    final thisWeek = history.where((w) => w.startedAt.isAfter(
-          DateTime(weekStart.year, weekStart.month, weekStart.day),
-        ));
+    final weekStart = startOfWeek(now);
+    final weekEnd = addCalendarDays(weekStart, 7);
+    final thisWeek = history.where(
+      (workout) => isWithinDateRange(workout.startedAt, weekStart, weekEnd),
+    );
     final weekCount = thisWeek.length;
     final weekVolume =
         thisWeek.fold<double>(0, (s, w) => s + w.totalVolume);

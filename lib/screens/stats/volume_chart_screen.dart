@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../models/workout.dart';
 import '../../providers/history_provider.dart';
 import '../../providers/settings_provider.dart';
+import '../../utils/date_range.dart';
 import '../../utils/format.dart';
 
 class VolumeChartScreen extends ConsumerStatefulWidget {
@@ -246,14 +247,12 @@ List<_Bucket> _weeklyBuckets(List<Workout> history, bool useKg) {
   final buckets = <_Bucket>[];
 
   for (int w = 11; w >= 0; w--) {
-    final weekStart = now.subtract(Duration(days: now.weekday - 1 + w * 7));
-    final wStart = DateTime(weekStart.year, weekStart.month, weekStart.day);
-    final wEnd = wStart.add(const Duration(days: 7));
+    final wStart = startOfWeek(addCalendarDays(now, -w * 7));
+    final wEnd = addCalendarDays(wStart, 7);
 
     double vol = 0;
     for (final workout in history) {
-      if (workout.startedAt.isAfter(wStart) &&
-          workout.startedAt.isBefore(wEnd)) {
+      if (isWithinDateRange(workout.startedAt, wStart, wEnd)) {
         vol += workout.totalVolume;
       }
     }
@@ -274,8 +273,7 @@ List<_Bucket> _monthlyBuckets(List<Workout> history, bool useKg) {
 
     double vol = 0;
     for (final workout in history) {
-      if (!workout.startedAt.isBefore(month) &&
-          workout.startedAt.isBefore(nextMonth)) {
+      if (isWithinDateRange(workout.startedAt, month, nextMonth)) {
         vol += workout.totalVolume;
       }
     }
