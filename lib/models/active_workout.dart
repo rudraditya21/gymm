@@ -71,6 +71,8 @@ class ActiveExercise {
   final String exerciseId;
   final String exerciseName;
   final List<ActiveSet> sets;
+  /// Session-only grouping used to render consecutive exercises as a superset.
+  /// It is intentionally not persisted in completed workouts or routines.
   final String? supersetGroupId;
 
   const ActiveExercise({

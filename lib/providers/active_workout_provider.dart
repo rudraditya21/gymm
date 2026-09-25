@@ -205,6 +205,7 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
           .map((ae) => WorkoutExercise(
                 exerciseId: ae.exerciseId,
                 exerciseName: ae.exerciseName,
+                // Supersets affect only the active workout layout.
                 sets: ae.sets
                     .map((as_) => WorkoutSet(
                           weight: as_.weight,
