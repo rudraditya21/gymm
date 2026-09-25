@@ -168,12 +168,12 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
         isCompleted: !s.isCompleted,
         isDropSet: s.isDropSet,
         isAmrap: s.isAmrap,
-        weight: weight ?? s.weight,
-        reps: reps ?? s.reps,
+        weight: weight,
+        reps: reps,
         prevWeight: s.prevWeight,
         prevReps: s.prevReps,
-        durationSeconds: durationSeconds ?? s.durationSeconds,
-        distanceMeters: distanceMeters ?? s.distanceMeters,
+        durationSeconds: durationSeconds,
+        distanceMeters: distanceMeters,
       ),
     );
   }
