@@ -240,7 +240,7 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
       double bestWeight = 0;
       int bestReps = 0;
       for (final set in ex.sets) {
-        if (!set.isCompleted || set.weight == null || set.reps == null) continue;
+        if (!set.isWorkingSet || set.weight == null || set.reps == null) continue;
         final e = estimate1RM(set.weight!, set.reps!);
         if (e > newBest) {
           newBest = e;
@@ -266,7 +266,7 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
       for (final ex in workout.exercises) {
         if (ex.exerciseId != exerciseId) continue;
         for (final s in ex.sets) {
-          if (!s.isCompleted || s.weight == null || s.reps == null) continue;
+          if (!s.isWorkingSet || s.weight == null || s.reps == null) continue;
           final e = estimate1RM(s.weight!, s.reps!);
           if (e > best) best = e;
         }
@@ -352,7 +352,7 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
       for (final ex in workout.exercises) {
         if (ex.exerciseId != exerciseId) continue;
         for (final s in ex.sets) {
-          if (!s.isCompleted || s.weight == null || s.reps == null) continue;
+          if (!s.isWorkingSet || s.weight == null || s.reps == null) continue;
           final e = estimate1RM(s.weight!, s.reps!);
           if (e > best) best = e;
         }

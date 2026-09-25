@@ -16,7 +16,7 @@ Map<String, double> computeMuscleIntensities(List<Workout> workouts) {
       // Skip muscles with no body region
       if (primary == 'Cardio' || primary == 'Full Body') continue;
 
-      final completedSets = ex.sets.where((s) => s.isCompleted).toList();
+      final completedSets = ex.sets.where((s) => s.isWorkingSet).toList();
       if (completedSets.isEmpty) continue;
 
       final vol = completedSets.fold<double>(

@@ -136,7 +136,7 @@ class ExerciseDetailScreen extends ConsumerWidget {
           final sets = w.exercises
               .where((e) => e.exerciseId == exId)
               .expand((e) => e.sets)
-              .where((s) => s.isCompleted)
+              .where((s) => s.isWorkingSet)
               .toList();
           if (sets.isEmpty) return null;
           return _ExerciseEntry(workout: w, sets: sets);

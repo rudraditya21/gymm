@@ -20,6 +20,8 @@ class WorkoutSet {
     this.durationSeconds,
     this.distanceMeters,
   });
+
+  bool get isWorkingSet => isCompleted && !isWarmup;
 }
 
 class WorkoutExercise {
@@ -59,7 +61,7 @@ class Workout {
         (sum, e) =>
             sum +
             e.sets
-                .where((s) => s.isCompleted)
+                .where((s) => s.isWorkingSet)
                 .fold(0.0, (eSum, s) => eSum + (s.weight ?? 0) * (s.reps ?? 0)),
       );
 

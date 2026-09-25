@@ -73,7 +73,7 @@ class PRScreen extends ConsumerWidget {
     for (final workout in history) {
       for (final ex in workout.exercises) {
         for (final set in ex.sets) {
-          if (!set.isCompleted || set.weight == null || set.reps == null) {
+          if (!set.isWorkingSet || set.weight == null || set.reps == null) {
             continue;
           }
           final e1rm = estimate1RM(set.weight!, set.reps!);

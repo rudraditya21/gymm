@@ -264,7 +264,7 @@ class ExerciseBlock extends ConsumerWidget {
       for (final ex in w.exercises) {
         if (ex.exerciseId != exerciseId) continue;
         for (final s in ex.sets) {
-          if (!s.isCompleted || s.weight == null || s.reps == null) continue;
+          if (!s.isWorkingSet || s.weight == null || s.reps == null) continue;
           if (best == null || (s.weight ?? 0) > (best.weight ?? 0)) {
             best = s;
           }

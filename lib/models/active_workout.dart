@@ -35,6 +35,8 @@ class ActiveSet {
     return SetType.normal;
   }
 
+  bool get isWorkingSet => isCompleted && !isWarmup;
+
   ActiveSet copyWith({
     bool? isWarmup,
     bool? isCompleted,
@@ -125,7 +127,7 @@ class ActiveWorkoutState {
         (sum, e) =>
             sum +
             e.sets
-                .where((s) => s.isCompleted)
+                .where((s) => s.isWorkingSet)
                 .fold(0.0, (eSum, s) => eSum + (s.weight ?? 0) * (s.reps ?? 0)),
       );
 
