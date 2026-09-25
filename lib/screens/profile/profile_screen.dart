@@ -17,7 +17,7 @@ class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final cs = Theme.of(context).colorScheme;
     final settings = ref.watch(settingsProvider);
     final history = ref.watch(historyProvider);
@@ -357,10 +357,10 @@ class ProfileScreen extends ConsumerWidget {
                             color: cs.onSurface.withValues(alpha: 0.5))),
                     trailing: Icon(Icons.chevron_right,
                         color: cs.onSurface.withValues(alpha: 0.3)),
-                  ),
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.vertical(
                             bottom: Radius.circular(10))),
+                  ),
                 ],
               ),
             ),
