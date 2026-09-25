@@ -19,6 +19,8 @@ abstract final class HiveService {
   static const _measurements = 'measurements';
   static const _seeded = 'seeded';
   static const _activeWorkoutDraft = 'active_workout_draft';
+  static const _schemaVersion = 'schemaVersion';
+  static const currentSchemaVersion = 1;
 
   static Box<Exercise> get exercises => Hive.box<Exercise>(_exercises);
   static Box<Workout> get workouts => Hive.box<Workout>(_workouts);
@@ -56,6 +58,7 @@ abstract final class HiveService {
       Hive.openBox<MeasurementEntry>(_measurements),
     ]);
 
+    await _initializeSchema();
     await _seedIfNeeded();
   }
 
@@ -82,6 +85,17 @@ abstract final class HiveService {
 
   static Future<void> clearActiveWorkoutDraft() =>
       settings.delete(_activeWorkoutDraft);
+
+  static Future<void> _initializeSchema() async {
+    final version = settings.get(_schemaVersion);
+    if (version == null) {
+      await settings.put(_schemaVersion, currentSchemaVersion);
+      return;
+    }
+    if (version is! int || version > currentSchemaVersion) {
+      throw StateError('Unsupported local data schema: $version');
+    }
+  }
 
   static Future<void> _seedIfNeeded() async {
     final box = settings;
