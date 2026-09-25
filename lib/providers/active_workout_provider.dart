@@ -18,16 +18,19 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
 
   bool get isActive => state != null;
 
-  void startEmpty() {
+  Future<void> startEmpty() async {
+    if (isActive) return;
     _setState(ActiveWorkoutState(
       id: const Uuid().v4(),
       name: _defaultName(),
       startedAt: DateTime.now(),
       exercises: [],
     ));
+    await flush();
   }
 
-  void startFromRoutine(Routine routine) {
+  Future<void> startFromRoutine(Routine routine) async {
+    if (isActive) return;
     final exercises = routine.exercises.map((re) {
       final prev = _lastSets(re.exerciseId);
       return ActiveExercise(
@@ -56,6 +59,7 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
       startedAt: DateTime.now(),
       exercises: exercises,
     ));
+    await flush();
   }
 
   void rename(String name) {
@@ -303,6 +307,8 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
   }
 
   void cancel() => _setState(null);
+
+  Future<void> flush() => _draftWrite;
 
   // ── Helpers ────────────────────────────────────────────────────────────────
 

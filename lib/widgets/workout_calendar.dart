@@ -434,16 +434,15 @@ class _DaySheet extends ConsumerWidget {
                 title: scheduled!.routineName ?? 'Scheduled workout',
                 subtitle: 'Tap to start',
                 cs: cs,
-                onTap: () {
+                onTap: () async {
                   final r = ref
                       .read(routinesProvider)
                       .where((r) => r.id == scheduled!.routineId)
                       .firstOrNull;
                   if (r == null) return;
                   Navigator.of(context).pop();
-                  ref
-                      .read(activeWorkoutProvider.notifier)
-                      .startFromRoutine(r);
+                  await ref.read(activeWorkoutProvider.notifier).startFromRoutine(r);
+                  if (!context.mounted) return;
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (_) => const ActiveWorkoutScreen(),
                   ));

@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app_theme.dart';
 import 'constants/colors.dart';
 import 'data/hive_service.dart';
+import 'providers/active_workout_provider.dart';
 import 'screens/exercises/exercises_screen.dart';
 import 'screens/history/history_screen.dart';
 import 'screens/home/home_screen.dart';
@@ -16,8 +19,34 @@ void main() async {
   runApp(const ProviderScope(child: GymmApp()));
 }
 
-class GymmApp extends StatelessWidget {
+class GymmApp extends ConsumerStatefulWidget {
   const GymmApp({super.key});
+
+  @override
+  ConsumerState<GymmApp> createState() => _GymmAppState();
+}
+
+class _GymmAppState extends ConsumerState<GymmApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      unawaited(ref.read(activeWorkoutProvider.notifier).flush());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

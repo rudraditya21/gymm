@@ -23,6 +23,7 @@ class HomeScreen extends ConsumerWidget {
     final history = ref.watch(historyProvider);
     final routines = ref.watch(routinesProvider);
     final useKg = ref.watch(settingsProvider).useKg;
+    final activeWorkout = ref.watch(activeWorkoutProvider);
 
     // This week stats
     final now = DateTime.now();
@@ -90,7 +91,9 @@ class HomeScreen extends ConsumerWidget {
                 width: double.infinity,
                 height: 52,
                 child: FilledButton(
-                  onPressed: () => _showStartSheet(context, ref, routines),
+                  onPressed: activeWorkout == null
+                      ? () => _showStartSheet(context, ref, routines)
+                      : () => _resumeWorkout(context),
                   style: FilledButton.styleFrom(
                     backgroundColor: cs.primary,
                     foregroundColor: cs.onPrimary,
@@ -99,7 +102,7 @@ class HomeScreen extends ConsumerWidget {
                     ),
                   ),
                   child: Text(
-                    'Start Workout',
+                    activeWorkout == null ? 'Start Workout' : 'Resume Workout',
                     style: GoogleFonts.dmSans(
                       fontSize: 15,
                     ),
@@ -241,20 +244,26 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  void _startEmpty(BuildContext context, WidgetRef ref) {
-    ref.read(activeWorkoutProvider.notifier).startEmpty();
+  Future<void> _startEmpty(BuildContext context, WidgetRef ref) async {
+    await ref.read(activeWorkoutProvider.notifier).startEmpty();
+    if (!context.mounted) return;
     Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => const ActiveWorkoutScreen()),
     );
   }
 
-  void _startFromRoutine(
-      BuildContext context, WidgetRef ref, Routine routine) {
-    ref.read(activeWorkoutProvider.notifier).startFromRoutine(routine);
+  Future<void> _startFromRoutine(
+      BuildContext context, WidgetRef ref, Routine routine) async {
+    await ref.read(activeWorkoutProvider.notifier).startFromRoutine(routine);
+    if (!context.mounted) return;
     Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => const ActiveWorkoutScreen()),
     );
   }
+
+  void _resumeWorkout(BuildContext context) => Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) => const ActiveWorkoutScreen()),
+      );
 
   Future<void> _confirmDeleteRoutine(
       BuildContext context, WidgetRef ref, String id) async {
