@@ -20,10 +20,12 @@ class WorkoutDetailScreen extends ConsumerWidget {
     final useKg = ref.watch(settingsProvider).useKg;
 
     if (workout == null) {
-      return Scaffold(
-        appBar: AppBar(),
-        body: const Center(child: Text('Workout not found')),
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) {
+          if (context.mounted) Navigator.of(context).maybePop();
+        },
       );
+      return const SizedBox.shrink();
     }
 
     final date = workout.startedAt;
@@ -236,8 +238,9 @@ class WorkoutDetailScreen extends ConsumerWidget {
       ),
     );
     if (confirmed == true && context.mounted) {
-      ref.read(historyProvider.notifier).delete(id);
+      final deletion = ref.read(historyProvider.notifier).delete(id);
       Navigator.of(context).pop();
+      await deletion;
     }
   }
 

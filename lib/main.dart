@@ -8,6 +8,7 @@ import 'constants/colors.dart';
 import 'data/hive_service.dart';
 import 'models/active_workout.dart';
 import 'providers/active_workout_provider.dart';
+import 'providers/navigation_provider.dart';
 import 'screens/exercises/exercises_screen.dart';
 import 'screens/history/history_screen.dart';
 import 'screens/home/home_screen.dart';
@@ -135,15 +136,8 @@ class _GymmAppState extends ConsumerState<GymmApp> with WidgetsBindingObserver {
   }
 }
 
-class MainShell extends ConsumerStatefulWidget {
+class MainShell extends ConsumerWidget {
   const MainShell({super.key});
-
-  @override
-  ConsumerState<MainShell> createState() => _MainShellState();
-}
-
-class _MainShellState extends ConsumerState<MainShell> {
-  int _index = 0;
 
   static const _pages = <Widget>[
     HomeScreen(),
@@ -153,14 +147,15 @@ class _MainShellState extends ConsumerState<MainShell> {
   ];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final cs = Theme.of(context).colorScheme;
+    final index = ref.watch(selectedTabProvider);
     final activeWorkout = ref.watch(activeWorkoutProvider);
 
     return Scaffold(
       body: Stack(
         children: [
-          IndexedStack(index: _index, children: _pages),
+          IndexedStack(index: index, children: _pages),
           if (activeWorkout != null)
             Positioned(
               left: 16,
@@ -180,8 +175,9 @@ class _MainShellState extends ConsumerState<MainShell> {
           border: Border(top: BorderSide(color: cs.outline, width: 1)),
         ),
         child: NavigationBar(
-          selectedIndex: _index,
-          onDestinationSelected: (i) => setState(() => _index = i),
+          selectedIndex: index,
+          onDestinationSelected: (i) =>
+              ref.read(selectedTabProvider.notifier).state = i,
           backgroundColor: cs.surface,
           surfaceTintColor: Colors.transparent,
           elevation: 0,

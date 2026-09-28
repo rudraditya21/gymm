@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../models/pr_result.dart';
+import '../../providers/navigation_provider.dart';
 import '../../models/workout.dart';
 import '../../providers/settings_provider.dart';
 import '../../utils/format.dart';
@@ -94,8 +95,8 @@ class WorkoutSummaryScreen extends ConsumerWidget {
                 width: double.infinity,
                 child: FilledButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(
+                    ref.read(selectedTabProvider.notifier).state = 1;
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
                       builder: (_) =>
                           WorkoutDetailScreen(workoutId: workout.id),
                     ));
@@ -117,7 +118,10 @@ class WorkoutSummaryScreen extends ConsumerWidget {
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton(
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () {
+                    ref.read(selectedTabProvider.notifier).state = 1;
+                    Navigator.of(context).pop();
+                  },
                   style: OutlinedButton.styleFrom(
                     side: BorderSide(color: cs.outline),
                     shape: RoundedRectangleBorder(
