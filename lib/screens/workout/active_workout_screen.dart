@@ -143,7 +143,17 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
   Future<void> _leave(ActiveWorkoutNotifier notifier) async {
     if (_isLeaving) return;
     _isLeaving = true;
-    await notifier.flush();
+    try {
+      await notifier.flush();
+    } catch (_) {
+      _isLeaving = false;
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Unable to save workout progress.')),
+        );
+      }
+      return;
+    }
     if (!mounted) return;
     setState(() => _canPop = true);
     WidgetsBinding.instance.addPostFrameCallback((_) {

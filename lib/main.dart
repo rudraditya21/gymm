@@ -16,6 +16,8 @@ import 'screens/workout/active_workout_screen.dart';
 import 'services/workout_notification_service.dart';
 import 'widgets/active_workout_popover.dart';
 
+final _navigatorKey = GlobalKey<NavigatorState>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await HiveService.init();
@@ -33,6 +35,7 @@ class GymmApp extends ConsumerStatefulWidget {
 
 class _GymmAppState extends ConsumerState<GymmApp> with WidgetsBindingObserver {
   late final ProviderSubscription<ActiveWorkoutState?> _workoutSubscription;
+  var _openingActiveWorkout = false;
 
   @override
   void initState() {
@@ -43,6 +46,7 @@ class _GymmAppState extends ConsumerState<GymmApp> with WidgetsBindingObserver {
       (_, workout) => _syncWorkoutNotification(workout),
       fireImmediately: true,
     );
+    WorkoutNotificationService.registerTapHandler(_openActiveWorkout);
   }
 
   @override
@@ -67,11 +71,31 @@ class _GymmAppState extends ConsumerState<GymmApp> with WidgetsBindingObserver {
             : WorkoutNotificationService.show(workout.name),
       );
 
+  void _openActiveWorkout() {
+    if (_openingActiveWorkout) return;
+    _openingActiveWorkout = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (ref.read(activeWorkoutProvider) == null) {
+        _openingActiveWorkout = false;
+        return;
+      }
+      final route = _navigatorKey.currentState?.push(
+        MaterialPageRoute(builder: (_) => const ActiveWorkoutScreen()),
+      );
+      if (route == null) {
+        _openingActiveWorkout = false;
+        return;
+      }
+      unawaited(route.whenComplete(() => _openingActiveWorkout = false));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<ThemeMode>(
       valueListenable: themeNotifier,
       builder: (_, mode, __) => MaterialApp(
+        navigatorKey: _navigatorKey,
         title: 'Gymm',
         debugShowCheckedModeBanner: false,
         themeMode: mode,
