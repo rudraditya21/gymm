@@ -20,6 +20,9 @@ class ActiveWorkoutScreen extends ConsumerStatefulWidget {
 }
 
 class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
+  bool _canPop = false;
+  bool _isLeaving = false;
+
   @override
   Widget build(BuildContext context) {
     final workout = ref.watch(activeWorkoutProvider);
@@ -32,7 +35,12 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
     final cs = Theme.of(context).colorScheme;
     final notifier = ref.read(activeWorkoutProvider.notifier);
 
-    return Scaffold(
+    return PopScope(
+      canPop: _canPop,
+      onPopInvokedWithResult: (didPop, _) async {
+        if (!didPop) await _leave(notifier);
+      },
+      child: Scaffold(
       backgroundColor: cs.surface,
       appBar: AppBar(
         backgroundColor: cs.surface,
@@ -128,7 +136,19 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
           const RestTimerBar(),
         ],
       ),
+      ),
     );
+  }
+
+  Future<void> _leave(ActiveWorkoutNotifier notifier) async {
+    if (_isLeaving) return;
+    _isLeaving = true;
+    await notifier.flush();
+    if (!mounted) return;
+    setState(() => _canPop = true);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) Navigator.of(context).pop();
+    });
   }
 
   List<Widget> _buildExerciseBlocks(List<ActiveExercise> exercises) {

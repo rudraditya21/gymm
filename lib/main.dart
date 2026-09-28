@@ -6,15 +6,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'app_theme.dart';
 import 'constants/colors.dart';
 import 'data/hive_service.dart';
+import 'models/active_workout.dart';
 import 'providers/active_workout_provider.dart';
 import 'screens/exercises/exercises_screen.dart';
 import 'screens/history/history_screen.dart';
 import 'screens/home/home_screen.dart';
 import 'screens/profile/profile_screen.dart';
+import 'screens/workout/active_workout_screen.dart';
+import 'services/workout_notification_service.dart';
+import 'widgets/active_workout_popover.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await HiveService.init();
+  await WorkoutNotificationService.initialize();
   restoreThemeMode();
   runApp(const ProviderScope(child: GymmApp()));
 }
@@ -27,14 +32,22 @@ class GymmApp extends ConsumerStatefulWidget {
 }
 
 class _GymmAppState extends ConsumerState<GymmApp> with WidgetsBindingObserver {
+  late final ProviderSubscription<ActiveWorkoutState?> _workoutSubscription;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _workoutSubscription = ref.listenManual(
+      activeWorkoutProvider,
+      (_, workout) => _syncWorkoutNotification(workout),
+      fireImmediately: true,
+    );
   }
 
   @override
   void dispose() {
+    _workoutSubscription.close();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -47,6 +60,12 @@ class _GymmAppState extends ConsumerState<GymmApp> with WidgetsBindingObserver {
       unawaited(ref.read(activeWorkoutProvider.notifier).flush());
     }
   }
+
+  void _syncWorkoutNotification(ActiveWorkoutState? workout) => unawaited(
+        workout == null
+            ? WorkoutNotificationService.cancel()
+            : WorkoutNotificationService.show(workout.name),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -92,14 +111,14 @@ class _GymmAppState extends ConsumerState<GymmApp> with WidgetsBindingObserver {
   }
 }
 
-class MainShell extends StatefulWidget {
+class MainShell extends ConsumerStatefulWidget {
   const MainShell({super.key});
 
   @override
-  State<MainShell> createState() => _MainShellState();
+  ConsumerState<MainShell> createState() => _MainShellState();
 }
 
-class _MainShellState extends State<MainShell> {
+class _MainShellState extends ConsumerState<MainShell> {
   int _index = 0;
 
   static const _pages = <Widget>[
@@ -112,9 +131,26 @@ class _MainShellState extends State<MainShell> {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+    final activeWorkout = ref.watch(activeWorkoutProvider);
 
     return Scaffold(
-      body: IndexedStack(index: _index, children: _pages),
+      body: Stack(
+        children: [
+          IndexedStack(index: _index, children: _pages),
+          if (activeWorkout != null)
+            Positioned(
+              left: 16,
+              right: 16,
+              bottom: 12,
+              child: ActiveWorkoutPopover(
+                workout: activeWorkout,
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const ActiveWorkoutScreen()),
+                ),
+              ),
+            ),
+        ],
+      ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           border: Border(top: BorderSide(color: cs.outline, width: 1)),

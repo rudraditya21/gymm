@@ -170,17 +170,20 @@ class ActiveWorkoutState {
       };
 
   static ActiveWorkoutState fromStorageMap(Map<dynamic, dynamic> map) {
+    Map<dynamic, dynamic> asMap(Object? value) =>
+        Map<dynamic, dynamic>.from(value as Map);
+
     ActiveSet setFromMap(Map<dynamic, dynamic> set) => ActiveSet(
-          index: set['index'] as int,
+          index: (set['index'] as num).toInt(),
           isWarmup: set['isWarmup'] as bool? ?? false,
           isCompleted: set['isCompleted'] as bool? ?? false,
           isDropSet: set['isDropSet'] as bool? ?? false,
           isAmrap: set['isAmrap'] as bool? ?? false,
           weight: (set['weight'] as num?)?.toDouble(),
-          reps: set['reps'] as int?,
+          reps: (set['reps'] as num?)?.toInt(),
           prevWeight: (set['prevWeight'] as num?)?.toDouble(),
-          prevReps: set['prevReps'] as int?,
-          durationSeconds: set['durationSeconds'] as int?,
+          prevReps: (set['prevReps'] as num?)?.toInt(),
+          durationSeconds: (set['durationSeconds'] as num?)?.toInt(),
           distanceMeters: (set['distanceMeters'] as num?)?.toDouble(),
         );
 
@@ -189,18 +192,19 @@ class ActiveWorkoutState {
           exerciseId: exercise['exerciseId'] as String,
           exerciseName: exercise['exerciseName'] as String,
           supersetGroupId: exercise['supersetGroupId'] as String?,
-          sets: (exercise['sets'] as List<dynamic>)
-              .map((set) => setFromMap(set as Map<dynamic, dynamic>))
+          sets: (exercise['sets'] as List)
+              .map((set) => setFromMap(asMap(set)))
               .toList(),
         );
 
     return ActiveWorkoutState(
       id: map['id'] as String,
       name: map['name'] as String,
-      startedAt: DateTime.fromMillisecondsSinceEpoch(map['startedAt'] as int),
+      startedAt: DateTime.fromMillisecondsSinceEpoch(
+          (map['startedAt'] as num).toInt()),
       notes: map['notes'] as String? ?? '',
-      exercises: (map['exercises'] as List<dynamic>)
-          .map((exercise) => exerciseFromMap(exercise as Map<dynamic, dynamic>))
+      exercises: (map['exercises'] as List)
+          .map((exercise) => exerciseFromMap(asMap(exercise)))
           .toList(),
     );
   }

@@ -324,10 +324,7 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkoutState?> {
 
   void _setState(ActiveWorkoutState? next) {
     state = next;
-    _draftWrite = _draftWrite.then<void>(
-      (_) => _persistDraft(next),
-      onError: (_, __) => _persistDraft(next),
-    );
+    _draftWrite = _persistDraft(next);
   }
 
   Future<void> _persistDraft(ActiveWorkoutState? draft) => draft == null
