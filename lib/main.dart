@@ -152,66 +152,72 @@ class MainShell extends ConsumerWidget {
     final index = ref.watch(selectedTabProvider);
     final activeWorkout = ref.watch(activeWorkoutProvider);
 
-    return Scaffold(
-      body: Stack(
-        children: [
-          IndexedStack(index: index, children: _pages),
-          if (activeWorkout != null)
-            Positioned(
-              left: 16,
-              right: 16,
-              bottom: 12,
-              child: ActiveWorkoutPopover(
-                workout: activeWorkout,
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const ActiveWorkoutScreen()),
+    return PopScope(
+      canPop: index == 0,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) ref.read(selectedTabProvider.notifier).state = 0;
+      },
+      child: Scaffold(
+        body: Stack(
+          children: [
+            IndexedStack(index: index, children: _pages),
+            if (activeWorkout != null)
+              Positioned(
+                left: 16,
+                right: 16,
+                bottom: 12,
+                child: ActiveWorkoutPopover(
+                  workout: activeWorkout,
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const ActiveWorkoutScreen()),
+                  ),
                 ),
               ),
-            ),
-        ],
-      ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          border: Border(top: BorderSide(color: cs.outline, width: 1)),
-        ),
-        child: NavigationBar(
-          selectedIndex: index,
-          onDestinationSelected: (i) =>
-              ref.read(selectedTabProvider.notifier).state = i,
-          backgroundColor: cs.surface,
-          surfaceTintColor: Colors.transparent,
-          elevation: 0,
-          height: 64,
-          labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-          indicatorColor: cs.primary.withValues(alpha: 0.08),
-          destinations: [
-            NavigationDestination(
-              icon: Icon(Icons.home_outlined,
-                  color: cs.onSurface.withValues(alpha: 0.45)),
-              selectedIcon: Icon(Icons.home_rounded, color: cs.primary),
-              label: 'Home',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.calendar_month_outlined,
-                  color: cs.onSurface.withValues(alpha: 0.45)),
-              selectedIcon:
-                  Icon(Icons.calendar_month, color: cs.primary),
-              label: 'History',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.fitness_center_outlined,
-                  color: cs.onSurface.withValues(alpha: 0.45)),
-              selectedIcon:
-                  Icon(Icons.fitness_center, color: cs.primary),
-              label: 'Exercises',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.person_outline,
-                  color: cs.onSurface.withValues(alpha: 0.45)),
-              selectedIcon: Icon(Icons.person, color: cs.primary),
-              label: 'Profile',
-            ),
           ],
+        ),
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            border: Border(top: BorderSide(color: cs.outline, width: 1)),
+          ),
+          child: NavigationBar(
+            selectedIndex: index,
+            onDestinationSelected: (i) =>
+                ref.read(selectedTabProvider.notifier).state = i,
+            backgroundColor: cs.surface,
+            surfaceTintColor: Colors.transparent,
+            elevation: 0,
+            height: 64,
+            labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+            indicatorColor: cs.primary.withValues(alpha: 0.08),
+            destinations: [
+              NavigationDestination(
+                icon: Icon(Icons.home_outlined,
+                    color: cs.onSurface.withValues(alpha: 0.45)),
+                selectedIcon: Icon(Icons.home_rounded, color: cs.primary),
+                label: 'Home',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.calendar_month_outlined,
+                    color: cs.onSurface.withValues(alpha: 0.45)),
+                selectedIcon:
+                    Icon(Icons.calendar_month, color: cs.primary),
+                label: 'History',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.fitness_center_outlined,
+                    color: cs.onSurface.withValues(alpha: 0.45)),
+                selectedIcon:
+                    Icon(Icons.fitness_center, color: cs.primary),
+                label: 'Exercises',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.person_outline,
+                    color: cs.onSurface.withValues(alpha: 0.45)),
+                selectedIcon: Icon(Icons.person, color: cs.primary),
+                label: 'Profile',
+              ),
+            ],
+          ),
         ),
       ),
     );
